@@ -1,20 +1,19 @@
-import os
-import pennylane as qml
-from pennylane import numpy as np
-import random
 import json
-
-from source_scripts.utils import get_device, str2bool, train
-from source_scripts.QNSPSA import QNSPSA
-from braket.jobs import save_job_result
+import os
 import time
+
 import networkx as nx
+import pennylane as qml
+from braket.jobs import save_job_result
+from pennylane import numpy as np
 from pennylane import qaoa
+from source_scripts.QNSPSA import QNSPSA
+from source_scripts.utils import get_device, str2bool, train
 
 
 def main():
     hp_file = os.environ["AMZN_BRAKET_HP_FILE"]
-    with open(hp_file, "r") as f:
+    with open(hp_file) as f:
         hyperparams = json.load(f)
     print(hyperparams)
 
@@ -51,7 +50,7 @@ def main():
         qaoa.mixer_layer(alpha, mixer_h)
 
     def qaoa_circuit(params, n_qubits, depth):
-        # initalizing all qubits into +X eigenstate.
+        # initializing all qubits into +X eigenstate.
         for w in range(n_qubits):
             qml.Hadamard(wires=w)
         gammas = params[0]

@@ -24,7 +24,6 @@ class QAOAInterface(ABC):
         Returns:
             array_like: Parameter format needed for the autodiff library.
         """
-        pass
 
     @classmethod
     @abstractmethod
@@ -36,7 +35,6 @@ class QAOAInterface(ABC):
         Returns:
             callable: Gradient descent optimizer for the ML framework.
         """
-        pass
 
     @classmethod
     @abstractmethod
@@ -47,7 +45,6 @@ class QAOAInterface(ABC):
         Returns:
             np.ndarray: The parameters converted to a Numpy array.
         """
-        pass
 
     @classmethod
     @abstractmethod
@@ -61,7 +58,6 @@ class QAOAInterface(ABC):
             tuple(array_like, float): The updated set of parameters, and the cost function evaluated
             before the update.
         """
-        pass
 
     @staticmethod
     def get_interface(interface):

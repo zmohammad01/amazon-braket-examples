@@ -39,6 +39,13 @@ for _ in range(5):
     counts_list.append(counts)
     print(counts)
 
-save_job_result({"counts": counts_list, "angles": angle_list, "task summary": t.quantum_tasks_statistics(), "estimated cost": t.qpu_tasks_cost() + t.simulator_tasks_cost()})
+save_job_result(
+    {
+        "counts": counts_list,
+        "angles": angle_list,
+        "task summary": t.quantum_tasks_statistics(),
+        "estimated cost": t.qpu_tasks_cost() + t.simulator_tasks_cost(),
+    }
+)
 
 print("Test job completed!!!!!")

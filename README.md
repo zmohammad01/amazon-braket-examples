@@ -1,7 +1,7 @@
 # Braket Tutorials GitHub
 Welcome to the primary repository for Amazon Braket tutorials. We provide tutorials on quantum computing, using Amazon Braket. We provide examples for quantum circuits and quantum annealing. We cover canonical routines, such as the Quantum Fourier Transform (QFT), as well as hybrid quantum algorithms, such as the Variational Quantum Eigensolver (VQE).
 
-The repository is structured as follows:  
+The repository is structured as follows:
 
 - [Getting Started: Simple circuits and algorithms](#simple)
 - [Advanced circuits and algorithms](#advanced)
@@ -26,7 +26,7 @@ The repository is structured as follows:
 
   * [**Running quantum circuits on QPU devices**](examples/getting_started/2_Running_quantum_circuits_on_QPU_devices/2_Running_quantum_circuits_on_QPU_devices.ipynb)
 
-    This tutorial prepares a maximally-entangled Bell state between two qubits, for classical simulators and for QPUs. For classical devices, we can run the circuit on a local simulator or a cloud-based on-demand simulator. For the quantum devices, we run the circuit on the superconducting machine from Rigetti, and on the ion-trap machine provided by IonQ. As shown, one can swap between different devices seamlessly, without any modifications to the circuit definition, by re-defining the device object. We also show how to recover results using the unique Amazon resource identifier (ARN) associated with every task. This tool is useful if you must deal with potential delays, which can occur if your quantum task sits in the queue awaiting execution.  
+    This tutorial prepares a maximally-entangled Bell state between two qubits, for classical simulators and for QPUs. For classical devices, we can run the circuit on a local simulator or a cloud-based on-demand simulator. For the quantum devices, we run the circuit on the superconducting machine from Rigetti, and on the ion-trap machine provided by IonQ. As shown, one can swap between different devices seamlessly, without any modifications to the circuit definition, by re-defining the device object. We also show how to recover results using the unique Amazon resource identifier (ARN) associated with every task. This tool is useful if you must deal with potential delays, which can occur if your quantum task sits in the queue awaiting execution.
 
   * [**Deep Dive into the anatomy of quantum circuits**](examples/getting_started/3_Deep_dive_into_the_anatomy_of_quantum_circuits/3_Deep_dive_into_the_anatomy_of_quantum_circuits.ipynb)
 
@@ -34,9 +34,9 @@ The repository is structured as follows:
 
   * [**Superdense coding**](examples/getting_started/4_Superdense_coding/4_Superdense_coding.ipynb)
 
-    This tutorial constructs an implementation of the _superdense coding_ protocol, by means of the Amazon Braket SDK. Superdense coding is a method of transmitting two classical bits by sending only one qubit. Starting with a pair of entanged qubits, the sender (_aka_ Alice) applies a certain quantum gate to their qubit and sends the result to the receiver (_aka_ Bob), who is then able to decode the full two-bit message.     
+    This tutorial constructs an implementation of the _superdense coding_ protocol, by means of the Amazon Braket SDK. Superdense coding is a method of transmitting two classical bits by sending only one qubit. Starting with a pair of entanged qubits, the sender (_aka_ Alice) applies a certain quantum gate to their qubit and sends the result to the receiver (_aka_ Bob), who is then able to decode the full two-bit message.
 
----  
+---
 ## <a name="advanced">Advanced circuits and algorithms</a>
 
   * [**Grover**](examples/advanced_circuits_algorithms/Grover/Grover.ipynb)
@@ -162,14 +162,14 @@ This folder contains examples that illustrate the use of Amazon Braket Hybrid Jo
 * [**Bring your own containers to Braket Jobs**](examples/hybrid_jobs/3_Bring_your_own_container/bring_your_own_container.ipynb)
 
     This notebook demonstrates the use of the Bring-Your-Own-Container (BYOC) functionality of Braket Jobs. While Amazon Braket has pre-configured environments which support most use cases of Braket Jobs, BYOC enables you to define fully customizable environments using Docker containers. You will learn how to use BYOC, including preparing a Dockerfile, creating a private Amazon Elastic Container Registry (ECR), building the container, and submitting a Braket Job using the custom container.
-    
+
 ---
 ## <a name="jobs">Photonic quantum computing with Strawberry Fields</a>
 This folder contains examples that illustrate the use of Strawberry Fields to run photonic quantum circuits on both Strawberry Field's built-in local simulators and Xanadu's Borealis device. These examples are based on existing tutorials on the [Strawberry Fields website](https://strawberryfields.ai/photonics/demonstrations.html).
 
 * [**Borealis Quickstart**](examples/photonics/Borealis_quickstart.ipynb)
 
-    This notebook provides a demonstration of running a circuit on Xanadu's Borealis device. Through the use of helper functions, you will learn how to generate random [Gaussian Boson Sampling](examples/photonics/2_Gaussian_boson_sampling_and_the_Hafnian.ipynb) (GBS) circuits closely resembling the circuits used in Xanadu's quantum advantage experiment, and submit them to Borealis via the [Amazon Braket Strawberry Fields plugin](https://github.com/aws/amazon-braket-strawberryfields-plugin-python). For more details, see the [Borealis beginner tutorial](examples/photonics/4_Operating_Borealis_beginner_tutorial.ipynb) and other introductory tutorials to Strawberry Fields. 
+    This notebook provides a demonstration of running a circuit on Xanadu's Borealis device. Through the use of helper functions, you will learn how to generate random [Gaussian Boson Sampling](examples/photonics/2_Gaussian_boson_sampling_and_the_Hafnian.ipynb) (GBS) circuits closely resembling the circuits used in Xanadu's quantum advantage experiment, and submit them to Borealis via the [Amazon Braket Strawberry Fields plugin](https://github.com/aws/amazon-braket-strawberryfields-plugin-python). For more details, see the [Borealis beginner tutorial](examples/photonics/4_Operating_Borealis_beginner_tutorial.ipynb) and other introductory tutorials to Strawberry Fields.
 
 * [**Introduction to Blackbird**](examples/photonics/0_Introduction_to_Blackbird.ipynb)
 
@@ -182,11 +182,11 @@ This folder contains examples that illustrate the use of Strawberry Fields to ru
 * [**Gaussian boson sampling**](examples/photonics/2_Gaussian_boson_sampling_and_the_Hafnian.ipynb)
 
     This notebook explains the problem of Gaussian boson sampling (GBS), the computational problem that the Borealis quantum computer solves, and explains why it is believed to be difficult to simulate classically. You will construct a small GBS circuit, execute it on a local simulator, and compare the results to theoretically expected values.
-    
+
 * [**Time-domain multiplexing**](examples/photonics/3_Time_domain_photonic_circuits.ipynb)
 
     This notebook introduces the concept of time-domain multiplexing (TDM), a technique for creating large entangled quantum systems in a limited size photonic quantum computer by sending the qumodes at different times. You will learn the basic ideas of TDM, construct a small TDM program, and execute it on a built-in local simulator.
-    
+
 * [**Operating Borealis: beginner tutorial**](examples/photonics/4_Operating_Borealis_beginner_tutorial.ipynb)
 
     In this example, you will learn how to create and run circuits on Borealis. You will learn how to write a time-domain program for Borealis and specify the gate parameters to customize your own GBS experiment. You will learn how to run GBS circuits on Borealis via the [Amazon Braket Strawberry Fields plugin](https://github.com/aws/amazon-braket-strawberryfields-plugin-python). Finally, you will learn how to do basic analysis to compare the experimental results with theory.

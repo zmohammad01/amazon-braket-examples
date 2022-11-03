@@ -18,11 +18,10 @@ import time
 import networkx as nx
 import numpy as np
 import pennylane as qml
-from matplotlib import pyplot as plt
-
 from braket.jobs import load_job_checkpoint, save_job_checkpoint, save_job_result
 from braket.jobs.metrics import log_metric
 from braket.tracking import Tracker
+from matplotlib import pyplot as plt
 
 import qaoa.qaoa_utils as qaoa_utils  # isort:skip
 
@@ -55,7 +54,7 @@ def main():
     device_arn = os.environ["AMZN_BRAKET_DEVICE_ARN"]
 
     # Read the hyperparameters
-    with open(hp_file, "r") as f:
+    with open(hp_file) as f:
         hyperparams = json.load(f)
     print(hyperparams)
 
@@ -161,7 +160,14 @@ def main():
 
     # We're done with the job, so save the result.
     # This will be returned in job.result()
-    save_job_result({"params": np_params.tolist(), "cost": final_cost,"task summary": t.quantum_tasks_statistics(), "estimated cost": t.qpu_tasks_cost() + t.simulator_tasks_cost()})
+    save_job_result(
+        {
+            "params": np_params.tolist(),
+            "cost": final_cost,
+            "task summary": t.quantum_tasks_statistics(),
+            "estimated cost": t.qpu_tasks_cost() + t.simulator_tasks_cost(),
+        }
+    )
 
 
 if __name__ == "__main__":

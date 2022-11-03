@@ -25,12 +25,12 @@ If applicable, add screenshots to help explain your problem.
 
 **System information (please complete the following information as applicable):**
  - Package Versions [e.g. amazon-braket-sdk==1.9.5]
- - Working Environment: [e.g. Local, Braket Notebook Instances] 
+ - Working Environment: [e.g. Local, Braket Notebook Instances]
  - Browser [e.g. chrome, safari]
  - Region [e.g. us-west-2]
 
  **Known workaround (if applicable)**
- Add a known workaround with steps to follow. 
+ Add a known workaround with steps to follow.
 
 **Additional context**
 Add any other context about the problem here.

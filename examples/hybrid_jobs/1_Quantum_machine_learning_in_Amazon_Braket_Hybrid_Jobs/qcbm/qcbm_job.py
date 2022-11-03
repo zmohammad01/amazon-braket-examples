@@ -2,13 +2,12 @@ import json
 import os
 
 import numpy as np
-from scipy.optimize import minimize
-
 from braket.aws import AwsDevice
 from braket.jobs import save_job_result
 from braket.jobs.metrics import log_metric
 from braket.tracking import Tracker
 from qcbm.qcbm import QCBM, mmd_loss
+from scipy.optimize import minimize
 
 np.random.seed(42)
 
@@ -34,7 +33,13 @@ def main():
     params = train_circuit(device, hyperparams, data)
     print("Final parameters were:", params)
 
-    save_job_result({"params": params.tolist(),"task summary": t.quantum_tasks_statistics(), "estimated cost": t.qpu_tasks_cost() + t.simulator_tasks_cost()})
+    save_job_result(
+        {
+            "params": params.tolist(),
+            "task summary": t.quantum_tasks_statistics(),
+            "estimated cost": t.qpu_tasks_cost() + t.simulator_tasks_cost(),
+        }
+    )
     print("Saved results. All done.")
 
 
