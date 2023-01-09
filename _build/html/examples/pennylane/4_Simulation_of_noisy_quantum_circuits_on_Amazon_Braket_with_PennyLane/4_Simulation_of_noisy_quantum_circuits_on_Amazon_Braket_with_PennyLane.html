@@ -1,0 +1,866 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
+
+    <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
+        <title>Simulation of noisy quantum circuits on Amazon Braket with PennyLane - Amazon Braket Examples documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../../index.html"><div class="brand">Amazon Braket Examples  documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
+  
+  
+  <span class="sidebar-brand-text">Amazon Braket Examples  documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="simulation-of-noisy-quantum-circuits-on-amazon-braket-with-pennylane">
+<h1>Simulation of noisy quantum circuits on Amazon Braket with PennyLane<a class="headerlink" href="#simulation-of-noisy-quantum-circuits-on-amazon-braket-with-pennylane" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use Braket SDK Cost Tracking to estimate the cost to run this example</span>
+<span class="kn">from</span> <span class="nn">braket.tracking</span> <span class="kn">import</span> <span class="n">Tracker</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">Tracker</span><span class="p">()</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>In this tutorial, we will explore the impact of noise on quantum hybrid algorithms.
+In previous tutorials, we have seen two examples of quantum hybrid algorithms,
+<a class="reference external" href="https://github.com/aws/amazon-braket-examples/blob/main/examples/pennylane/3_Hydrogen_Molecule_geometry_with_VQE/3_Hydrogen_Molecule_geometry_with_VQE.ipynb">the variational quantum eigensolver (VQE)</a>
+and
+<a class="reference external" href="https://github.com/aws/amazon-braket-examples/blob/main/examples/pennylane/2_Graph_optimization_with_QAOA/2_Graph_optimization_with_QAOA.ipynb">the quantum approximate optimization algorithm (QAOA)</a>,
+applied to quantum chemistry and graph-based optimization problems respectively in noiseless settings.
+These algorithms are promising for the near term noisy quantum devices, and we will take QAOA as an example to benchmark its performance in the presence of noise.</p>
+<p>Additionally, the tutorial gives an overview of noise simulation on Amazon Braket with PennyLane, such that the user will be able to use PennyLane to simulate the noisy circuits, on either the local or Braket on-demand noise simulator. In particular, the notebook covers the basic concepts of noise channels (for more details, see <a class="reference external" href="https://github.com/aws/amazon-braket-examples/blob/main/examples/braket_features/Simulating_Noise_On_Amazon_Braket.ipynb">here</a>) and uses PennyLane to compute cost functions of noisy circuits and optimize them.</p>
+<section id="table-of-contents">
+<h2>Table of contents:<a class="headerlink" href="#table-of-contents" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p><span class="xref myst">Import of necessary packages</span></p></li>
+<li><p><span class="xref myst">Simulation of a noisy circuit</span></p>
+<ul>
+<li><p><span class="xref myst">Simulation of noisy circuits with built-in noise channels</span></p></li>
+<li><p><span class="xref myst">Simulation of noisy circuits with custom noise channels</span></p></li>
+</ul>
+</li>
+<li><p><span class="xref myst">Impact of noise on graph optimization with QAOA</span></p>
+<ul>
+<li><p><span class="xref myst">Defining a noisy QAOA circuit</span></p></li>
+<li><p><span class="xref myst">Benchmarking a noisy circuit evaluation</span></p></li>
+<li><p><span class="xref myst">Comparing the effect of noise channels for QAOA</span></p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="import-of-necessary-packages-a-class-anchor-id-import-a">
+<h2>Import of necessary packages <a class="anchor" id="import"></a><a class="headerlink" href="#import-of-necessary-packages-a-class-anchor-id-import-a" title="Permalink to this heading">#</a></h2>
+<p>Before we get started, let us import the packages that we will use throughout this tutorial.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pennylane</span> <span class="k">as</span> <span class="nn">qml</span>
+<span class="kn">from</span> <span class="nn">pennylane</span> <span class="kn">import</span> <span class="n">numpy</span> <span class="k">as</span> <span class="n">np</span>
+
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">unitary_group</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="simulation-of-a-noisy-circuit-a-class-anchor-id-simulation-a">
+<h2>Simulation of a noisy circuit <a class="anchor" id="simulation"></a><a class="headerlink" href="#simulation-of-a-noisy-circuit-a-class-anchor-id-simulation-a" title="Permalink to this heading">#</a></h2>
+<p>In today’s Noisy Intermediate-Scale Quantum (NISQ) era, quantum computers do not perform perfect computations. Instead, every time a gate is executed or a qubit waits during the computation, there is a small chance that an error will occur.
+To understand how quantum algorithms behave when executed on today’s devices, it is therefore important to take noise into account, and quantum simulators are powerful tools to study the impact of noise on the performance of near-term algorithms.</p>
+<p>A convenient and universal way of modeling noise in a quantum circuit is via Kraus operators. Letting the initial state be represented by the density matrix $\rho$, the output of the noisy quantum circuit (or quantum channel) $\Phi$ is represented by</p>
+<p>$
+\Phi(\rho) = \sum_iK_i\rho K_i^\dagger
+$</p>
+<p>where the operators $\left{K_i\right}$, called Kraus operators, satisfy $\sum_i K_i^\dagger K_i = \mathbb{1}$ (notice the adjoint comes first), where $\mathbb{1}$ is the identity operator. PennyLane provides the following pre-defined single qubit noise channels:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://pennylane.readthedocs.io/en/latest/code/api/pennylane.BitFlip.html">BitFlip</a></p></li>
+<li><p><a class="reference external" href="https://pennylane.readthedocs.io/en/latest/code/api/pennylane.PhaseFlip.html">PhaseFlip</a></p></li>
+<li><p><a class="reference external" href="https://pennylane.readthedocs.io/en/latest/code/api/pennylane.DepolarizingChannel.html">DepolarizingChannel</a></p></li>
+<li><p><a class="reference external" href="https://pennylane.readthedocs.io/en/latest/code/api/pennylane.AmplitudeDamping.html">AmplitudeDamping</a></p></li>
+<li><p><a class="reference external" href="https://pennylane.readthedocs.io/en/latest/code/api/pennylane.GeneralizedAmplitudeDamping.html">GeneralizedAmplitudeDamping</a></p></li>
+<li><p><a class="reference external" href="https://pennylane.readthedocs.io/en/latest/code/api/pennylane.PhaseDamping.html">PhaseDamping</a></p></li>
+</ul>
+<p>In this section, we will illustrate how to simulate noisy quantum circuits with PennyLane’s built-in noise channels, followed by how to define custom noise channels.</p>
+<section id="simulation-of-noisy-circuits-with-built-in-noise-channels-a-class-anchor-id-builtin-a">
+<h3>Simulation of noisy circuits with built-in noise channels<a class="anchor" id="builtin"></a><a class="headerlink" href="#simulation-of-noisy-circuits-with-built-in-noise-channels-a-class-anchor-id-builtin-a" title="Permalink to this heading">#</a></h3>
+<p>First, we consider a quantum circuit for preparing the <code class="docutils literal notranslate"><span class="pre">n</span></code>-qubit GHZ state. For an illustration of the circuit, see <a class="reference external" href="https://github.com/aws/amazon-braket-examples/blob/main/examples/getting_started/1_Running_quantum_circuits_on_simulators/1_Running_quantum_circuits_on_simulators.ipynb">this notebook</a>. When building this quantum circuit, we assume that all unitary gates are subject to the same single qubit noise, with the same probability. For the purpose of comparing different noise channels, we wrap the quantum circuit into a function as below.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">ghz_circuits</span><span class="p">(</span><span class="n">noise_opt</span><span class="p">,</span> <span class="n">wires</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to return simple GHZ circuit ansatz, subject to a given noise operator. </span>
+<span class="sd">    The output is a method for specifying the number of qubits and the noise strength of the GHZ circuit.</span>
+<span class="sd">    The result type is `Probability`. </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">circuits</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The noisy quantum circuit with noise strength p</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">qml</span><span class="o">.</span><span class="n">Hadamard</span><span class="p">(</span><span class="n">wires</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">noise_opt</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">wires</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">wires</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">qml</span><span class="o">.</span><span class="n">CNOT</span><span class="p">(</span><span class="n">wires</span><span class="o">=</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+            <span class="n">noise_opt</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">wires</span><span class="o">=</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">noise_opt</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">wires</span><span class="o">=</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">qml</span><span class="o">.</span><span class="n">probs</span><span class="p">(</span><span class="n">wires</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">wires</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">circuits</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>As an example, we look at two GHZ circuits, each with <code class="docutils literal notranslate"><span class="pre">n=6</span></code> qubits, subject to bit flip and depolarizing noise, respectively. The circuits are constructed for various noise strengths, with the output being the corresponding probability distributions.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wires</span> <span class="o">=</span> <span class="mi">6</span>
+
+<span class="n">noise_opt_1</span> <span class="o">=</span> <span class="n">qml</span><span class="o">.</span><span class="n">BitFlip</span>
+<span class="n">noise_opt_2</span> <span class="o">=</span> <span class="n">qml</span><span class="o">.</span><span class="n">DepolarizingChannel</span>
+<span class="c1"># noise_opt_2 = qml.PhaseDamping</span>
+
+<span class="n">dev</span> <span class="o">=</span> <span class="n">qml</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;braket.local.qubit&quot;</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="s2">&quot;braket_dm&quot;</span><span class="p">,</span> <span class="n">wires</span><span class="o">=</span><span class="n">wires</span><span class="p">)</span>
+<span class="n">ghz_1</span> <span class="o">=</span> <span class="n">qml</span><span class="o">.</span><span class="n">QNode</span><span class="p">(</span><span class="n">ghz_circuits</span><span class="p">(</span><span class="n">noise_opt_1</span><span class="p">,</span> <span class="n">wires</span><span class="p">),</span> <span class="n">dev</span><span class="p">)</span>
+<span class="n">ghz_2</span> <span class="o">=</span> <span class="n">qml</span><span class="o">.</span><span class="n">QNode</span><span class="p">(</span><span class="n">ghz_circuits</span><span class="p">(</span><span class="n">noise_opt_2</span><span class="p">,</span> <span class="n">wires</span><span class="p">),</span> <span class="n">dev</span><span class="p">)</span>
+
+
+<span class="c1"># Draw the quantum circuits</span>
+<span class="n">ghz_1_drawer</span> <span class="o">=</span> <span class="n">qml</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">ghz_1</span><span class="p">)</span>
+<span class="n">ghz_2_drawer</span> <span class="o">=</span> <span class="n">qml</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">ghz_2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The circuit for ghz with BitFlip is</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">ghz_1_drawer</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The circuit for ghz with Depolarizing is</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">ghz_2_drawer</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The circuit for ghz with BitFlip is
+ 0: ──H──BitFlip(0.00)─╭●──BitFlip(0.00)─────────────────────────────────────────────────────────
+1: ───────────────────╰X──BitFlip(0.00)─╭●──BitFlip(0.00)───────────────────────────────────────
+2: ─────────────────────────────────────╰X──BitFlip(0.00)─╭●──BitFlip(0.00)─────────────────────
+3: ───────────────────────────────────────────────────────╰X──BitFlip(0.00)─╭●──BitFlip(0.00)───
+4: ─────────────────────────────────────────────────────────────────────────╰X──BitFlip(0.00)─╭●
+5: ───────────────────────────────────────────────────────────────────────────────────────────╰X
+
+─────────────────┤ ╭Probs
+─────────────────┤ ├Probs
+─────────────────┤ ├Probs
+─────────────────┤ ├Probs
+───BitFlip(0.00)─┤ ├Probs
+───BitFlip(0.00)─┤ ╰Probs
+The circuit for ghz with Depolarizing is
+ 0: ──H──DepolarizingChannel(0.00)─╭●──DepolarizingChannel(0.00)─────────────────────────────────
+1: ───────────────────────────────╰X──DepolarizingChannel(0.00)─╭●──DepolarizingChannel(0.00)───
+2: ─────────────────────────────────────────────────────────────╰X──DepolarizingChannel(0.00)─╭●
+3: ───────────────────────────────────────────────────────────────────────────────────────────╰X
+4: ─────────────────────────────────────────────────────────────────────────────────────────────
+5: ─────────────────────────────────────────────────────────────────────────────────────────────
+
+─────────────────────────────────────────────────────────────────────────────────────────┤ ╭Probs
+─────────────────────────────────────────────────────────────────────────────────────────┤ ├Probs
+───DepolarizingChannel(0.00)─────────────────────────────────────────────────────────────┤ ├Probs
+───DepolarizingChannel(0.00)─╭●──DepolarizingChannel(0.00)───────────────────────────────┤ ├Probs
+─────────────────────────────╰X──DepolarizingChannel(0.00)─╭●──DepolarizingChannel(0.00)─┤ ├Probs
+───────────────────────────────────────────────────────────╰X──DepolarizingChannel(0.00)─┤ ╰Probs
+</pre></div>
+</div>
+</div>
+</div>
+<p>Finally, we collect and present the results as histograms. For noise-free circuits with $p=0$, there are only two peaks corresponding to states where all qubits take values of 0 or 1 respectively, and their values sum to 1. As the noise probability gets larger, the sum of the leftmost and rightmost probabilities in the histogram gets smaller, as expected.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Obtain the results for different noise strengths</span>
+<span class="n">ps</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]</span>
+<span class="n">res_1</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">res_2</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">ps</span><span class="p">:</span>
+    <span class="n">res_1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ghz_1</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>
+    <span class="n">res_2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ghz_2</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>
+
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ps</span><span class="p">),</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span>
+    <span class="s2">&quot;The probability distribution for the quantum circuit with BitFlip and Depolarizaing with various p&quot;</span><span class="p">,</span>
+    <span class="n">size</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;BitFlip&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Depolarizing&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="c1"># axs.set_ylabel(&#39;Probability&#39;)</span>
+<span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ps</span><span class="p">)):</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">ii</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="n">wires</span><span class="p">),</span> <span class="n">res_1</span><span class="p">[</span><span class="n">ii</span><span class="p">])</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">ii</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="n">wires</span><span class="p">),</span> <span class="n">res_2</span><span class="p">[</span><span class="n">ii</span><span class="p">])</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">ii</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.55</span><span class="p">])</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">ii</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.55</span><span class="p">])</span>
+    <span class="n">textstr</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span><span class="s2">&quot;p=&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">ps</span><span class="p">[</span><span class="n">ii</span><span class="p">])))</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">ii</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="n">wires</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="n">textstr</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">ii</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="n">wires</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="n">textstr</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Probability&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="n">axs</span><span class="o">.</span><span class="n">flat</span><span class="p">:</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Bit string&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="n">axs</span><span class="o">.</span><span class="n">flat</span><span class="p">:</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">label_outer</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../../_images/4a6b36e4cb59951107092e1d1e31a6db756d58ceef6f75737b43aabfa93d948c.png" src="../../../_images/4a6b36e4cb59951107092e1d1e31a6db756d58ceef6f75737b43aabfa93d948c.png" />
+</div>
+</div>
+</section>
+<section id="simulation-of-noisy-circuits-with-custom-noise-channels-a-class-anchor-id-custom-a">
+<h3>Simulation of noisy circuits with custom noise channels<a class="anchor" id="custom"></a><a class="headerlink" href="#simulation-of-noisy-circuits-with-custom-noise-channels-a-class-anchor-id-custom-a" title="Permalink to this heading">#</a></h3>
+<p>PennyLane offers a way for users to define their own noise channels with <code class="docutils literal notranslate"><span class="pre">QubitChannel</span></code> by specifying the Kraus operators of the channel. We illustrate this feature with a Kraus channel with randomly generated unitary matrices</p>
+<p>$
+K_0 = \sqrt{1-p}\mathbb{1}, \quad K_i = \sqrt{\frac{p}{3}}U_i
+$</p>
+<p>where $p\in[0,1]$ is the noise strength, and $U_i^\dagger U_i=\mathbb{1}\ (i=1,2,3)$ are random unitary matrices. We define a quantum circuit for generating an <code class="docutils literal notranslate"><span class="pre">n</span></code>-qubit GHZ state, subject to this custom noise channel. Again, we assume that all unitary gates are subject to the same noise channel, with the same probability.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">ghz_circuits_custom_noise</span><span class="p">(</span><span class="n">wires</span><span class="p">,</span> <span class="n">Ks</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to return simple GHZ circuit ansatz with customized noise channel. </span>
+<span class="sd">    The result type is `Probability`.     </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">qml</span><span class="o">.</span><span class="n">Hadamard</span><span class="p">(</span><span class="n">wires</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">qml</span><span class="o">.</span><span class="n">QubitChannel</span><span class="p">(</span><span class="n">Ks</span><span class="p">,</span> <span class="n">wires</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">wires</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">qml</span><span class="o">.</span><span class="n">CNOT</span><span class="p">(</span><span class="n">wires</span><span class="o">=</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="n">qml</span><span class="o">.</span><span class="n">QubitChannel</span><span class="p">(</span><span class="n">Ks</span><span class="p">,</span> <span class="n">wires</span><span class="o">=</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">qml</span><span class="o">.</span><span class="n">QubitChannel</span><span class="p">(</span><span class="n">Ks</span><span class="p">,</span> <span class="n">wires</span><span class="o">=</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">qml</span><span class="o">.</span><span class="n">probs</span><span class="p">(</span><span class="n">wires</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">wires</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="alert alert-block alert-info">
+<b>Note</b> The maximum number of Kraus operators allowed for a custom noise channel is four.
+</div>
+<p>We initialize the random matrices $U_i$, then define the custom noise channel with various noise strength p. Again, we take the 6-qubit GHZ state as an example.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wires</span> <span class="o">=</span> <span class="mi">6</span>
+<span class="n">dev</span> <span class="o">=</span> <span class="n">qml</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;braket.local.qubit&quot;</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="s2">&quot;braket_dm&quot;</span><span class="p">,</span> <span class="n">wires</span><span class="o">=</span><span class="n">wires</span><span class="p">)</span>
+<span class="n">ghz</span> <span class="o">=</span> <span class="n">qml</span><span class="o">.</span><span class="n">QNode</span><span class="p">(</span><span class="n">ghz_circuits_custom_noise</span><span class="p">,</span> <span class="n">dev</span><span class="p">)</span>
+<span class="n">ghz_drawer</span> <span class="o">=</span> <span class="n">qml</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">ghz</span><span class="p">)</span>
+
+<span class="n">ps</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]</span>
+
+<span class="n">Ks_basis</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">unitary_group</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">unitary_group</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">unitary_group</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="mi">2</span><span class="p">)]</span>
+
+<span class="n">res_custom</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">ps</span><span class="p">:</span>
+    <span class="n">Ks</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">p</span><span class="p">)</span> <span class="o">*</span> <span class="n">Ks_basis</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">p</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="n">Ks_basis</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> 
+          <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">p</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="n">Ks_basis</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">p</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="n">Ks_basis</span><span class="p">[</span><span class="mi">3</span><span class="p">]]</span>
+    <span class="n">res_custom</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ghz</span><span class="p">(</span><span class="n">wires</span><span class="p">,</span> <span class="n">Ks</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ps</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span>
+    <span class="s2">&quot;The probability distribution for the quantum circuit with customized noise channel with various p&quot;</span><span class="p">,</span>
+    <span class="n">size</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ps</span><span class="p">)):</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="n">wires</span><span class="p">),</span> <span class="n">res_custom</span><span class="p">[</span><span class="n">ii</span><span class="p">])</span>
+    <span class="n">textstr</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span><span class="s2">&quot;p=&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">ps</span><span class="p">[</span><span class="n">ii</span><span class="p">])))</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="n">wires</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="n">textstr</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.55</span><span class="p">])</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.55</span><span class="p">])</span>
+<span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="n">axs</span><span class="o">.</span><span class="n">flat</span><span class="p">:</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Bit string&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="n">axs</span><span class="o">.</span><span class="n">flat</span><span class="p">:</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">label_outer</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="../../../_images/ac6a3c77054ff0ed70f98939f9afbb2b5a5b2cef53d2c0cc310d38b008dad9d8.png" src="../../../_images/ac6a3c77054ff0ed70f98939f9afbb2b5a5b2cef53d2c0cc310d38b008dad9d8.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="impact-of-noise-on-graph-optimization-with-qaoa-a-class-anchor-id-noise-qaoa-a">
+<h2>Impact of noise on graph optimization with QAOA <a class="anchor" id="noise_qaoa"></a><a class="headerlink" href="#impact-of-noise-on-graph-optimization-with-qaoa-a-class-anchor-id-noise-qaoa-a" title="Permalink to this heading">#</a></h2>
+<p>In <a class="reference external" href="https://github.com/aws/amazon-braket-examples/blob/main/examples/pennylane/2_Graph_optimization_with_QAOA/2_Graph_optimization_with_QAOA.ipynb">a previous notebook</a>, we have seen examples of using the quantum approximate optimization algorithm (QAOA) to solve graph-based combinatorial optimization problems, assuming the device is noise-free. Since QAOA, as a class of hybrid quantum algorithms, is designed for noisy near-term hardware, we will now study how noise affects the performance of QAOA. We first define a noisy QAOA circuit, and then benchmark its run time on both the local simulator and the on-demand DM1 simulator. Finally, we compare the effect of two noise channels with different noise strengths on the performance of QAOA.</p>
+<section id="defining-a-noisy-qaoa-circuit-a-class-anchor-id-define-circuit-a">
+<h3>Defining a noisy QAOA circuit <a class="anchor" id="define_circuit"></a><a class="headerlink" href="#defining-a-noisy-qaoa-circuit-a-class-anchor-id-define-circuit-a" title="Permalink to this heading">#</a></h3>
+<p>Consider the <a class="reference external" href="https://en.wikipedia.org/wiki/Clique_problem">maximum clique problem</a> based on a given graph <code class="docutils literal notranslate"><span class="pre">g</span></code>. To apply QAOA to this problem, we first obtain the cost Hamiltonian $H_C$ that encodes our target problem and the corresponding mixer Hamiltonian $H_M$ with PennyLane’s built-in functions. A single QAOA layer consists of $\exp(-i\gamma H_C)$ followed by $\exp(-i\alpha H_M)$ with controllable parameters $\gamma$ and $\alpha$. In order to simulate the effect of noise, typically we would append a noise channel operator after each unitary in the quantum circuit, as we did in the previous section. Here, for simplicity, we insert a layer of noise channels, which acts on all the qubits with the same noise strengths simultaneously, after each block of $\exp(-i\gamma H_C)$ and $\exp(-i\alpha H_M)$.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">qaoa_layer_noise</span><span class="p">(</span><span class="n">γ</span><span class="p">,</span> <span class="n">α</span><span class="p">,</span> <span class="n">noise_opt</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">n_nodes</span><span class="p">,</span> <span class="n">cost_h</span><span class="p">,</span> <span class="n">mixer_h</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A QAOA layer with noise, simulated by noise_opt with noise strength p. </span>
+<span class="sd">    cost_h and mixer_h are the cost and mixer Hamiltonian from the given graph with n_nodes nodes. </span>
+<span class="sd">    γ, α are the tuning parameters of the QAOA.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">qml</span><span class="o">.</span><span class="n">qaoa</span><span class="o">.</span><span class="n">cost_layer</span><span class="p">(</span><span class="n">γ</span><span class="p">,</span> <span class="n">cost_h</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_nodes</span><span class="p">):</span>
+        <span class="n">noise_opt</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">wires</span><span class="o">=</span><span class="n">i</span><span class="p">)</span>
+    <span class="n">qml</span><span class="o">.</span><span class="n">qaoa</span><span class="o">.</span><span class="n">mixer_layer</span><span class="p">(</span><span class="n">α</span><span class="p">,</span> <span class="n">mixer_h</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_nodes</span><span class="p">):</span>
+        <span class="n">noise_opt</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">wires</span><span class="o">=</span><span class="n">i</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>In the above function, we have used <code class="docutils literal notranslate"><span class="pre">noise_opt</span></code> for the noise channel and <code class="docutils literal notranslate"><span class="pre">p</span></code> for the noise strength. With a single layer of QAOA set up, we can proceed to construct the full QAOA circuit, the cost function and the sampling function that probes the probability of each outcome. These are defined in the same way as in the noise-free QAOA example, and we wrap them in another function for the convenience of benchmarking different noise channels and runtime on different devices.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">QAOA</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">n_layers</span><span class="p">,</span> <span class="n">noise_opt</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">dev</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the cost function and sampling function for the QAOA, with n_layers layers. </span>
+<span class="sd">    dev is the device on which the QAOA will be run. </span>
+<span class="sd">    g is the graph on which the problem is defined. </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">n_nodes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">nodes</span><span class="p">)</span>
+    <span class="n">cost_h</span><span class="p">,</span> <span class="n">mixer_h</span> <span class="o">=</span> <span class="n">qml</span><span class="o">.</span><span class="n">qaoa</span><span class="o">.</span><span class="n">max_clique</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">constrained</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">circuit</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The full QAOA circuit with parameters params</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_nodes</span><span class="p">):</span>  <span class="c1"># Prepare an equal superposition over all qubits</span>
+            <span class="n">qml</span><span class="o">.</span><span class="n">Hadamard</span><span class="p">(</span><span class="n">wires</span><span class="o">=</span><span class="n">i</span><span class="p">)</span>
+
+        <span class="n">qml</span><span class="o">.</span><span class="n">layer</span><span class="p">(</span>
+            <span class="n">qaoa_layer_noise</span><span class="p">,</span>
+            <span class="n">n_layers</span><span class="p">,</span>
+            <span class="n">params</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="c1"># These parameters are γ&#39;s </span>
+            <span class="n">params</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="c1"># These parameters are α&#39;s </span>
+            <span class="p">[</span><span class="n">noise_opt</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_layers</span><span class="p">)],</span>
+            <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_layers</span><span class="p">)],</span>
+            <span class="p">[</span><span class="n">n_nodes</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_layers</span><span class="p">)],</span>
+            <span class="p">[</span><span class="n">cost_h</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_layers</span><span class="p">)],</span>
+            <span class="p">[</span><span class="n">mixer_h</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_layers</span><span class="p">)],</span>
+        <span class="p">)</span>
+    
+    <span class="nd">@qml</span><span class="o">.</span><span class="n">qnode</span><span class="p">(</span><span class="n">dev</span><span class="p">,</span> <span class="n">diff_method</span><span class="o">=</span><span class="s1">&#39;parameter-shift&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">cost_fun</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">circuit</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">qml</span><span class="o">.</span><span class="n">expval</span><span class="p">(</span><span class="n">cost_h</span><span class="p">)</span>
+
+    <span class="nd">@qml</span><span class="o">.</span><span class="n">qnode</span><span class="p">(</span><span class="n">dev</span><span class="p">,</span> <span class="n">diff_method</span><span class="o">=</span><span class="s1">&#39;parameter-shift&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">samples</span><span class="p">(</span><span class="n">params</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The sampling function for the probability distribution</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">circuit</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">qml</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">qml</span><span class="o">.</span><span class="n">PauliZ</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_nodes</span><span class="p">)]</span>
+
+    <span class="k">return</span> <span class="n">cost_fun</span><span class="p">,</span> <span class="n">samples</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="benchmarking-a-noisy-circuit-evaluation-a-class-anchor-id-benchmark1-v2-a">
+<h3>Benchmarking a noisy circuit evaluation <a class="anchor" id="benchmark1_v2"></a><a class="headerlink" href="#benchmarking-a-noisy-circuit-evaluation-a-class-anchor-id-benchmark1-v2-a" title="Permalink to this heading">#</a></h3>
+<p>A typical step in QAOA is to optimize the quantum circuit with respect to a cost function by tuning its parameters $\gamma$ and $\alpha$. In practice, it will involve many circuit evaluations, and DM1, an on-demand density matrix simulator on Amazon Braket is well suited for such a workloads, as it can execute multiple circuits in parallel, just like Braket’s on-demand state vector simulator <a class="reference external" href="https://github.com/aws/amazon-braket-examples/blob/main/examples/pennylane/1_Parallelized_optimization_of_quantum_circuits/1_Parallelized_optimization_of_quantum_circuits.ipynb">SV1</a>.</p>
+<p>Let’s compare the time it takes to compute the cost function on DM1 and the local simulator.
+In particular, for a graph with <code class="docutils literal notranslate"><span class="pre">n_nodes</span></code> nodes, we  evaluate a noisy QAOA circuit with four layers on both local simulator and DM1 and compare their performance. Note that we have omitted <code class="docutils literal notranslate"><span class="pre">parallel=True</span></code> for DM1 since we only evaluate the cost function once here. For multiple evaluations of the cost function, such as for evaluating the gradient using parameter-shift rules, setting <code class="docutils literal notranslate"><span class="pre">parallel=True</span></code> will result in shorter runtime.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">compare_dm1_local</span><span class="p">(</span><span class="n">n_nodes</span><span class="p">):</span>
+    <span class="n">seed</span> <span class="o">=</span> <span class="mi">1967</span>
+    <span class="n">g</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">erdos_renyi_graph</span><span class="p">(</span><span class="n">n_nodes</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">n_layers</span> <span class="o">=</span> <span class="mi">4</span>
+
+    <span class="c1"># The following parameters won&#39;t affect the time consumptions.</span>
+    <span class="n">noise_opt</span> <span class="o">=</span> <span class="n">qml</span><span class="o">.</span><span class="n">BitFlip</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="mf">0.01</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_layers</span><span class="p">])</span>
+
+    <span class="n">shots</span> <span class="o">=</span> <span class="mi">5000</span>
+
+    <span class="n">dev_local</span> <span class="o">=</span> <span class="n">qml</span><span class="o">.</span><span class="n">device</span><span class="p">(</span>
+        <span class="s2">&quot;braket.local.qubit&quot;</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="s2">&quot;braket_dm&quot;</span><span class="p">,</span> <span class="n">wires</span><span class="o">=</span><span class="n">n_nodes</span><span class="p">,</span> <span class="n">shots</span><span class="o">=</span><span class="n">shots</span>
+    <span class="p">)</span>
+
+    <span class="n">dev_DM1</span> <span class="o">=</span> <span class="n">qml</span><span class="o">.</span><span class="n">device</span><span class="p">(</span>
+        <span class="s2">&quot;braket.aws.qubit&quot;</span><span class="p">,</span>
+        <span class="n">device_arn</span><span class="o">=</span><span class="s2">&quot;arn:aws:braket:::device/quantum-simulator/amazon/dm1&quot;</span><span class="p">,</span>
+        <span class="n">wires</span><span class="o">=</span><span class="n">n_nodes</span><span class="p">,</span>
+        <span class="n">shots</span><span class="o">=</span><span class="n">shots</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">cost_fun_local</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">QAOA</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">n_layers</span><span class="p">,</span> <span class="n">noise_opt</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">dev_local</span><span class="p">)</span>
+
+    <span class="n">cost_fun_DM1</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">QAOA</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">n_layers</span><span class="p">,</span> <span class="n">noise_opt</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">dev_DM1</span><span class="p">)</span>
+
+    <span class="n">t_0_local</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">res_local</span> <span class="o">=</span> <span class="n">cost_fun_local</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+    <span class="n">t_1_local</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+    <span class="n">t_0_DM1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">res_DM1</span> <span class="o">=</span> <span class="n">cost_fun_DM1</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+    <span class="n">t_1_DM1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>  
+    
+    <span class="k">return</span> <span class="n">t_1_local</span><span class="o">-</span><span class="n">t_0_local</span><span class="p">,</span> <span class="n">t_1_DM1</span><span class="o">-</span><span class="n">t_0_DM1</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We then plot the runtime and the results obtained from the local device and DM1.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">runtimes_local</span><span class="p">,</span> <span class="n">runtimes_DM1</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+<span class="n">n_nodes_list</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">13</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">n_nodes</span> <span class="ow">in</span> <span class="n">n_nodes_list</span><span class="p">:</span>
+    <span class="n">runtime_local</span><span class="p">,</span> <span class="n">runtime_DM1</span> <span class="o">=</span> <span class="n">compare_dm1_local</span><span class="p">(</span><span class="n">n_nodes</span><span class="p">)</span>
+    <span class="n">runtimes_local</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">runtime_local</span><span class="p">)</span>
+    <span class="n">runtimes_DM1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">runtime_DM1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;Comparison of runtime on local device and DM1&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">n_nodes_list</span><span class="p">,</span> <span class="n">runtimes_local</span><span class="p">,</span> <span class="s1">&#39;o-&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Run time on local device&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">n_nodes_list</span><span class="p">,</span> <span class="n">runtimes_DM1</span><span class="p">,</span> <span class="s1">&#39;x-&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Run time on DM1&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Number of nodes in the graph&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Run time (seconds)&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../../_images/8792c28436d790ec3a488f2ca83e050ab61ffba891ad142385395adc2f956898.png" src="../../../_images/8792c28436d790ec3a488f2ca83e050ab61ffba891ad142385395adc2f956898.png" />
+</div>
+</div>
+<p>When $n_\text{nodes}\leq 10$, the local device runs faster than DM1 because the execution time  of the latter is dominated by the network overhead. However, already for $n_\text{nodes}\geq11$, DM1 runs much faster and the difference will grow as $n_\text{nodes}$ gets larger. We note that the runtime on the local device will depend on the actual hardware that this notebook is running on.</p>
+</section>
+<section id="comparing-the-effect-of-noise-channels-for-qaoa-a-class-anchor-id-benchmark2-v2-a">
+<h3>Comparing the effect of noise channels for QAOA <a class="anchor" id="benchmark2_v2"></a><a class="headerlink" href="#comparing-the-effect-of-noise-channels-for-qaoa-a-class-anchor-id-benchmark2-v2-a" title="Permalink to this heading">#</a></h3>
+<p>Finally, we compare the effects of different noise channels with different noise strengths on the convergence of our algorithm. In particular, we consider the bit flip and the phase damping channels with $p\in{0, 0.05, 0.25}$. For simplicity, we pick the same graph and optimizer as in the noise-free QAOA example.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">qml</span><span class="o">.</span><span class="n">GradientDescentOptimizer</span><span class="p">()</span>
+
+<span class="n">n_nodes</span> <span class="o">=</span> <span class="mi">6</span>
+<span class="n">seed</span> <span class="o">=</span> <span class="mi">1967</span>
+<span class="n">g</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">erdos_renyi_graph</span><span class="p">(</span><span class="n">n_nodes</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
+
+<span class="n">positions</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">spring_layout</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
+<span class="n">nx</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">with_labels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">positions</span><span class="p">,</span> <span class="n">node_size</span><span class="o">=</span><span class="mi">600</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../../_images/fcd3a1cc48c73f48275a39e95f3d922641d66c6b0f296c0e87d1ff7248f39ecb.png" src="../../../_images/fcd3a1cc48c73f48275a39e95f3d922641d66c6b0f296c0e87d1ff7248f39ecb.png" />
+</div>
+</div>
+<p>We save the values of the cost function at each iteration step, and then sample the probability of the final outcomes.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_cost_sampling</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">n_layers</span><span class="p">,</span> <span class="n">noise_opt</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">n_iterations</span><span class="p">,</span> <span class="n">shots</span><span class="p">,</span> <span class="n">dev</span><span class="p">):</span>
+
+    <span class="n">cost_func</span><span class="p">,</span> <span class="n">samples</span> <span class="o">=</span> <span class="n">QAOA</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">n_layers</span><span class="p">,</span> <span class="n">noise_opt</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">dev</span><span class="p">)</span>
+
+    <span class="n">costs</span> <span class="o">=</span> <span class="p">[</span><span class="n">cost_func</span><span class="p">(</span><span class="n">params</span><span class="p">)]</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_iterations</span><span class="p">):</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">cost_func</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+        <span class="n">cost_eval</span> <span class="o">=</span> <span class="n">cost_func</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+        <span class="n">costs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cost_eval</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Completed iteration </span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s2">, cost function:&quot;</span><span class="p">,</span> <span class="n">cost_eval</span><span class="p">)</span>
+
+    <span class="n">s</span> <span class="o">=</span> <span class="n">samples</span><span class="p">(</span><span class="n">params</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">s</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span> <span class="o">/</span> <span class="mi">2</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+
+    <span class="n">counts</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+    <span class="n">indx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ndindex</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">n_nodes</span><span class="p">)</span>
+
+    <span class="n">probs</span> <span class="o">=</span> <span class="p">{</span><span class="n">p</span><span class="p">:</span> <span class="n">counts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">/</span> <span class="n">shots</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">indx</span><span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">costs</span><span class="p">,</span> <span class="n">probs</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We use 4 layers for the full QAOA circuit, set the number of shots to be <code class="docutils literal notranslate"><span class="pre">shots=1000</span></code>, and fix the number of iterations to be <code class="docutils literal notranslate"><span class="pre">n_iterations=50</span></code>. Note that for fairness of the comparison, we always start with the same initial <code class="docutils literal notranslate"><span class="pre">params</span></code> for the optimization process.</p>
+<div class="alert alert-block alert-info">
+<b>Note 1</b> The choice of depth, number of shots and iterations of QAOA is a tradeoff between improved solutions (for greater depth and more iterations) and longer runtime.
+</div>
+<div class="alert alert-block alert-info">
+<b>Note 2</b> We have chosen a relatively smaller graph for illustrating the impact of noise on QAOA. As a result, the local simulator is sufficient for the task. For users who would like to try larger graphs on DM1, we recommend monitoring the Billing & Cost Management Dashboard on the AWS console and being aware that jobs involving a large number of qubits or deep circuits can be costly. 
+</div>
+<div class="alert alert-block alert-warning">
+<b>Caution:</b> Running the following cell will take a long time. Only uncomment the cell if you are comfortable with the potential wait time.
+</div><div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># ps = [0.0, 0.05, 0.25]</span>
+<span class="c1"># noise_opts = [qml.BitFlip, qml.PhaseDamping]</span>
+
+<span class="c1"># n_layers = 4</span>
+<span class="c1"># shots = 1000</span>
+<span class="c1"># n_iterations = 50</span>
+
+<span class="c1"># params = np.random.uniform(size=[2, n_layers])</span>
+
+<span class="c1"># dev = qml.device(&quot;braket.local.qubit&quot;, backend=&quot;braket_dm&quot;, wires=n_nodes, shots=shots)</span>
+
+<span class="c1"># costs_range = []</span>
+<span class="c1"># probs_range = []</span>
+<span class="c1"># for p in ps:</span>
+<span class="c1">#     costs_range_2 = []</span>
+<span class="c1">#     probs_range_2 = []</span>
+<span class="c1">#     for noise_opt in noise_opts:</span>
+<span class="c1">#         costs, probs = get_cost_sampling(</span>
+<span class="c1">#             g, n_layers, noise_opt, p, params, n_iterations, shots, dev</span>
+<span class="c1">#         )</span>
+<span class="c1">#         costs_range_2.append(costs)</span>
+<span class="c1">#         probs_range_2.append(probs)</span>
+
+<span class="c1">#     costs_range.append(costs_range_2)</span>
+<span class="c1">#     probs_range.append(probs_range_2)</span>
+
+<span class="c1"># ## Plot the results</span>
+
+<span class="c1"># plt.figure(figsize=(20, 6))</span>
+<span class="c1"># for i in range(len(ps)):</span>
+<span class="c1">#     for j in range(len(noise_opts)):</span>
+<span class="c1">#         if j == 0:</span>
+<span class="c1">#             label = f&quot;Bit flip with p={ps[i]}&quot;</span>
+<span class="c1">#             marker = &quot;x-&quot;</span>
+<span class="c1">#         elif j == 1:</span>
+<span class="c1">#             label = f&quot;Phase damping with p={ps[i]}&quot;</span>
+<span class="c1">#             marker = &quot;o-&quot;</span>
+
+<span class="c1">#         plt.plot(costs_range[i][j], marker, markersize=10, label=label)</span>
+
+<span class="c1"># plt.legend()</span>
+<span class="c1"># plt.xlabel(&quot;Iterations&quot;, fontsize=20)</span>
+<span class="c1"># plt.ylabel(&quot;Cost function&quot;, fontsize=20)</span>
+<span class="c1"># plt.title(</span>
+<span class="c1">#     &quot;Comparison of cost functions for bit flip and phase damping channels&quot;, size=20</span>
+<span class="c1"># )</span>
+<span class="c1"># plt.show()</span>
+
+<span class="c1"># fig, axs = plt.subplots(len(ps), 2, figsize=(20, 8))</span>
+<span class="c1"># fig.suptitle(</span>
+<span class="c1">#     &quot;Comparison of probability distributions for bit flip and phase damping channels&quot;,</span>
+<span class="c1">#     size=20,</span>
+<span class="c1"># )</span>
+<span class="c1"># axs[0][0].set_title(&quot;BitFlip&quot;, fontsize=20)</span>
+<span class="c1"># axs[0][1].set_title(&quot;PhaseDamping&quot;, fontsize=20)</span>
+<span class="c1"># # axs.set_ylabel(&#39;Probability&#39;)</span>
+<span class="c1"># for ii in range(len(ps)):</span>
+<span class="c1">#     axs[ii][0].bar(range(2 ** n_nodes), probs_range[ii][0].values())</span>
+<span class="c1">#     axs[ii][1].bar(range(2 ** n_nodes), probs_range[ii][1].values())</span>
+<span class="c1">#     axs[ii][0].set_ylim([0, 0.5])</span>
+<span class="c1">#     axs[ii][1].set_ylim([0, 0.5])</span>
+<span class="c1">#     textstr = &quot;&quot;.join((&quot;p=&quot;, str(ps[ii])))</span>
+<span class="c1">#     axs[ii][0].text(2 ** n_nodes / 2, 0.3, textstr, fontsize=20)</span>
+<span class="c1">#     axs[ii][1].text(2 ** n_nodes / 2, 0.3, textstr, fontsize=20)</span>
+<span class="c1"># axs[1][0].set_ylabel(&quot;Probability&quot;, fontsize=20)</span>
+<span class="c1"># for ax in axs.flat:</span>
+<span class="c1">#     ax.set_xlabel(&quot;Bit string&quot;, size=20)</span>
+<span class="c1"># for ax in axs.flat:</span>
+<span class="c1">#     ax.label_outer()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>For the first plot, when $p=0$, both QAOA circuits reproduce the noiseless result as expected, and both cost functions nearly overlap throughout the iteration process.
+Upon increasing the noise strength, for $p=0.05$, the distinction between the two noise channels starts to appear: for the phase damping case, the cost function only deviates marginally from the noiseless case,
+whereas the cost function is halved for the bit flip case.
+The difference is even more dramatic for $p=0.25$, where the classical optimizer is incapable of optimizing the QAOA with bit flip noise, and its cost function essentially fluctuates around 0.
+On the other hand, QAOA shows remarkable robustness to phase damping noise, and the cost function converges after around $40$ iteration steps.</p>
+<p>This sharp distinction between bit flip and phase damping channels is also evident from the comparison of probability distributions.
+For the plots with $p=0$, the highest peaks correspond to the most frequent outcome, as represented by the bit-string <code class="docutils literal notranslate"><span class="pre">101110</span></code> (not shown in the figures), which is the maximum clique of the given graph.
+When $p=0.05$, compared to the phase damping case, the probability of the maximum clique substantially decreases for the bit flip case.
+Although we can still infer the correct solution for the bit flip case when $p=0.05$, this is no longer the case for $p=0.25$ where the noise completely destroys any useful information. Remarkably, the QAOA with phase damping can still produce the correct result but less reliably, and we expect that QAOA with phase damping channel will fail for even larger $p$.</p>
+<p>To summarize, there are a few takeaways from the above comparison.</p>
+<ol class="arabic simple">
+<li><p>For QAOA with a given type of noise channel, the approximate solution gets less reliable with increasing noise strength, as expected;</p></li>
+<li><p>For a given noise strength, different noise channels can have very different effects;</p></li>
+<li><p>QAOA is robust to certain types of noise: for certain noise channels, QAOA can provide reliable solutions for graph-based optimization problems, even with moderate noise strength. However, detailed exploration of this topic is beyond the scope of this notebook.</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Task Summary&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">quantum_tasks_statistics</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Note: Charges shown are estimates based on your Amazon Braket simulator and quantum processing unit (QPU) task usage. Estimated charges shown may differ from your actual charges. Estimated charges do not factor in any discounts or credits, and you may experience additional charges based on your use of other services such as Amazon Elastic Compute Cloud (Amazon EC2).&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Estimated cost to run this example: </span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="n">qpu_tasks_cost</span><span class="p">()</span> <span class="o">+</span> <span class="n">t</span><span class="o">.</span><span class="n">simulator_tasks_cost</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> USD&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Task Summary
+{&#39;arn:aws:braket:::device/quantum-simulator/amazon/dm1&#39;: {&#39;shots&#39;: 45000, &#39;tasks&#39;: {&#39;COMPLETED&#39;: 9}, &#39;execution_duration&#39;: datetime.timedelta(seconds=3, microseconds=490000), &#39;billed_execution_duration&#39;: datetime.timedelta(seconds=27)}}
+Note: Charges shown are estimates based on your Amazon Braket simulator and quantum processing unit (QPU) task usage. Estimated charges shown may differ from your actual charges. Estimated charges do not factor in any discounts or credits, and you may experience additional charges based on your use of other services such as Amazon Elastic Compute Cloud (Amazon EC2).
+Estimated cost to run this example: 0.034 USD
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Simulation of noisy quantum circuits on Amazon Braket with PennyLane</a><ul>
+<li><a class="reference internal" href="#table-of-contents">Table of contents:</a></li>
+<li><a class="reference internal" href="#import-of-necessary-packages-a-class-anchor-id-import-a">Import of necessary packages <a class="anchor" id="import"></a></a></li>
+<li><a class="reference internal" href="#simulation-of-a-noisy-circuit-a-class-anchor-id-simulation-a">Simulation of a noisy circuit <a class="anchor" id="simulation"></a></a><ul>
+<li><a class="reference internal" href="#simulation-of-noisy-circuits-with-built-in-noise-channels-a-class-anchor-id-builtin-a">Simulation of noisy circuits with built-in noise channels<a class="anchor" id="builtin"></a></a></li>
+<li><a class="reference internal" href="#simulation-of-noisy-circuits-with-custom-noise-channels-a-class-anchor-id-custom-a">Simulation of noisy circuits with custom noise channels<a class="anchor" id="custom"></a></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#impact-of-noise-on-graph-optimization-with-qaoa-a-class-anchor-id-noise-qaoa-a">Impact of noise on graph optimization with QAOA <a class="anchor" id="noise_qaoa"></a></a><ul>
+<li><a class="reference internal" href="#defining-a-noisy-qaoa-circuit-a-class-anchor-id-define-circuit-a">Defining a noisy QAOA circuit <a class="anchor" id="define_circuit"></a></a></li>
+<li><a class="reference internal" href="#benchmarking-a-noisy-circuit-evaluation-a-class-anchor-id-benchmark1-v2-a">Benchmarking a noisy circuit evaluation <a class="anchor" id="benchmark1_v2"></a></a></li>
+<li><a class="reference internal" href="#comparing-the-effect-of-noise-channels-for-qaoa-a-class-anchor-id-benchmark2-v2-a">Comparing the effect of noise channels for QAOA <a class="anchor" id="benchmark2_v2"></a></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/scripts/furo.js"></script>
+    </body>
+</html>

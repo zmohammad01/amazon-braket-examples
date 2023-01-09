@@ -1,0 +1,731 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
+
+    <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
+        <title>Running quantum circuits on QPU devices - Amazon Braket Examples documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../../index.html"><div class="brand">Amazon Braket Examples  documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
+  
+  
+  <span class="sidebar-brand-text">Amazon Braket Examples  documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="running-quantum-circuits-on-qpu-devices">
+<h1>Running quantum circuits on QPU devices<a class="headerlink" href="#running-quantum-circuits-on-qpu-devices" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use Braket SDK Cost Tracking to estimate the cost to run this example</span>
+<span class="kn">from</span> <span class="nn">braket.tracking</span> <span class="kn">import</span> <span class="n">Tracker</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">Tracker</span><span class="p">()</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>In this tutorial we show how to run circuits on QPU devices. We can run our circuit on both the superconducting machine from Rigetti and the ion-trap machine provided by IonQ. As shown below, one can seamlessly swap between different devices without any modifications to the circuit definition, by just re-defining the device object. We also show how to recover results using the unique ARN associated with every task. This tool is useful in order to deal with potential delays if your quantum task sits in the queue for some time waiting for execution.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># general imports</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="c1"># magic word for producing visualizations in notebook</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+<span class="kn">import</span> <span class="nn">string</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="c1"># AWS imports: Import Braket SDK modules</span>
+<span class="kn">from</span> <span class="nn">braket.circuits</span> <span class="kn">import</span> <span class="n">Circuit</span><span class="p">,</span> <span class="n">Gate</span><span class="p">,</span> <span class="n">Observable</span>
+<span class="kn">from</span> <span class="nn">braket.devices</span> <span class="kn">import</span> <span class="n">LocalSimulator</span>
+<span class="kn">from</span> <span class="nn">braket.aws</span> <span class="kn">import</span> <span class="n">AwsDevice</span><span class="p">,</span> <span class="n">AwsQuantumTask</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="supported-gate-sets-by-different-devices">
+<h2>Supported gate sets by different devices<a class="headerlink" href="#supported-gate-sets-by-different-devices" title="Permalink to this heading">#</a></h2>
+<p>First, let us check out the gate set currently supported by our SDK. Note that the QPU devices only support a subset of these gates.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># print all (the usual suspects) available gates currently available within SDK</span>
+<span class="n">gate_set</span> <span class="o">=</span> <span class="p">[</span><span class="n">attr</span> <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">Gate</span><span class="p">)</span> <span class="k">if</span> <span class="n">attr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">string</span><span class="o">.</span><span class="n">ascii_uppercase</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Gate set supported by SDK:</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">gate_set</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span> 
+
+<span class="c1"># the Rigetti device</span>
+<span class="n">device</span> <span class="o">=</span> <span class="n">AwsDevice</span><span class="p">(</span><span class="s2">&quot;arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-2&quot;</span><span class="p">)</span>
+<span class="n">supported_gates</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">action</span><span class="p">[</span><span class="s1">&#39;braket.ir.jaqcd.program&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">supportedOperations</span>
+<span class="c1"># print the supported gate set</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Gate set supported by the Rigetti device:</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">supported_gates</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span> 
+
+<span class="c1"># the IonQ device</span>
+<span class="n">device</span> <span class="o">=</span> <span class="n">AwsDevice</span><span class="p">(</span><span class="s2">&quot;arn:aws:braket:::device/qpu/ionq/ionQdevice&quot;</span><span class="p">)</span>
+<span class="n">supported_gates</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">action</span><span class="p">[</span><span class="s1">&#39;braket.ir.jaqcd.program&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">supportedOperations</span>
+<span class="c1"># print the supported gate set</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Gate set supported by the IonQ device:</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">supported_gates</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span> 
+
+<span class="c1"># the Oxford Quantum Circuits (OQC) device</span>
+<span class="n">device</span> <span class="o">=</span> <span class="n">AwsDevice</span><span class="p">(</span><span class="s2">&quot;arn:aws:braket:eu-west-2::device/qpu/oqc/Lucy&quot;</span><span class="p">)</span>
+<span class="n">supported_gates</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">action</span><span class="p">[</span><span class="s1">&#39;braket.ir.jaqcd.program&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">supportedOperations</span>
+<span class="c1"># print the supported gate set</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Gate set supported by the OQC device:</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">supported_gates</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Gate set supported by SDK:
+ [&#39;CCNot&#39;, &#39;CNot&#39;, &#39;CPhaseShift&#39;, &#39;CPhaseShift00&#39;, &#39;CPhaseShift01&#39;, &#39;CPhaseShift10&#39;, &#39;CSwap&#39;, &#39;CV&#39;, &#39;CY&#39;, &#39;CZ&#39;, &#39;ECR&#39;, &#39;H&#39;, &#39;I&#39;, &#39;ISwap&#39;, &#39;PSwap&#39;, &#39;PhaseShift&#39;, &#39;Rx&#39;, &#39;Ry&#39;, &#39;Rz&#39;, &#39;S&#39;, &#39;Si&#39;, &#39;Swap&#39;, &#39;T&#39;, &#39;Ti&#39;, &#39;Unitary&#39;, &#39;V&#39;, &#39;Vi&#39;, &#39;X&#39;, &#39;XX&#39;, &#39;XY&#39;, &#39;Y&#39;, &#39;YY&#39;, &#39;Z&#39;, &#39;ZZ&#39;]
+
+
+Gate set supported by the Rigetti device:
+ [&#39;cz&#39;, &#39;xy&#39;, &#39;ccnot&#39;, &#39;cnot&#39;, &#39;cphaseshift&#39;, &#39;cphaseshift00&#39;, &#39;cphaseshift01&#39;, &#39;cphaseshift10&#39;, &#39;cswap&#39;, &#39;h&#39;, &#39;i&#39;, &#39;iswap&#39;, &#39;phaseshift&#39;, &#39;pswap&#39;, &#39;rx&#39;, &#39;ry&#39;, &#39;rz&#39;, &#39;s&#39;, &#39;si&#39;, &#39;swap&#39;, &#39;t&#39;, &#39;ti&#39;, &#39;x&#39;, &#39;y&#39;, &#39;z&#39;, &#39;start_verbatim_box&#39;, &#39;end_verbatim_box&#39;]
+
+
+Gate set supported by the IonQ device:
+ [&#39;x&#39;, &#39;y&#39;, &#39;z&#39;, &#39;rx&#39;, &#39;ry&#39;, &#39;rz&#39;, &#39;h&#39;, &#39;cnot&#39;, &#39;s&#39;, &#39;si&#39;, &#39;t&#39;, &#39;ti&#39;, &#39;v&#39;, &#39;vi&#39;, &#39;xx&#39;, &#39;yy&#39;, &#39;zz&#39;, &#39;swap&#39;, &#39;i&#39;]
+
+
+Gate set supported by the OQC device:
+ [&#39;ccnot&#39;, &#39;cnot&#39;, &#39;cphaseshift&#39;, &#39;cswap&#39;, &#39;cy&#39;, &#39;cz&#39;, &#39;h&#39;, &#39;i&#39;, &#39;phaseshift&#39;, &#39;rx&#39;, &#39;ry&#39;, &#39;rz&#39;, &#39;s&#39;, &#39;si&#39;, &#39;swap&#39;, &#39;t&#39;, &#39;ti&#39;, &#39;v&#39;, &#39;vi&#39;, &#39;x&#39;, &#39;y&#39;, &#39;z&#39;, &#39;ecr&#39;, &#39;start_verbatim_box&#39;, &#39;end_verbatim_box&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="problem-prepare-bell-state">
+<h2>Problem: Prepare Bell State<a class="headerlink" href="#problem-prepare-bell-state" title="Permalink to this heading">#</a></h2>
+<p>Goal: Prepare maximally entangled Bell state:
+$$\left|0,0\right&gt; \rightarrow \left|\mathrm{Bell}\right&gt; = \frac{1}{\sqrt{2}}\left(\left|0,0\right&gt; + \left|1,1\right&gt;\right).$$</p>
+<p>To this end, we build and run the following circuit using a single-qubit Hadamard gate (denoted as <code class="docutils literal notranslate"><span class="pre">H</span></code>) acting on the first qubit followed by a two-qubit <code class="docutils literal notranslate"><span class="pre">CNOT</span></code> gate:</p>
+<div align="center">
+<img src="bell_circuit.png" width="500"/>
+</div></section>
+<section id="setup-circuit">
+<h2>Setup Circuit<a class="headerlink" href="#setup-circuit" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># define circuit</span>
+<span class="n">bell</span> <span class="o">=</span> <span class="n">Circuit</span><span class="p">()</span><span class="o">.</span><span class="n">h</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">cnot</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># print circuit</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">bell</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>T  : |0|1|
+          
+q0 : -H-C-
+        | 
+q1 : ---X-
+
+T  : |0|1|
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="local-simulator">
+<h2>Local Simulator<a class="headerlink" href="#local-simulator" title="Permalink to this heading">#</a></h2>
+<p>First we run our circuit locally, using an exact state-vector simulator. This local simulator is the preferred choice for fast experiments with low to intermediate qubit numbers ($N&lt;20-25$) and essentially unlimited circuit depth.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># set up device: Local Simulator</span>
+<span class="n">device</span> <span class="o">=</span> <span class="n">LocalSimulator</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># run circuit (execute single TASK)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">bell</span><span class="p">,</span> <span class="n">shots</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+<span class="c1"># get measurement shots</span>
+<span class="n">counts</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">measurement_counts</span>
+<span class="c1"># print counts</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">counts</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Counter({&#39;11&#39;: 506, &#39;00&#39;: 494})
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># plot using Counter</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">counts</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">counts</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;bitstrings&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;counts&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../../_images/7a78db4ba0b7d476eb6bede8ee66ded76249c1c6b8d784476185087d6a620a45.png" src="../../../_images/7a78db4ba0b7d476eb6bede8ee66ded76249c1c6b8d784476185087d6a620a45.png" />
+</div>
+</div>
+</section>
+<section id="quantum-hardware-rigetti">
+<h2>Quantum Hardware: Rigetti<a class="headerlink" href="#quantum-hardware-rigetti" title="Permalink to this heading">#</a></h2>
+<p>Next we submit our circuit to the superconducting quantum chip provided by Rigetti. Depending on our position in the queue, we may have to wait for some time till our circuit is actually run. However, thanks to asynchronous execution, we can always come back and recover the results by providing the unique ID associated with every task.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># set up device</span>
+<span class="n">rigetti</span> <span class="o">=</span> <span class="n">AwsDevice</span><span class="p">(</span><span class="s2">&quot;arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-2&quot;</span><span class="p">)</span>
+
+<span class="c1"># create a clean circuit with no result type attached.(This is because some result types are only supported when shots=0)</span>
+<span class="n">bell</span> <span class="o">=</span> <span class="n">Circuit</span><span class="p">()</span><span class="o">.</span><span class="n">h</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">cnot</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  
+
+<span class="c1"># add the Z \otimes Z expectation value</span>
+<span class="n">bell</span><span class="o">.</span><span class="n">expectation</span><span class="p">(</span><span class="n">Observable</span><span class="o">.</span><span class="n">Z</span><span class="p">()</span> <span class="o">@</span> <span class="n">Observable</span><span class="o">.</span><span class="n">Z</span><span class="p">(),</span> <span class="n">target</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="c1"># run circuit </span>
+<span class="n">rigetti_task</span> <span class="o">=</span> <span class="n">rigetti</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">bell</span><span class="p">,</span> <span class="n">shots</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+
+<span class="c1"># get id and status of submitted task</span>
+<span class="n">rigetti_task_id</span> <span class="o">=</span> <span class="n">rigetti_task</span><span class="o">.</span><span class="n">id</span>
+<span class="n">rigetti_status</span> <span class="o">=</span> <span class="n">rigetti_task</span><span class="o">.</span><span class="n">state</span><span class="p">()</span>
+<span class="c1"># print(&#39;ID of task:&#39;, rigetti_task_id)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Status of task:&#39;</span><span class="p">,</span> <span class="n">rigetti_status</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Status of task: CREATED
+</pre></div>
+</div>
+</div>
+</div>
+<p>The task is submitted and we can regularly (or irregularly) check the status of this task by executing the following cell. You may easily build logic around this query to wait for this task to complete before your code proceeds.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># print status</span>
+<span class="n">status</span> <span class="o">=</span> <span class="n">rigetti_task</span><span class="o">.</span><span class="n">state</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Status of (reconstructed) task:&#39;</span><span class="p">,</span> <span class="n">status</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Status of (reconstructed) task: COMPLETED
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="quantum-hardware-ionq">
+<h2>Quantum Hardware: IonQ<a class="headerlink" href="#quantum-hardware-ionq" title="Permalink to this heading">#</a></h2>
+<p>Next, we submit our example Bell state circuit to IonQ. We set the device as AwsDevice(“arn:aws:braket:::device/qpu/ionq/ionQdevice”). This task may not readily be executed but enter a queue for this specific machine. While we can interrupt our kernel (and work on something else), we can always recover our results using the unique ID of this task.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># set up device</span>
+<span class="n">ionq</span> <span class="o">=</span> <span class="n">AwsDevice</span><span class="p">(</span><span class="s2">&quot;arn:aws:braket:::device/qpu/ionq/ionQdevice&quot;</span><span class="p">)</span>
+
+<span class="c1"># run circuit</span>
+<span class="n">ionq_task</span> <span class="o">=</span> <span class="n">ionq</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">bell</span><span class="p">,</span> <span class="n">shots</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+
+<span class="c1"># get id and status of submitted task</span>
+<span class="n">ionq_task_id</span> <span class="o">=</span> <span class="n">ionq_task</span><span class="o">.</span><span class="n">id</span>
+<span class="n">ionq_status</span> <span class="o">=</span> <span class="n">ionq_task</span><span class="o">.</span><span class="n">state</span><span class="p">()</span>
+<span class="c1"># print(&#39;ID of task:&#39;, ionq_task_id)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Status of task:&#39;</span><span class="p">,</span> <span class="n">ionq_status</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Status of task: CREATED
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># print status</span>
+<span class="n">status</span> <span class="o">=</span> <span class="n">ionq_task</span><span class="o">.</span><span class="n">state</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Status of (reconstructed) task:&#39;</span><span class="p">,</span> <span class="n">status</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Status of (reconstructed) task: COMPLETED
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="quantum-hardware-oxford-quantum-circuits">
+<h2>Quantum Hardware: Oxford Quantum Circuits<a class="headerlink" href="#quantum-hardware-oxford-quantum-circuits" title="Permalink to this heading">#</a></h2>
+<p>Finally, we submit our circuit to the superconducting quantum computer provided by Oxford Quantum Circuits (OQC). The task runs asynchronously. We can retrieve the result when the task is completed.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># set up device</span>
+<span class="n">oqc</span> <span class="o">=</span> <span class="n">AwsDevice</span><span class="p">(</span><span class="s2">&quot;arn:aws:braket:eu-west-2::device/qpu/oqc/Lucy&quot;</span><span class="p">)</span>
+
+<span class="c1"># run circuit</span>
+<span class="n">oqc_task</span> <span class="o">=</span> <span class="n">oqc</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">bell</span><span class="p">,</span> <span class="n">shots</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+
+<span class="c1"># get id and status of submitted task</span>
+<span class="n">oqc_task_id</span> <span class="o">=</span> <span class="n">oqc_task</span><span class="o">.</span><span class="n">id</span>
+<span class="n">oqc_status</span> <span class="o">=</span> <span class="n">oqc_task</span><span class="o">.</span><span class="n">state</span><span class="p">()</span>
+<span class="c1"># print(&#39;ID of task:&#39;, oqc_task_id)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Status of task:&#39;</span><span class="p">,</span> <span class="n">oqc_status</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Status of task: COMPLETED
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="task-recovery">
+<h2>Task Recovery<a class="headerlink" href="#task-recovery" title="Permalink to this heading">#</a></h2>
+<p>By simply grabbing the unique task ID associated with the quantum tasks we have submitted above, we can recover this task at any point in time and (once the status is completed) visualize and analyze the corresponding results. Note that apart from other metadata, you can retrieve the compiled circuit that was actually run on the Rigetti device. More information about the compiling process can be found <a class="reference external" href="https://pyquil-docs.rigetti.com/en/v2.22.0/compiler.html#partial">here</a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># recover task</span>
+<span class="n">task_load</span> <span class="o">=</span> <span class="n">AwsQuantumTask</span><span class="p">(</span><span class="n">arn</span><span class="o">=</span><span class="n">rigetti_task_id</span><span class="p">)</span>
+
+<span class="c1"># print status</span>
+<span class="n">status</span> <span class="o">=</span> <span class="n">task_load</span><span class="o">.</span><span class="n">state</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Status of (reconstructed) task:&#39;</span><span class="p">,</span> <span class="n">status</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="c1"># wait for job to complete</span>
+<span class="c1"># terminal_states = [&#39;COMPLETED&#39;, &#39;FAILED&#39;, &#39;CANCELLED&#39;]</span>
+<span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;COMPLETED&#39;</span><span class="p">:</span>
+    <span class="c1"># get results</span>
+    <span class="n">rigetti_results</span> <span class="o">=</span> <span class="n">task_load</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+    <span class="c1"># print(rigetti_results)</span>
+    
+    <span class="c1"># get all metadata of submitted task</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="n">task_load</span><span class="o">.</span><span class="n">metadata</span><span class="p">()</span>
+    <span class="c1"># example for metadata</span>
+    <span class="n">shots</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;shots&#39;</span><span class="p">]</span>
+    <span class="n">machine</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;deviceArn&#39;</span><span class="p">]</span>
+    <span class="c1"># print example metadata</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> shots taken on machine </span><span class="si">{}</span><span class="s2">.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">shots</span><span class="p">,</span> <span class="n">machine</span><span class="p">))</span>
+    
+    <span class="c1"># get the compiled circuit</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The compiled circuit is:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">rigetti_results</span><span class="o">.</span><span class="n">additional_metadata</span><span class="o">.</span><span class="n">rigettiMetadata</span><span class="o">.</span><span class="n">compiledProgram</span><span class="p">)</span>
+    
+    <span class="c1"># get measurement counts</span>
+    <span class="n">rigetti_counts</span> <span class="o">=</span> <span class="n">rigetti_results</span><span class="o">.</span><span class="n">measurement_counts</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Measurement counts:&#39;</span><span class="p">,</span> <span class="n">rigetti_counts</span><span class="p">)</span>
+
+    <span class="c1"># plot results: see effects of noise</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">rigetti_counts</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">rigetti_counts</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;bitstrings&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;counts&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;rigetti.png&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">700</span><span class="p">)</span>
+    
+<span class="k">elif</span> <span class="n">status</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;FAILED&#39;</span><span class="p">,</span> <span class="s1">&#39;CANCELLED&#39;</span><span class="p">]:</span>
+    <span class="c1"># print terminal message </span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Your task is in terminal status, but has not completed.&#39;</span><span class="p">)</span>
+
+<span class="k">else</span><span class="p">:</span>
+    <span class="c1"># print current status</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Sorry, your task is still being processed and has not been finalized yet.&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Status of (reconstructed) task: COMPLETED
+
+
+1000 shots taken on machine arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-2.
+
+The compiled circuit is:
+ DECLARE ro BIT[2]
+PRAGMA INITIAL_REWIRING &quot;PARTIAL&quot;
+RESET
+RZ(pi) 12
+RZ(-pi/2) 13
+RX(-pi/2) 13
+XY(pi) 13 12
+RZ(pi/2) 13
+RX(pi/2) 13
+RZ(-pi/2) 13
+XY(pi) 13 12
+RX(-pi/2) 12
+MEASURE 12 ro[1]
+MEASURE 13 ro[0]
+
+Measurement counts: Counter({&#39;11&#39;: 458, &#39;00&#39;: 421, &#39;10&#39;: 81, &#39;01&#39;: 40})
+</pre></div>
+</div>
+<img alt="../../../_images/60cad89e49f07a1e28fe2001d87890bdce12d3e196c6ef731b0031d4e82eb318.png" src="../../../_images/60cad89e49f07a1e28fe2001d87890bdce12d3e196c6ef731b0031d4e82eb318.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># recover task</span>
+<span class="n">task_load</span> <span class="o">=</span> <span class="n">AwsQuantumTask</span><span class="p">(</span><span class="n">arn</span><span class="o">=</span><span class="n">ionq_task_id</span><span class="p">)</span>
+
+<span class="c1"># print status</span>
+<span class="n">status</span> <span class="o">=</span> <span class="n">task_load</span><span class="o">.</span><span class="n">state</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Status of (reconstructed) task:&#39;</span><span class="p">,</span> <span class="n">status</span><span class="p">)</span>
+
+<span class="c1"># wait for job to complete</span>
+<span class="c1"># terminal_states = [&#39;COMPLETED&#39;, &#39;FAILED&#39;, &#39;CANCELLED&#39;]</span>
+<span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;COMPLETED&#39;</span><span class="p">:</span>
+    <span class="c1"># get results</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">task_load</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+    <span class="c1"># print(rigetti_results)</span>
+    
+    <span class="c1"># get all metadata of submitted task</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="n">task_load</span><span class="o">.</span><span class="n">metadata</span><span class="p">()</span>
+    <span class="c1"># example for metadata</span>
+    <span class="n">shots</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;shots&#39;</span><span class="p">]</span>
+    <span class="n">machine</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;deviceArn&#39;</span><span class="p">]</span>
+    <span class="c1"># print example metadata</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> shots taken on machine </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">shots</span><span class="p">,</span> <span class="n">machine</span><span class="p">))</span>
+    
+    <span class="c1"># get measurement counts</span>
+    <span class="n">counts</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">measurement_counts</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Measurement counts:&#39;</span><span class="p">,</span> <span class="n">counts</span><span class="p">)</span>
+
+    <span class="c1"># plot results: see effects of noise</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">counts</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">counts</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;bitstrings&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;counts&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;bell_ionq.png&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">700</span><span class="p">)</span>
+    
+<span class="k">elif</span> <span class="n">status</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;FAILED&#39;</span><span class="p">,</span> <span class="s1">&#39;CANCELLED&#39;</span><span class="p">]:</span>
+    <span class="c1"># print terminal message </span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Your task is in terminal status, but has not completed.&#39;</span><span class="p">)</span>
+
+<span class="k">else</span><span class="p">:</span>
+    <span class="c1"># print current status</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Sorry, your task is still being processed and has not been finalized yet.&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Status of (reconstructed) task: COMPLETED
+1000 shots taken on machine arn:aws:braket:::device/qpu/ionq/ionQdevice.
+Measurement counts: Counter({&#39;11&#39;: 501, &#39;00&#39;: 456, &#39;01&#39;: 25, &#39;10&#39;: 18})
+</pre></div>
+</div>
+<img alt="../../../_images/e16051069433a6f8dbbd629a2f8a375d491b638ef6b9f6c9c5d186cdbfbe5c12.png" src="../../../_images/e16051069433a6f8dbbd629a2f8a375d491b638ef6b9f6c9c5d186cdbfbe5c12.png" />
+</div>
+</div>
+<p>We have successfully recovered the results associated with the tasks that were queued up for the quantum hardware providers. Because of noise (decoherence) and other imperfections we cannot fully recover the exact results we have seen when using the classical simulator. To deal with that, in the fullness of time we will be able to use error correction techniques. As long as error correction is not available, it is important to benchmark our quantum results using classical simulators, whenever possible.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="appendix">
+<h1>APPENDIX<a class="headerlink" href="#appendix" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># set up device</span>
+<span class="n">rigetti</span> <span class="o">=</span> <span class="n">AwsDevice</span><span class="p">(</span><span class="s2">&quot;arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-2&quot;</span><span class="p">)</span>
+
+<span class="c1"># run circuit</span>
+<span class="n">task</span> <span class="o">=</span> <span class="n">rigetti</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">bell</span><span class="p">,</span> <span class="n">shots</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Information on task:</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">task</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;==================================&#39;</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># get status of submitted task</span>
+<span class="n">status</span> <span class="o">=</span> <span class="n">task</span><span class="o">.</span><span class="n">state</span><span class="p">()</span>
+
+<span class="c1"># wait for job to complete</span>
+<span class="n">terminal_states</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;COMPLETED&#39;</span><span class="p">,</span> <span class="s1">&#39;FAILED&#39;</span><span class="p">,</span> <span class="s1">&#39;CANCELLED&#39;</span><span class="p">]</span>
+<span class="k">while</span> <span class="n">status</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">terminal_states</span><span class="p">:</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="n">task</span><span class="o">.</span><span class="n">state</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Status:&#39;</span><span class="p">,</span> <span class="n">status</span><span class="p">)</span>
+    <span class="c1"># time.sleep(60)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Status:&#39;</span><span class="p">,</span> <span class="n">status</span><span class="p">)</span>
+
+<span class="c1"># get results</span>
+<span class="n">rigetti_results</span> <span class="o">=</span> <span class="n">task</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">rigetti_results</span><span class="p">)</span>
+
+<span class="c1"># get measurement counts</span>
+<span class="n">rigetti_counts</span> <span class="o">=</span> <span class="n">rigetti_results</span><span class="o">.</span><span class="n">measurement_counts</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">rigetti_counts</span><span class="p">)</span>
+
+<span class="c1"># plot results: see effects of noise</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">rigetti_counts</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">rigetti_counts</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;bitstrings&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;counts&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;rigetti2.png&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">700</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Task Summary&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">quantum_tasks_statistics</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Note: Charges shown are estimates based on your Amazon Braket simulator and quantum processing unit (QPU) task usage. Estimated charges shown may differ from your actual charges. Estimated charges do not factor in any discounts or credits, and you may experience additional charges based on your use of other services such as Amazon Elastic Compute Cloud (Amazon EC2).&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Estimated cost to run this example: </span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="n">qpu_tasks_cost</span><span class="p">()</span> <span class="o">+</span> <span class="n">t</span><span class="o">.</span><span class="n">simulator_tasks_cost</span><span class="p">()</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> USD&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Task Summary
+{&#39;arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-2&#39;: {&#39;shots&#39;: 2000, &#39;tasks&#39;: {&#39;COMPLETED&#39;: 2}}, &#39;arn:aws:braket:::device/qpu/ionq/ionQdevice&#39;: {&#39;shots&#39;: 1000, &#39;tasks&#39;: {&#39;QUEUED&#39;: 1}}, &#39;arn:aws:braket:eu-west-2::device/qpu/oqc/Lucy&#39;: {&#39;shots&#39;: 1000, &#39;tasks&#39;: {&#39;CREATED&#39;: 1}}}
+Note: Charges shown are estimates based on your Amazon Braket simulator and quantum processing unit (QPU) task usage. Estimated charges shown may differ from your actual charges. Estimated charges do not factor in any discounts or credits, and you may experience additional charges based on your use of other services such as Amazon Elastic Compute Cloud (Amazon EC2).
+Estimated cost to run this example: 12.25 USD
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Running quantum circuits on QPU devices</a><ul>
+<li><a class="reference internal" href="#supported-gate-sets-by-different-devices">Supported gate sets by different devices</a></li>
+<li><a class="reference internal" href="#problem-prepare-bell-state">Problem: Prepare Bell State</a></li>
+<li><a class="reference internal" href="#setup-circuit">Setup Circuit</a></li>
+<li><a class="reference internal" href="#local-simulator">Local Simulator</a></li>
+<li><a class="reference internal" href="#quantum-hardware-rigetti">Quantum Hardware: Rigetti</a></li>
+<li><a class="reference internal" href="#quantum-hardware-ionq">Quantum Hardware: IonQ</a></li>
+<li><a class="reference internal" href="#quantum-hardware-oxford-quantum-circuits">Quantum Hardware: Oxford Quantum Circuits</a></li>
+<li><a class="reference internal" href="#task-recovery">Task Recovery</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#appendix">APPENDIX</a></li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/scripts/furo.js"></script>
+    </body>
+</html>

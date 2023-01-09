@@ -1,0 +1,574 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
+
+    <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
+        <title>Parallel tasks on Aquila - Amazon Braket Examples documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">Amazon Braket Examples  documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  
+  
+  <span class="sidebar-brand-text">Amazon Braket Examples  documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="parallel-tasks-on-aquila">
+<h1>Parallel tasks on Aquila<a class="headerlink" href="#parallel-tasks-on-aquila" title="Permalink to this heading">#</a></h1>
+<p>For tasks with few qubits in the register, we can use parallel execution that makes use of full area allowed by the QPU. In this tutorial we go through the previously explored checkerboard preparation but now we take advantage of the full area.</p>
+<p>We will break up the register into <strong>batches</strong> which will run in parallel.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use Braket SDK Cost Tracking to estimate the cost to run this example</span>
+<span class="kn">from</span> <span class="nn">braket.tracking</span> <span class="kn">import</span> <span class="n">Tracker</span>
+<span class="n">tracker</span> <span class="o">=</span> <span class="n">Tracker</span><span class="p">()</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="defining-batches">
+<h2>Defining batches<a class="headerlink" href="#defining-batches" title="Permalink to this heading">#</a></h2>
+<p>First, we will define a <em>single</em> batch containing a 3x3 square grid of atoms</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">braket.ahs.hamiltonian</span> <span class="kn">import</span> <span class="n">Hamiltonian</span>
+<span class="kn">from</span> <span class="nn">braket.ahs.atom_arrangement</span> <span class="kn">import</span> <span class="n">AtomArrangement</span>
+<span class="kn">from</span> <span class="nn">braket.ahs.analog_hamiltonian_simulation</span> <span class="kn">import</span> <span class="n">AnalogHamiltonianSimulation</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># distance between atoms</span>
+<span class="n">distance</span> <span class="o">=</span> <span class="mf">6.7e-6</span>
+
+<span class="c1"># number of atoms in a batch</span>
+<span class="n">Lx</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">Ly</span> <span class="o">=</span> <span class="mi">3</span>
+
+<span class="n">register</span> <span class="o">=</span> <span class="n">AtomArrangement</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">ix</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Lx</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">iy</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Ly</span><span class="p">):</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="p">(</span><span class="n">ix</span> <span class="o">*</span> <span class="n">distance</span><span class="p">,</span> <span class="n">iy</span> <span class="o">*</span> <span class="n">distance</span><span class="p">)</span>
+        <span class="n">register</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="bounding-box">
+<h2>Bounding box<a class="headerlink" href="#bounding-box" title="Permalink to this heading">#</a></h2>
+<p>Next, we define a bounding box by calculating its width and height of the batch. This will prove useful in setting up multiple batches in parallel.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_min</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">site</span><span class="o">.</span><span class="n">coordinate</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">site</span> <span class="ow">in</span> <span class="n">register</span><span class="p">])</span>
+<span class="n">x_max</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">site</span><span class="o">.</span><span class="n">coordinate</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">site</span> <span class="ow">in</span> <span class="n">register</span><span class="p">])</span>
+<span class="n">y_min</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">site</span><span class="o">.</span><span class="n">coordinate</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">site</span> <span class="ow">in</span> <span class="n">register</span><span class="p">])</span>
+<span class="n">y_max</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">site</span><span class="o">.</span><span class="n">coordinate</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">site</span> <span class="ow">in</span> <span class="n">register</span><span class="p">])</span>
+
+<span class="n">single_problem_width</span> <span class="o">=</span> <span class="n">x_max</span> <span class="o">-</span> <span class="n">x_min</span>
+<span class="n">single_problem_height</span> <span class="o">=</span> <span class="n">y_max</span> <span class="o">-</span> <span class="n">y_min</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="calculating-batch-placement">
+<h3>Calculating batch placement<a class="headerlink" href="#calculating-batch-placement" title="Permalink to this heading">#</a></h3>
+<p>To prevent entanglement via the Rydberg interaction between batches, we need to place them far apart. Each batch needs an area occupied by its bounding box plus a padding that ensure proper separation.</p>
+<p>We pick the distance between the batches to be $3 \times d$, where $d$ is the distance between neighboring atoms in a single batch. This means the ratio between intra- and inter-batch interaction strengths (using the van der Waals formula, $V = C_6/d^6$) is at most $\frac{1}{3^6} \approx 0.001372$.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">braket.ahs.atom_arrangement</span> <span class="kn">import</span> <span class="n">AtomArrangement</span><span class="p">,</span> <span class="n">SiteType</span>
+<span class="kn">from</span> <span class="nn">braket.aws</span> <span class="kn">import</span> <span class="n">AwsDevice</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="n">qpu</span> <span class="o">=</span> <span class="n">AwsDevice</span><span class="p">(</span><span class="s2">&quot;arn:aws:braket:us-east-1::device/qpu/quera/Aquila&quot;</span><span class="p">)</span>
+
+<span class="c1"># get values from device capabilities</span>
+<span class="n">field_of_view_width</span> <span class="o">=</span> <span class="n">qpu</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">paradigm</span><span class="o">.</span><span class="n">lattice</span><span class="o">.</span><span class="n">area</span><span class="o">.</span><span class="n">width</span>
+<span class="n">field_of_view_height</span> <span class="o">=</span> <span class="n">qpu</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">paradigm</span><span class="o">.</span><span class="n">lattice</span><span class="o">.</span><span class="n">area</span><span class="o">.</span><span class="n">height</span>
+<span class="n">n_site_max</span> <span class="o">=</span> <span class="n">qpu</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">paradigm</span><span class="o">.</span><span class="n">lattice</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">numberSitesMax</span>
+
+<span class="c1"># set distance between batches to be 3 x d</span>
+<span class="n">interproblem_distance</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">distance</span>
+
+<span class="c1"># setting up a grid of problems filling the total area</span>
+<span class="n">n_width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">field_of_view_width</span><span class="p">)</span>   <span class="o">//</span> <span class="p">(</span><span class="n">single_problem_width</span>  <span class="o">+</span> <span class="n">interproblem_distance</span><span class="p">))</span>
+<span class="n">n_height</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">field_of_view_height</span><span class="p">)</span> <span class="o">//</span> <span class="p">(</span><span class="n">single_problem_height</span> <span class="o">+</span> <span class="n">interproblem_distance</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="generating-registers-for-all-batches">
+<h2>Generating registers for all batches<a class="headerlink" href="#generating-registers-for-all-batches" title="Permalink to this heading">#</a></h2>
+<p>We now loop create the total set of registers that will run on the QPU.</p>
+<p>We will keep track of which set of registers (by atom number) belongs to which batch using a dictionary called <code class="docutils literal notranslate"><span class="pre">batch_mapping</span></code>.</p>
+<p>We stop generating batches once we have reached the maximum number of sites allowed by the QPU. In this case we check to make sure we can fit the necessary number of atoms into a batch in case the number of atoms per batch is not a factor of <code class="docutils literal notranslate"><span class="pre">n_site_max</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">batch_mapping</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+<span class="n">parallel_register</span> <span class="o">=</span> <span class="n">AtomArrangement</span><span class="p">()</span>
+
+<span class="n">atom_number</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1">#counting number of atoms added</span>
+
+<span class="k">for</span> <span class="n">ix</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_width</span><span class="p">):</span>
+    <span class="n">x_shift</span> <span class="o">=</span> <span class="n">ix</span> <span class="o">*</span> <span class="p">(</span><span class="n">single_problem_width</span>   <span class="o">+</span> <span class="n">interproblem_distance</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">iy</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_height</span><span class="p">):</span>    
+        <span class="n">y_shift</span> <span class="o">=</span> <span class="n">iy</span> <span class="o">*</span> <span class="p">(</span><span class="n">single_problem_height</span>  <span class="o">+</span> <span class="n">interproblem_distance</span><span class="p">)</span>
+
+        <span class="c1"># reached the maximum number of batches possible given n_site_max</span>
+        <span class="k">if</span> <span class="n">atom_number</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">register</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">n_site_max</span><span class="p">:</span> <span class="k">break</span> 
+
+        <span class="n">atoms</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">site</span> <span class="ow">in</span> <span class="n">register</span><span class="p">:</span>
+            <span class="n">new_coordinate</span> <span class="o">=</span> <span class="p">(</span><span class="n">x_shift</span> <span class="o">+</span> <span class="n">site</span><span class="o">.</span><span class="n">coordinate</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y_shift</span> <span class="o">+</span> <span class="n">site</span><span class="o">.</span><span class="n">coordinate</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">parallel_register</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">new_coordinate</span><span class="p">,</span><span class="n">site</span><span class="o">.</span><span class="n">site_type</span><span class="p">)</span>
+
+            <span class="n">atoms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atom_number</span><span class="p">)</span>
+
+            <span class="n">atom_number</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">batch_mapping</span><span class="p">[(</span><span class="n">ix</span><span class="p">,</span><span class="n">iy</span><span class="p">)]</span> <span class="o">=</span> <span class="n">atoms</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Key indicates the position of the batch itself on a unitless grid, </span>
+<span class="c1"># with dictionary value being the atom number</span>
+<span class="n">batch_mapping</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{(0, 0): [0, 1, 2, 3, 4, 5, 6, 7, 8],
+ (0, 1): [9, 10, 11, 12, 13, 14, 15, 16, 17],
+ (1, 0): [18, 19, 20, 21, 22, 23, 24, 25, 26],
+ (1, 1): [27, 28, 29, 30, 31, 32, 33, 34, 35]}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># [Optional] We visually inspect the register</span>
+<span class="kn">from</span> <span class="nn">ahs_utils</span> <span class="kn">import</span> <span class="n">show_register</span>
+
+<span class="n">show_register</span><span class="p">(</span><span class="n">register</span><span class="p">)</span>
+<span class="n">show_register</span><span class="p">(</span><span class="n">parallel_register</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/bbb8ea01a8a31cb38e6e1e46abf715281222838db75fd7129b9c132eccf68067.png" src="../../_images/bbb8ea01a8a31cb38e6e1e46abf715281222838db75fd7129b9c132eccf68067.png" />
+<img alt="../../_images/49612aa1163c545a8976df305e0e2a0386b33aa399ca9a4db11bc9b8991c3a6c.png" src="../../_images/49612aa1163c545a8976df305e0e2a0386b33aa399ca9a4db11bc9b8991c3a6c.png" />
+</div>
+</div>
+</section>
+<section id="ahs-program-for-creating-the-checkerboard-phase">
+<h2>AHS program for creating the checkerboard phase<a class="headerlink" href="#ahs-program-for-creating-the-checkerboard-phase" title="Permalink to this heading">#</a></h2>
+<p>We use the same values and timings for the Amplitude, Phase, and Detuning from the <a class="reference internal" href="02_Ordered_phases_in_Rydberg_systems.html"><span class="doc std std-doc">Ordered phases in Rydberg Systems</span></a> example</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ahs_utils</span> <span class="kn">import</span> <span class="n">get_drive</span>
+
+<span class="n">time_points</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">2.5e-7</span><span class="p">,</span> <span class="mf">2.75e-6</span><span class="p">,</span> <span class="mf">3e-6</span><span class="p">]</span> <span class="c1"># s</span>
+
+<span class="n">amplitude_min</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">amplitude_max</span> <span class="o">=</span> <span class="mf">1.5708e7</span>  <span class="c1"># rad / s</span>
+
+<span class="n">detuning_min</span> <span class="o">=</span> <span class="o">-</span><span class="mf">5.49778714e7</span>  <span class="c1"># rad / s</span>
+<span class="n">detuning_max</span> <span class="o">=</span> <span class="mf">5.49778714e7</span>   <span class="c1"># rad / s</span>
+
+<span class="n">amplitude_values</span> <span class="o">=</span> <span class="p">[</span><span class="n">amplitude_min</span><span class="p">,</span> <span class="n">amplitude_max</span><span class="p">,</span> <span class="n">amplitude_max</span><span class="p">,</span> <span class="n">amplitude_min</span><span class="p">]</span>
+<span class="n">detuning_values</span> <span class="o">=</span> <span class="p">[</span><span class="n">detuning_min</span><span class="p">,</span> <span class="n">detuning_min</span><span class="p">,</span> <span class="n">detuning_max</span><span class="p">,</span> <span class="n">detuning_max</span><span class="p">]</span>
+<span class="n">phase_values</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+
+<span class="n">drive</span> <span class="o">=</span> <span class="n">get_drive</span><span class="p">(</span><span class="n">time_points</span><span class="p">,</span> <span class="n">amplitude_values</span><span class="p">,</span> <span class="n">detuning_values</span><span class="p">,</span> <span class="n">phase_values</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ahs_utils</span> <span class="kn">import</span> <span class="n">show_global_drive</span>
+
+<span class="c1"># [Optional] We visually inspect the time series</span>
+
+<span class="n">show_global_drive</span><span class="p">(</span><span class="n">drive</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/e2b7dc4094c6019bd5f90f1e3a5462e5958325f2a2d51d18654be42f2dfccba9.png" src="../../_images/e2b7dc4094c6019bd5f90f1e3a5462e5958325f2a2d51d18654be42f2dfccba9.png" />
+</div>
+</div>
+<p>We now construct the AHS program to be run. Note that we create two programs and execute them to allow us to compare the accuracy of our results, with <code class="docutils literal notranslate"><span class="pre">parallel_ahs_program</span></code> being run on Aquila and <code class="docutils literal notranslate"><span class="pre">ahs_program</span></code> just being simulated with the local simulator.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">parallel_ahs_program</span> <span class="o">=</span> <span class="n">AnalogHamiltonianSimulation</span><span class="p">(</span>
+    <span class="n">register</span><span class="o">=</span><span class="n">parallel_register</span><span class="p">,</span> 
+    <span class="n">hamiltonian</span><span class="o">=</span><span class="n">drive</span>
+<span class="p">)</span>
+
+<span class="n">ahs_program</span> <span class="o">=</span> <span class="n">AnalogHamiltonianSimulation</span><span class="p">(</span>
+    <span class="n">register</span><span class="o">=</span><span class="n">register</span><span class="p">,</span> 
+    <span class="n">hamiltonian</span><span class="o">=</span><span class="n">drive</span>
+<span class="p">)</span>
+
+<span class="n">ahs_program</span> <span class="o">=</span> <span class="n">ahs_program</span><span class="o">.</span><span class="n">discretize</span><span class="p">(</span><span class="n">qpu</span><span class="p">)</span>
+<span class="n">parallel_ahs_program</span> <span class="o">=</span> <span class="n">parallel_ahs_program</span><span class="o">.</span><span class="n">discretize</span><span class="p">(</span><span class="n">qpu</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="run-on-simulator">
+<h2>Run on simulator<a class="headerlink" href="#run-on-simulator" title="Permalink to this heading">#</a></h2>
+<p>First, we run a non-parallelized register on the local simulator, and sample 400 shots.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">braket.devices</span> <span class="kn">import</span> <span class="n">LocalSimulator</span>
+<span class="n">sim</span> <span class="o">=</span> <span class="n">LocalSimulator</span><span class="p">(</span><span class="s2">&quot;braket_ahs&quot;</span><span class="p">)</span>
+
+<span class="n">sim_result</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">ahs_program</span><span class="p">,</span> <span class="n">shots</span><span class="o">=</span><span class="mi">400</span><span class="p">)</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We compute the average Rydberg density on the 9 sites.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ahs_utils</span> <span class="kn">import</span> <span class="n">get_avg_density</span>
+
+<span class="n">sim_density</span> <span class="o">=</span> <span class="n">get_avg_density</span><span class="p">(</span><span class="n">sim_result</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="run-on-aquila">
+<h2>Run on Aquila<a class="headerlink" href="#run-on-aquila" title="Permalink to this heading">#</a></h2>
+<p>Next, we run a the parallelized register on the QPU. This time, we only need to run 100 shots to get to the same statistical certainty, because we are running four batches in parallel in each shot.</p>
+<div class="alert alert-block alert-info">
+<b>Note: </b> Some atoms may be missing even if the shot was successful. We recommend comparing <code>pre_sequence</code> of each shot with the requested atom filling in the AHS program specification.  
+</div><div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># This cell submits the task, waits for its completion, and gets the results.</span>
+<span class="c1"># To check the status of the task, go to the Amazon Braket tasks page at</span>
+<span class="c1"># https://us-east-1.console.aws.amazon.com/braket/home?region=us-east-1#/tasks</span>
+
+<span class="n">qpu_result</span> <span class="o">=</span> <span class="n">qpu</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">parallel_ahs_program</span><span class="p">,</span> <span class="n">shots</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># collecting QPU Data</span>
+
+<span class="n">all_sequences</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">measurement</span> <span class="ow">in</span> <span class="n">qpu_result</span><span class="o">.</span><span class="n">measurements</span><span class="p">:</span>
+    <span class="c1"># iterate over key and values</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">ix</span><span class="p">,</span><span class="n">iy</span><span class="p">),</span><span class="n">inds</span> <span class="ow">in</span> <span class="n">batch_mapping</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">batch_sequence</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">measurement</span><span class="o">.</span><span class="n">post_sequence</span><span class="p">[</span><span class="n">inds</span><span class="p">])</span>
+        <span class="n">all_sequences</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">batch_sequence</span><span class="p">)</span>
+
+<span class="n">all_rydberg</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">all_sequences</span><span class="p">)</span>
+<span class="n">qpu_density</span> <span class="o">=</span> <span class="n">all_rydberg</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>After running the separate programs, we can analyze the results.</p>
+<p>We average the data across all the batches that ran in parallel across multiple shots, represented visually as a single batch versus the simulator result which just ran a single batch.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">ahs_utils</span> <span class="kn">import</span> <span class="n">plot_avg_density_2D</span>
+
+<span class="c1"># Compare results side-by-side</span>
+<span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+
+<span class="c1"># plot density of all batches that ran in parallel with geometry and averaged values of single batch</span>
+
+<span class="n">plot_avg_density_2D</span><span class="p">(</span><span class="n">qpu_density</span><span class="p">,</span> <span class="n">parallel_register</span><span class="p">,</span> <span class="n">batch_mapping</span><span class="o">=</span><span class="n">batch_mapping</span><span class="p">,</span> <span class="n">custom_axes</span> <span class="o">=</span> <span class="n">ax1</span><span class="p">);</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Averages of Densities across parallelized batches&quot;</span><span class="p">);</span>
+
+<span class="c1"># plot density of simulator result</span>
+<span class="n">plot_avg_density_2D</span><span class="p">(</span><span class="n">sim_density</span><span class="p">,</span> <span class="n">register</span><span class="p">,</span> <span class="n">custom_axes</span> <span class="o">=</span> <span class="n">ax2</span><span class="p">);</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Simulator Result&quot;</span><span class="p">);</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/588902a094e3def8d548c975c94d72bd1e5ba216d18c83a6de3b5d53585a502c.png" src="../../_images/588902a094e3def8d548c975c94d72bd1e5ba216d18c83a6de3b5d53585a502c.png" />
+</div>
+</div>
+<p>As we can see from the results, the simulated single batch result and the results from the batches running in parallel line up with what we expect for the checkerboard phase.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Task Summary&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tracker</span><span class="o">.</span><span class="n">quantum_tasks_statistics</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Note: Charges shown are estimates based on your Amazon Braket simulator and quantum processing unit (QPU) task usage. Estimated charges shown may differ from your actual charges. Estimated charges do not factor in any discounts or credits, and you may experience additional charges based on your use of other services such as Amazon Elastic Compute Cloud (Amazon EC2).&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Estimated cost to run this example: </span><span class="si">{</span><span class="n">tracker</span><span class="o">.</span><span class="n">qpu_tasks_cost</span><span class="p">()</span> <span class="o">+</span> <span class="n">tracker</span><span class="o">.</span><span class="n">simulator_tasks_cost</span><span class="p">()</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> USD&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Parallel tasks on Aquila</a><ul>
+<li><a class="reference internal" href="#defining-batches">Defining batches</a></li>
+<li><a class="reference internal" href="#bounding-box">Bounding box</a><ul>
+<li><a class="reference internal" href="#calculating-batch-placement">Calculating batch placement</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#generating-registers-for-all-batches">Generating registers for all batches</a></li>
+<li><a class="reference internal" href="#ahs-program-for-creating-the-checkerboard-phase">AHS program for creating the checkerboard phase</a></li>
+<li><a class="reference internal" href="#run-on-simulator">Run on simulator</a></li>
+<li><a class="reference internal" href="#run-on-aquila">Run on Aquila</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/scripts/furo.js"></script>
+    </body>
+</html>

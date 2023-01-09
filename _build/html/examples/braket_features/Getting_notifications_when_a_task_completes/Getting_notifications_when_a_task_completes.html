@@ -1,0 +1,426 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
+
+    <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
+        <title>Getting notifications when a task completes - Amazon Braket Examples documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../../index.html"><div class="brand">Amazon Braket Examples  documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
+  
+  
+  <span class="sidebar-brand-text">Amazon Braket Examples  documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="getting-notifications-when-a-task-completes">
+<h1>Getting notifications when a task completes<a class="headerlink" href="#getting-notifications-when-a-task-completes" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use Braket SDK Cost Tracking to estimate the cost to run this example</span>
+<span class="kn">from</span> <span class="nn">braket.tracking</span> <span class="kn">import</span> <span class="n">Tracker</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">Tracker</span><span class="p">()</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>This notebook walks you through how to set up notifications for completion of Amazon Braket tasks through the Amazon Simple Notification Service (SNS). Active notifications may be useful in situations where a large wait time is expected, such as when a submitted task is large and takes a while to complete, or when a task is submitted to a device outside of its availability window. In such a setting, a user may not want to wait for the task to complete, and would prefer to move forward and receive an alert once the task is complete.</p>
+<section id="the-workflow">
+<h2>The workflow<a class="headerlink" href="#the-workflow" title="Permalink to this heading">#</a></h2>
+<p>Amazon Braket tasks leverage Amazon S3 as an intermediate storage device. This allows you to leverage the built-in event architecture of S3 to generate active push notifications. All you need to do is subscribe an SMS capable endpoint (for example, an email address or a cell phone number) to an SNS Topic, and tie that SNS Topic to the S3 bucket of interest.</p>
+<p>See the architecture diagram for a full picture of the sequence of events:</p>
+<div align="center">
+<img src="sns_task_notification.png" width="700"/>
+</div></section>
+</section>
+<section id="instructions">
+<h1>Instructions<a class="headerlink" href="#instructions" title="Permalink to this heading">#</a></h1>
+<section id="optional-step-create-a-kms-customer-master-key-cmk">
+<h2>Optional Step: Create a KMS customer master key (CMK)<a class="headerlink" href="#optional-step-create-a-kms-customer-master-key-cmk" title="Permalink to this heading">#</a></h2>
+<p>Security is a priority at AWS. Therefore, nearly all AWS Services integrate with AWS Key Management Service (KMS) to allow data to be encrypted in transmission and at rest. In particular, Amazon S3 and SNS are integrated with KMS. To leverage this capability, follow the quick summary provided here. First, create a custom key through the KMS console, by following these instructions:</p>
+<p>https://docs.aws.amazon.com/kms/latest/developerguide/create-keys.html#create-symmetric-cmk</p>
+<p><strong>NOTE: When creating the key, you don’t need to explicitly allow any IAM users, roles, or services to have access to the key.</strong></p>
+<p>After the key is created, you must edit the default Key Policy to include S3 and SNS services as Principals that can encrypt and decrypt data. Add the following permission within the “Statement” list (remember to replace the &lt;CMK ARN&gt; into the ARN of the key)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;Sid&quot;</span><span class="p">:</span> <span class="s2">&quot;Allow access for S3 and SNS (as Service Principals)&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Effect&quot;</span><span class="p">:</span> <span class="s2">&quot;Allow&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Principal&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;Service&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;s3.amazonaws.com&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;sns.amazonaws.com&quot;</span>
+        <span class="p">]</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;Action&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;kms:GenerateDataKey*&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;kms:Decrypt&quot;</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;Resource&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;CMK ARN&gt;&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="step-1-create-an-appropriate-s3-bucket">
+<h2>Step 1: Create an Appropriate S3 Bucket<a class="headerlink" href="#step-1-create-an-appropriate-s3-bucket" title="Permalink to this heading">#</a></h2>
+<p>You can create an S3 bucket to receive the Amazon Braket task results. To accommodate certain IAM permissions, Amazon Braket expects your bucket name to begin with “amazon-braket-” and generally follow this naming convention:</p>
+<p><code class="docutils literal notranslate"><span class="pre">amazon-braket-&lt;bucket</span> <span class="pre">name&gt;</span></code></p>
+<p>If you don’t specify the S3 location, default S3 folder, where all inputs and outputs for your tasks are saved, follows the convention <code class="docutils literal notranslate"><span class="pre">amazon-braket-&lt;region&gt;-&lt;account</span> <span class="pre">number&gt;</span></code>.</p>
+</section>
+<section id="step-2-create-an-sns-topic">
+<h2>Step 2: Create an SNS Topic<a class="headerlink" href="#step-2-create-an-sns-topic" title="Permalink to this heading">#</a></h2>
+<p>Amazon Simple Notification Service (SNS) acts as the event broker that receives notifications from S3 (along a given Topic) and routes them out to any subscriber, for example, an email address. You must create that SNS Topic to serve as the central communications channel. See the following instructions:</p>
+<p>https://docs.aws.amazon.com/sns/latest/dg/sns-tutorial-create-topic.html#create-topic-aws-console</p>
+<p><strong>NOTE: If you created a CMK in the optional step, make sure you enable encryption on the SNS Topic, and select the CMK you created from the dropdown menu.</strong></p>
+<p>You should already have created an S3 bucket “amazon-braket-&lt;bucket name&gt;” for this workflow. Now you must add permissions to the SNS Topic so it can receive events from the bucket. To do so, edit the Topic’s “Access Policy” to paste the following permission (under the “Statement” list). Replace the contents in &lt;&gt;.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;Sid&quot;</span><span class="p">:</span> <span class="s2">&quot;allow-S3-access&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Effect&quot;</span><span class="p">:</span> <span class="s2">&quot;Allow&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Principal&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;AWS&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;Action&quot;</span><span class="p">:</span> <span class="s2">&quot;SNS:Publish&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Resource&quot;</span><span class="p">:</span> <span class="s2">&quot;arn:aws:sns:&lt;region&gt;:&lt;account_id&gt;:&lt;sns_topic_name&gt;&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Condition&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;StringEquals&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;aws:SourceAccount&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;account_id&gt;&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;ArnLike&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;aws:SourceArn&quot;</span><span class="p">:</span> <span class="s2">&quot;arn:aws:s3:*:*:amazon-braket-&lt;bucket name&gt;&quot;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="step-3-subscribe-an-endpoint-to-the-sns-topic">
+<h2>Step 3: Subscribe an endpoint to the SNS Topic<a class="headerlink" href="#step-3-subscribe-an-endpoint-to-the-sns-topic" title="Permalink to this heading">#</a></h2>
+<p>Follow the instructions here to subscribe an endpoint to an SNS Topic:</p>
+<p>https://docs.aws.amazon.com/sns/latest/dg/sns-create-subscribe-endpoint-to-topic.html</p>
+<p>SNS &gt; Subscriptions &gt; Create subscription &gt; choose the Topic ARN from the dropdown menu &gt; choose the protocol from the dropdown menu (SMS for cell phone number and Email for email address) &gt; fill in the details of the endpoint</p>
+<p><strong>NOTE: SNS is not a free service. Check the pricing <a class="reference external" href="https://aws.amazon.com/sns/pricing/">here</a>. Sending text messages to non-US cell phone numbers might be expensive. On the other hand, the default spending limit for SMS messages is 1.00 USD per month. You can <a class="reference external" href="https://aws.amazon.com/premiumsupport/knowledge-center/sns-sms-spending-limit-increase/">request</a> a limit increase through the support center.</strong></p>
+<p>After this step is completed, you should see the endpoint listed under the SNS &gt; Subscriptions tab in the console. To test functionality, go to the subscribed Topic and publish a test message by choosing “Publish message”. If the endpoint is subscribed properly, you will receive a message immediately, containing the message title and text you provided. If you do not receive a text, double check the instructions in this step</p>
+</section>
+<section id="step-4-create-an-s3-event-and-tie-it-to-the-sns-topic">
+<h2>Step 4: Create an S3 Event and tie it to the SNS Topic<a class="headerlink" href="#step-4-create-an-s3-event-and-tie-it-to-the-sns-topic" title="Permalink to this heading">#</a></h2>
+<p>Follow the instructions provided here to create a new S3 Event:</p>
+<p>https://docs.aws.amazon.com/AmazonS3/latest/user-guide/enable-event-notifications.html#enable-event-notifications-how-to</p>
+<p>Open the Amazon S3 console &gt; choose the bucket <code class="docutils literal notranslate"><span class="pre">amazon-braket-&lt;bucket</span> <span class="pre">name&gt;</span></code> &gt; Properties &gt; choose Create event notification under Event notifications &gt; Enter event name, prefix, and suffix &gt; choose event type &gt; choose SNS topic as the destination &gt; select the SNS topic created in Step 2 from the dropdown menu.</p>
+<p><strong>NOTE 1: AWS recommends that you filter the S3 events by prefix to prevent unnecessary notifications. For the purpose of this tutorial, you can add a prefix filter on <code class="docutils literal notranslate"><span class="pre">sns-testing/</span></code> , which is used as the destination in the following cell for Braket task outputs.</strong></p>
+<p><strong>NOTE 2: If the SNS Topic ARN does not appear in the dropdown menu, it is likely that the appropriate permissions were not added to the Topic Access Policy - review Step 2.</strong></p>
+</section>
+<section id="step-5-test-the-setup-with-a-braket-task">
+<h2>Step 5: Test the setup with a Braket task<a class="headerlink" href="#step-5-test-the-setup-with-a-braket-task" title="Permalink to this heading">#</a></h2>
+<p>Now the pipeline is configured and ready to test. To test it, run the following code to kick off an Amazon Braket task. After the task state registers as “COMPLETED”, within a few seconds you should receive a message stating that a file has been added to the S3 bucket. Your task is done.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">braket.circuits</span> <span class="kn">import</span> <span class="n">Circuit</span>
+<span class="kn">from</span> <span class="nn">braket.aws</span> <span class="kn">import</span> <span class="n">AwsDevice</span>
+
+<span class="n">n_qubits</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">n_shots</span> <span class="o">=</span> <span class="mi">100</span>
+
+<span class="n">device</span> <span class="o">=</span> <span class="n">AwsDevice</span><span class="p">(</span><span class="s1">&#39;arn:aws:braket:::device/quantum-simulator/amazon/sv1&#39;</span><span class="p">)</span>
+<span class="c1"># ##</span>
+
+<span class="k">def</span> <span class="nf">ghz_circuit</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Circuit</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to return simple GHZ circuit ansatz. Assumes all qubits in range(0, n_qubits-1)</span>
+<span class="sd">    are entangled.</span>
+
+<span class="sd">    :param int n_qubits: number of qubits</span>
+<span class="sd">    :return: Constructed GHZ circuit</span>
+<span class="sd">    :rtype: Circuit</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">circuit</span> <span class="o">=</span> <span class="n">Circuit</span><span class="p">()</span>                          <span class="c1"># instantiate circuit object</span>
+    <span class="n">circuit</span><span class="o">.</span><span class="n">h</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>                                 <span class="c1"># add Hadamard gate on first qubit</span>
+
+    <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_qubits</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">circuit</span><span class="o">.</span><span class="n">cnot</span><span class="p">(</span><span class="n">control</span><span class="o">=</span><span class="n">ii</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">ii</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>    <span class="c1"># apply series of CNOT gates</span>
+    <span class="k">return</span> <span class="n">circuit</span>
+
+
+<span class="c1"># Define circuit</span>
+<span class="n">ghz</span> <span class="o">=</span> <span class="n">ghz_circuit</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">)</span>
+
+<span class="c1"># Kick off single task execution</span>
+<span class="n">task</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">ghz</span><span class="p">,</span> <span class="n">shots</span><span class="o">=</span><span class="n">n_shots</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">task</span><span class="o">.</span><span class="n">state</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;QUEUED&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Task Summary&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">quantum_tasks_statistics</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Note: Charges shown are estimates based on your Amazon Braket simulator and quantum processing unit (QPU) task usage. Estimated charges shown may differ from your actual charges. Estimated charges do not factor in any discounts or credits, and you may experience additional charges based on your use of other services such as Amazon Elastic Compute Cloud (Amazon EC2).&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Estimated cost to run this example: </span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="n">qpu_tasks_cost</span><span class="p">()</span> <span class="o">+</span> <span class="n">t</span><span class="o">.</span><span class="n">simulator_tasks_cost</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> USD&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Task Summary
+{&#39;arn:aws:braket:::device/quantum-simulator/amazon/sv1&#39;: {&#39;shots&#39;: 100, &#39;tasks&#39;: {&#39;COMPLETED&#39;: 1}, &#39;execution_duration&#39;: datetime.timedelta(microseconds=112000), &#39;billed_execution_duration&#39;: datetime.timedelta(seconds=3)}}
+Note: Charges shown are estimates based on your Amazon Braket simulator and quantum processing unit (QPU) task usage. Estimated charges shown may differ from your actual charges. Estimated charges do not factor in any discounts or credits, and you may experience additional charges based on your use of other services such as Amazon Elastic Compute Cloud (Amazon EC2).
+Estimated cost to run this example: 0.004 USD
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Getting notifications when a task completes</a><ul>
+<li><a class="reference internal" href="#the-workflow">The workflow</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#instructions">Instructions</a><ul>
+<li><a class="reference internal" href="#optional-step-create-a-kms-customer-master-key-cmk">Optional Step: Create a KMS customer master key (CMK)</a></li>
+<li><a class="reference internal" href="#step-1-create-an-appropriate-s3-bucket">Step 1: Create an Appropriate S3 Bucket</a></li>
+<li><a class="reference internal" href="#step-2-create-an-sns-topic">Step 2: Create an SNS Topic</a></li>
+<li><a class="reference internal" href="#step-3-subscribe-an-endpoint-to-the-sns-topic">Step 3: Subscribe an endpoint to the SNS Topic</a></li>
+<li><a class="reference internal" href="#step-4-create-an-s3-event-and-tie-it-to-the-sns-topic">Step 4: Create an S3 Event and tie it to the SNS Topic</a></li>
+<li><a class="reference internal" href="#step-5-test-the-setup-with-a-braket-task">Step 5: Test the setup with a Braket task</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/scripts/furo.js"></script>
+    </body>
+</html>

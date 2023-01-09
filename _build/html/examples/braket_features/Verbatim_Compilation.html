@@ -1,0 +1,856 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
+
+    <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
+        <title>Verbatim compilation - Amazon Braket Examples documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">Amazon Braket Examples  documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  
+  
+  <span class="sidebar-brand-text">Amazon Braket Examples  documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="verbatim-compilation">
+<h1>Verbatim compilation<a class="headerlink" href="#verbatim-compilation" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use Braket SDK Cost Tracking to estimate the cost to run this example</span>
+<span class="kn">from</span> <span class="nn">braket.tracking</span> <span class="kn">import</span> <span class="n">Tracker</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">Tracker</span><span class="p">()</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Usually, when you run a circuit on a QPU, behind the scenes, Amazon Braket will do a series of compilation steps to optimize your circuit and map the abstract circuit to the physical qubits on the QPU. However, in many situations,  such as for error mitigation or benchmarking experiments, researchers require full control of the qubits and the gates that are being applied. In a <a class="reference external" href="https://github.com/aws/amazon-braket-examples/blob/main/examples/braket_features/Allocating_Qubits_on_QPU_Devices.ipynb">previous notebook</a>, we showed you how to manually allocate the qubits of your circuit, i.e., how you can exactly define which logical qubit maps to which physical qubit. In this notebook, you will learn how to use <em>verbatim compilation</em> to run your circuits exactly as defined without any modification during the compilation process.</p>
+<section id="table-of-contents">
+<h2>Table of contents:<a class="headerlink" href="#table-of-contents" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p><span class="xref myst">Recap: Running circuits on Amazon Braket</span></p></li>
+<li><p><span class="xref myst">Using verbatim compilation to run circuits without further compilation</span></p></li>
+<li><p><span class="xref myst">Programming verbatim circuits onto the Rigetti device</span></p></li>
+<li><p><span class="xref myst">Programming verbatim circuits onto the Oxford Quantum Circuits device</span></p></li>
+</ul>
+</section>
+<section id="recap-running-circuits-on-amazon-braket-a-class-anchor-id-recap-a">
+<h2>Recap: Running circuits on Amazon Braket  <a class="anchor" id="Recap"></a><a class="headerlink" href="#recap-running-circuits-on-amazon-braket-a-class-anchor-id-recap-a" title="Permalink to this heading">#</a></h2>
+<p>Let us begin with importing the usual dependencies. Verbatim compilation is supported by all Rigetti devices, and we will use the Aspen-M-2 device for this demonstration.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># general imports</span>
+<span class="kn">import</span> <span class="nn">boto3</span>
+<span class="kn">from</span> <span class="nn">braket.aws</span> <span class="kn">import</span> <span class="n">AwsDevice</span>
+<span class="kn">from</span> <span class="nn">braket.circuits</span> <span class="kn">import</span> <span class="n">Circuit</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">pi</span>
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+</pre></div>
+</div>
+</div>
+</div>
+<p>When you run a circuit on Amazon Braket, different compilation and optimization steps occur before the circuit is executed on the selected QPU. First, the gates of your circuit are decomposed into the <em>native gates</em> of the QPU. Let’s first remember what the native gates of the Aspen-M-2 device are:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># set up the Rigetti Aspen-M-2 device</span>
+<span class="n">device</span> <span class="o">=</span> <span class="n">AwsDevice</span><span class="p">(</span><span class="s2">&quot;arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-2&quot;</span><span class="p">)</span>
+
+<span class="c1"># list the native gate set</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The native gates for the&quot;</span><span class="p">,</span> <span class="n">device</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;device are:&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">gate</span> <span class="ow">in</span> <span class="n">device</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">paradigm</span><span class="o">.</span><span class="n">nativeGateSet</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The native gates for the Aspen-M-2 device are:
+rx
+rz
+cz
+cphaseshift
+xy
+</pre></div>
+</div>
+</div>
+</div>
+<p>If we create a circuit with gates that are not part of that list, the gates will automatically be decomposed into a gate set that can be executed on the device.</p>
+<div class="alert alert-block alert-info">
+    <b>Note:</b> This notebook uses the Rigetti Aspen-M-2 device. When you run this notebook, make sure the device is currently available. You can find QPU availability windows on the <a href="https://us-west-1.console.aws.amazon.com/braket/home?region=us-west-1#/devices">Devices page</a> in the Amazon Braket Console
+</div><div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bell</span> <span class="o">=</span> <span class="n">Circuit</span><span class="p">()</span><span class="o">.</span><span class="n">h</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">cnot</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">bell</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">bell</span><span class="p">,</span> <span class="n">shots</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">measurement_counts</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>T  : |0|1|
+          
+q0 : -H-C-
+        | 
+q1 : ---X-
+
+T  : |0|1|
+Counter({&#39;11&#39;: 418, &#39;00&#39;: 358, &#39;10&#39;: 203, &#39;01&#39;: 21})
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s have a look at the circuit that was actually executed.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">meta</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">additional_metadata</span><span class="o">.</span><span class="n">rigettiMetadata</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">meta</span><span class="o">.</span><span class="n">compiledProgram</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>DECLARE ro BIT[2]
+PRAGMA INITIAL_REWIRING &quot;PARTIAL&quot;
+RESET
+RZ(pi/2) 121
+RX(pi/2) 121
+RZ(pi/2) 121
+RZ(-pi/2) 122
+RX(pi/2) 122
+RZ(pi/2) 122
+CZ 122 121
+RZ(pi) 121
+RZ(-3*pi/2) 122
+RX(pi/2) 122
+RZ(3*pi/2) 122
+MEASURE 122 ro[1]
+MEASURE 121 ro[0]
+</pre></div>
+</div>
+</div>
+</div>
+<p>As you can see, the original gates, <code class="docutils literal notranslate"><span class="pre">h</span></code> and <code class="docutils literal notranslate"><span class="pre">cnot</span></code>, were decomposed into the native <code class="docutils literal notranslate"><span class="pre">rz</span></code>, <code class="docutils literal notranslate"><span class="pre">rx</span></code>, <code class="docutils literal notranslate"><span class="pre">cz</span></code>, and <code class="docutils literal notranslate"><span class="pre">cphase</span></code> gates. You will also note that the abstract qubit indices 0 and 1 (which were chosen as an example) were remapped to qubits that actually exist on the device, in this case, 121 and 122, respectively. At the time when you run this notebook, you might see a different remapping, as the compiler takes into account the latest calibration of the device and tries to map to the qubits that yield the best results.</p>
+<p>The compiler further performs circuit optimizations to minimize the number of operations, e.g., by removing redundant gates. Let’s have a look at a single-qubit circuit containing two subsequent <code class="docutils literal notranslate"><span class="pre">x</span></code> gates:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">identity</span> <span class="o">=</span> <span class="n">Circuit</span><span class="p">()</span><span class="o">.</span><span class="n">x</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">x</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Of course, if you do the math, two consecutive <code class="docutils literal notranslate"><span class="pre">x</span></code> gates just cancel each other out, and we are left with an empty circuit after compilation.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">identity</span><span class="p">,</span> <span class="n">shots</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+<span class="n">compiled_program</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">additional_metadata</span><span class="o">.</span><span class="n">rigettiMetadata</span><span class="o">.</span><span class="n">compiledProgram</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">compiled_program</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">measurement_counts</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>DECLARE ro BIT[1]
+PRAGMA INITIAL_REWIRING &quot;PARTIAL&quot;
+RESET
+MEASURE 46 ro[0]
+
+Counter({&#39;0&#39;: 994, &#39;1&#39;: 6})
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="using-verbatim-compilation-to-run-circuits-without-further-compilation-a-class-anchor-id-verbatim-a">
+<h2>Using verbatim compilation to run circuits without further compilation <a class="anchor" id="Verbatim"></a><a class="headerlink" href="#using-verbatim-compilation-to-run-circuits-without-further-compilation-a-class-anchor-id-verbatim-a" title="Permalink to this heading">#</a></h2>
+<p>In some cases, however, you may need to run circuits exactly as defined, without any further modifications by the compiler. For instance, if you want to benchmark device performance you may want to control exactly which gates are executed on the hardware. Similarly, <a class="reference external" href="https://arxiv.org/pdf/2005.10921.pdf">certain error mitigation protocols</a> require insertion of additional, redundant operations that would normally be removed by the compiler but are essential for the protocol to work. To prevent circuits (or parts of circuits) from further compiler optimizations, you can use the <code class="docutils literal notranslate"><span class="pre">add_verbatim_box</span></code> function in the Amazon Braket SDK.</p>
+<div class="alert alert-block alert-info">
+    <b>Note:</b> <code>add_verbatim_box</code> is currently only supported on Rigetti, OQC, and IonQ devices.
+</div><p>When you define a (sub-)circuit in a verbatim box, you need to make sure that everything inside the verbatim box can be executed on the device <em>exactly</em> as you defined it. This means that</p>
+<ol class="arabic simple">
+<li><p>The circuit can only use qubit indices that exist on the device</p></li>
+<li><p>All gates of the circuit have to be part of the native gate set of the device</p></li>
+<li><p>All multi-qubit gates have to be between qubits that are connected according to the connectivity graph of the device</p></li>
+</ol>
+<section id="getting-started-with-a-minimal-example">
+<h3>Getting started with a minimal example<a class="headerlink" href="#getting-started-with-a-minimal-example" title="Permalink to this heading">#</a></h3>
+<p>Let’s have a look at the simple example from before of an identify circuit.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">identity</span> <span class="o">=</span> <span class="n">Circuit</span><span class="p">()</span><span class="o">.</span><span class="n">rx</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">pi</span><span class="p">)</span><span class="o">.</span><span class="n">rx</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">pi</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Here, we have chosen the Rigetti-native <code class="docutils literal notranslate"><span class="pre">rx</span></code> gate, which is identical to <code class="docutils literal notranslate"><span class="pre">x</span></code> if we choose the angle to be $\pi$. Next, we wrap this circuit in a verbatim box to prevent the compiler from collapsing the two gates. You can see the circuit diagram indicates the start and end of the verbatim box.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">circ</span> <span class="o">=</span> <span class="n">Circuit</span><span class="p">()</span><span class="o">.</span><span class="n">add_verbatim_box</span><span class="p">(</span><span class="n">identity</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">circ</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>T  : |      0      |   1    |   2    |     3     |
+                                                  
+q0 : -StartVerbatim-Rx(3.14)-Rx(3.14)-EndVerbatim-
+
+T  : |      0      |   1    |   2    |     3     |
+</pre></div>
+</div>
+</div>
+</div>
+<p>When we run the circuit, both gates will be executed on the device.</p>
+<div class="alert alert-block alert-info">
+    <b>Note:</b> To run a circuit that contains a verbatim box the <code>disable_qubit_rewiring</code> flag must be set to <code>True</code> 
+</div><div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">circ</span><span class="p">,</span> <span class="n">shots</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">disable_qubit_rewiring</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+<span class="n">compiled_program</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">additional_metadata</span><span class="o">.</span><span class="n">rigettiMetadata</span><span class="o">.</span><span class="n">compiledProgram</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">compiled_program</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">measurement_counts</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>DECLARE ro BIT[1]
+PRAGMA INITIAL_REWIRING &quot;NAIVE&quot;
+RESET
+RX(pi) 0
+RX(pi) 0
+MEASURE 0 ro[0]
+
+Counter({&#39;0&#39;: 809, &#39;1&#39;: 191})
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="programming-verbatim-circuits-onto-the-rigetti-device-a-class-anchor-id-rigetti-a">
+<h2>Programming verbatim circuits onto the Rigetti device  <a class="anchor" id="Rigetti"></a><a class="headerlink" href="#programming-verbatim-circuits-onto-the-rigetti-device-a-class-anchor-id-rigetti-a" title="Permalink to this heading">#</a></h2>
+<p>As we have mentioned above, to build circuits with multi-qubit gates, you need to take into consideration the connectivity graph of the device. When a circuit contains a verbatim box, automatic qubit rewiring has to be disables, and you have manually allocate the qubits on the device that you want to use for your circuit.
+You can access the connectivity graph on the <a class="reference external" href="https://console.aws.amazon.com/braket/home?region=us-west-1#/devices/arn:aws:braket:us-west-2::device/qpu/rigetti/Aspen-M-2">device detail page</a> in the Amazon Braket Console, or by using the code below.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># set up the Rigetti Aspen-M-2 device</span>
+<span class="n">rigetti</span> <span class="o">=</span> <span class="n">AwsDevice</span><span class="p">(</span><span class="s2">&quot;arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-2&quot;</span><span class="p">)</span>
+
+<span class="c1"># access and visualize the device topology</span>
+<span class="c1"># note that device topology can change day-to-day based on edge fidelity data</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">rigetti</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">paradigm</span><span class="o">.</span><span class="n">connectivity</span><span class="o">.</span><span class="n">connectivityGraph</span><span class="p">)</span>
+<span class="n">nx</span><span class="o">.</span><span class="n">draw_kamada_kawai</span><span class="p">(</span><span class="n">rigetti</span><span class="o">.</span><span class="n">topology_graph</span><span class="p">,</span> <span class="n">with_labels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">font_color</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;0&#39;: [&#39;1&#39;, &#39;7&#39;], &#39;1&#39;: [&#39;0&#39;, &#39;16&#39;, &#39;2&#39;], &#39;10&#39;: [&#39;11&#39;, &#39;113&#39;, &#39;17&#39;], &#39;100&#39;: [&#39;101&#39;, &#39;107&#39;], &#39;101&#39;: [&#39;100&#39;, &#39;102&#39;, &#39;116&#39;], &#39;102&#39;: [&#39;101&#39;, &#39;103&#39;, &#39;115&#39;], &#39;103&#39;: [&#39;102&#39;, &#39;104&#39;], &#39;104&#39;: [&#39;103&#39;, &#39;105&#39;, &#39;7&#39;], &#39;105&#39;: [&#39;104&#39;, &#39;106&#39;], &#39;106&#39;: [&#39;105&#39;, &#39;107&#39;], &#39;107&#39;: [&#39;100&#39;, &#39;106&#39;], &#39;11&#39;: [&#39;10&#39;, &#39;12&#39;, &#39;26&#39;], &#39;110&#39;: [&#39;111&#39;, &#39;117&#39;], &#39;111&#39;: [&#39;110&#39;, &#39;112&#39;, &#39;126&#39;], &#39;112&#39;: [&#39;111&#39;, &#39;113&#39;], &#39;113&#39;: [&#39;10&#39;, &#39;112&#39;, &#39;114&#39;], &#39;114&#39;: [&#39;113&#39;, &#39;115&#39;, &#39;17&#39;], &#39;115&#39;: [&#39;102&#39;, &#39;114&#39;, &#39;116&#39;], &#39;116&#39;: [&#39;101&#39;, &#39;115&#39;, &#39;117&#39;], &#39;117&#39;: [&#39;110&#39;, &#39;116&#39;], &#39;12&#39;: [&#39;11&#39;, &#39;13&#39;, &#39;25&#39;], &#39;120&#39;: [&#39;121&#39;, &#39;127&#39;], &#39;121&#39;: [&#39;120&#39;, &#39;122&#39;, &#39;136&#39;], &#39;122&#39;: [&#39;121&#39;, &#39;123&#39;, &#39;135&#39;], &#39;123&#39;: [&#39;122&#39;, &#39;124&#39;, &#39;20&#39;], &#39;124&#39;: [&#39;123&#39;, &#39;125&#39;, &#39;27&#39;], &#39;125&#39;: [&#39;124&#39;, &#39;126&#39;], &#39;126&#39;: [&#39;111&#39;, &#39;125&#39;, &#39;127&#39;], &#39;127&#39;: [&#39;120&#39;, &#39;126&#39;], &#39;13&#39;: [&#39;12&#39;, &#39;14&#39;], &#39;130&#39;: [&#39;131&#39;, &#39;137&#39;], &#39;131&#39;: [&#39;130&#39;, &#39;132&#39;, &#39;146&#39;], &#39;132&#39;: [&#39;131&#39;, &#39;133&#39;, &#39;145&#39;], &#39;133&#39;: [&#39;132&#39;, &#39;134&#39;, &#39;30&#39;], &#39;134&#39;: [&#39;133&#39;, &#39;135&#39;, &#39;37&#39;], &#39;135&#39;: [&#39;122&#39;, &#39;134&#39;, &#39;136&#39;], &#39;136&#39;: [&#39;121&#39;, &#39;135&#39;, &#39;137&#39;], &#39;137&#39;: [&#39;130&#39;, &#39;136&#39;], &#39;14&#39;: [&#39;13&#39;, &#39;15&#39;], &#39;140&#39;: [&#39;141&#39;, &#39;147&#39;], &#39;141&#39;: [&#39;140&#39;, &#39;142&#39;], &#39;142&#39;: [&#39;141&#39;, &#39;143&#39;], &#39;143&#39;: [&#39;142&#39;, &#39;144&#39;, &#39;40&#39;], &#39;144&#39;: [&#39;143&#39;, &#39;145&#39;, &#39;47&#39;], &#39;145&#39;: [&#39;132&#39;, &#39;144&#39;, &#39;146&#39;], &#39;146&#39;: [&#39;131&#39;, &#39;145&#39;, &#39;147&#39;], &#39;147&#39;: [&#39;140&#39;, &#39;146&#39;], &#39;15&#39;: [&#39;14&#39;, &#39;16&#39;, &#39;2&#39;], &#39;16&#39;: [&#39;1&#39;, &#39;15&#39;, &#39;17&#39;], &#39;17&#39;: [&#39;10&#39;, &#39;16&#39;, &#39;114&#39;], &#39;2&#39;: [&#39;1&#39;, &#39;15&#39;, &#39;3&#39;], &#39;20&#39;: [&#39;123&#39;, &#39;21&#39;, &#39;27&#39;], &#39;21&#39;: [&#39;20&#39;, &#39;22&#39;, &#39;36&#39;], &#39;22&#39;: [&#39;21&#39;, &#39;23&#39;, &#39;35&#39;], &#39;23&#39;: [&#39;22&#39;, &#39;24&#39;], &#39;24&#39;: [&#39;23&#39;, &#39;25&#39;], &#39;25&#39;: [&#39;12&#39;, &#39;24&#39;, &#39;26&#39;], &#39;26&#39;: [&#39;11&#39;, &#39;25&#39;, &#39;27&#39;], &#39;27&#39;: [&#39;20&#39;, &#39;26&#39;, &#39;124&#39;], &#39;3&#39;: [&#39;2&#39;, &#39;4&#39;], &#39;30&#39;: [&#39;133&#39;, &#39;31&#39;, &#39;37&#39;], &#39;31&#39;: [&#39;30&#39;, &#39;32&#39;, &#39;46&#39;], &#39;32&#39;: [&#39;31&#39;, &#39;33&#39;, &#39;45&#39;], &#39;33&#39;: [&#39;32&#39;, &#39;34&#39;], &#39;34&#39;: [&#39;33&#39;, &#39;35&#39;], &#39;35&#39;: [&#39;22&#39;, &#39;34&#39;, &#39;36&#39;], &#39;36&#39;: [&#39;21&#39;, &#39;35&#39;, &#39;37&#39;], &#39;37&#39;: [&#39;30&#39;, &#39;36&#39;, &#39;134&#39;], &#39;4&#39;: [&#39;3&#39;, &#39;5&#39;], &#39;40&#39;: [&#39;143&#39;, &#39;41&#39;, &#39;47&#39;], &#39;41&#39;: [&#39;40&#39;, &#39;42&#39;], &#39;42&#39;: [&#39;41&#39;, &#39;43&#39;], &#39;43&#39;: [&#39;42&#39;, &#39;44&#39;], &#39;44&#39;: [&#39;43&#39;, &#39;45&#39;], &#39;45&#39;: [&#39;32&#39;, &#39;44&#39;, &#39;46&#39;], &#39;46&#39;: [&#39;31&#39;, &#39;45&#39;, &#39;47&#39;], &#39;47&#39;: [&#39;40&#39;, &#39;46&#39;, &#39;144&#39;], &#39;5&#39;: [&#39;4&#39;, &#39;6&#39;], &#39;6&#39;: [&#39;5&#39;, &#39;7&#39;], &#39;7&#39;: [&#39;0&#39;, &#39;6&#39;, &#39;104&#39;]}
+</pre></div>
+</div>
+<img alt="../../_images/4a91a6aa0ff845a9e89a3ddf1f61181b5d512479b5c37852741d9e761f68bfed.png" src="../../_images/4a91a6aa0ff845a9e89a3ddf1f61181b5d512479b5c37852741d9e761f68bfed.png" />
+</div>
+</div>
+<p>From the connectivity graph, you can see that qubits 11, 10, and 17 are connected in a line, and with the code in the next cell you can access their respective 2-qubit gate fidelities to make sure you have selected a high-quality qubit subset.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">rigetti</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">provider</span><span class="o">.</span><span class="n">specs</span><span class="p">[</span><span class="s2">&quot;2Q&quot;</span><span class="p">][</span><span class="s2">&quot;10-11&quot;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">rigetti</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">provider</span><span class="o">.</span><span class="n">specs</span><span class="p">[</span><span class="s2">&quot;2Q&quot;</span><span class="p">][</span><span class="s2">&quot;10-17&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;fCPHASE&#39;: 0.9337939355722039, &#39;fCPHASE_std_err&#39;: 0.009613787561716118, &#39;fCZ&#39;: 0.9422746489035245, &#39;fCZ_std_err&#39;: 0.007187651208699537, &#39;fXY&#39;: 0.9887022319066467, &#39;fXY_std_err&#39;: 0.003682831114426735}
+{&#39;fCPHASE&#39;: 0.919371151695913, &#39;fCPHASE_std_err&#39;: 0.003625200733935161, &#39;fCZ&#39;: 0.9557165619080631, &#39;fCZ_std_err&#39;: 0.00549970432762644, &#39;fXY&#39;: 0.9739503289969474, &#39;fXY_std_err&#39;: 0.005178345557993867}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="alert alert-block alert-info">
+    <b>Note:</b> At the time when you run this notebook the fidelity numbers may be different as QPU devices are periodically recalibrated
+</div><p>After selecting the qubits and validating their gate fidelities, you can now construct a circuit and run it.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">circ</span> <span class="o">=</span> <span class="n">Circuit</span><span class="p">()</span><span class="o">.</span><span class="n">xy</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="n">pi</span><span class="o">/</span><span class="mi">4</span><span class="p">)</span><span class="o">.</span><span class="n">xy</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">17</span><span class="p">,</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">rx</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="n">pi</span><span class="p">)</span><span class="o">.</span><span class="n">xy</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="n">pi</span><span class="o">/</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">verbatim_circ</span> <span class="o">=</span> <span class="n">Circuit</span><span class="p">()</span><span class="o">.</span><span class="n">add_verbatim_box</span><span class="p">(</span><span class="n">circ</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">verbatim_circ</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>T   : |      0      |   1    |   2    |   3    |   4    |     5     |
+                                                                     
+q10 : -StartVerbatim-XY(0.79)-XY(1.57)-Rx(3.14)-XY(0.79)-EndVerbatim-
+       |             |        |                 |        |           
+q11 : -|-------------XY(0.79)-|-----------------XY(0.79)-|-----------
+       |                      |                          |           
+q17 : -*************----------XY(1.57)-------------------***********-
+
+T   : |      0      |   1    |   2    |   3    |   4    |     5     |
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">rigetti</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">verbatim_circ</span><span class="p">,</span> <span class="n">shots</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">disable_qubit_rewiring</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+<span class="n">compiled_program</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">additional_metadata</span><span class="o">.</span><span class="n">rigettiMetadata</span><span class="o">.</span><span class="n">compiledProgram</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">compiled_program</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">measurement_counts</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>DECLARE ro BIT[3]
+PRAGMA INITIAL_REWIRING &quot;NAIVE&quot;
+RESET
+XY(pi/4) 10 11
+XY(pi/2) 10 17
+RX(pi) 10
+XY(pi/4) 10 11
+MEASURE 17 ro[2]
+MEASURE 11 ro[1]
+MEASURE 10 ro[0]
+
+Counter({&#39;100&#39;: 659, &#39;010&#39;: 119, &#39;000&#39;: 112, &#39;110&#39;: 93, &#39;101&#39;: 11, &#39;011&#39;: 3, &#39;001&#39;: 2, &#39;111&#39;: 1})
+</pre></div>
+</div>
+</div>
+</div>
+<p>As expected, the program is faithfully executed exactly as it was defined.</p>
+<section id="defining-verbatim-subcircuits">
+<h3>Defining verbatim subcircuits<a class="headerlink" href="#defining-verbatim-subcircuits" title="Permalink to this heading">#</a></h3>
+<p>In some situations, you might only be interested in executing parts of your circuits verbatim, and have the compiler nativize and optimize the rest. The next example demonstrates how to do this. Let’s get started by defining the subcircuit we want to execute verbatim.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">verbatim_subcirc</span> <span class="o">=</span> <span class="n">Circuit</span><span class="p">()</span><span class="o">.</span><span class="n">rx</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="n">pi</span><span class="p">)</span><span class="o">.</span><span class="n">rx</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="n">pi</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Next, define the part of the circuit you want to compiler to process, so you don’t have to worry about nativizing gates.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">subcirc1</span> <span class="o">=</span> <span class="n">Circuit</span><span class="p">()</span><span class="o">.</span><span class="n">cnot</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">11</span><span class="p">)</span><span class="o">.</span><span class="n">cnot</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">17</span><span class="p">)</span>
+<span class="n">subcirc2</span> <span class="o">=</span> <span class="n">Circuit</span><span class="p">()</span><span class="o">.</span><span class="n">cnot</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">17</span><span class="p">)</span><span class="o">.</span><span class="n">cnot</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">11</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Finally, put everything together</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">circ</span> <span class="o">=</span> <span class="n">subcirc1</span><span class="o">.</span><span class="n">add_verbatim_box</span><span class="p">(</span><span class="n">verbatim_subcirc</span><span class="p">)</span><span class="o">.</span><span class="n">add_circuit</span><span class="p">(</span><span class="n">subcirc2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">circ</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>T   : |0|1|      2      |   3    |   4    |     5     |6|7|
+                                                           
+q10 : -C-C-StartVerbatim-Rx(3.14)-Rx(3.14)-EndVerbatim-C-C-
+       | | |                               |           | | 
+q11 : -X-|-|-------------------------------|-----------|-X-
+         | |                               |           |   
+q17 : ---X-*************-------------------***********-X---
+
+T   : |0|1|      2      |   3    |   4    |     5     |6|7|
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">rigetti</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">circ</span><span class="p">,</span> <span class="n">shots</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">disable_qubit_rewiring</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+<span class="n">compiled_program</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">additional_metadata</span><span class="o">.</span><span class="n">rigettiMetadata</span><span class="o">.</span><span class="n">compiledProgram</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">compiled_program</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">measurement_counts</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>DECLARE ro BIT[3]
+PRAGMA INITIAL_REWIRING &quot;NAIVE&quot;
+RESET
+RZ(-pi/2) 10
+RZ(-pi/2) 11
+RX(pi/2) 11
+CZ 11 10
+RZ(-pi/2) 10
+RZ(-pi/2) 17
+RX(pi/2) 17
+RZ(pi/2) 17
+CZ 17 10
+RZ(pi) 10
+RZ(-pi) 11
+RX(pi/2) 11
+RZ(3*pi/2) 11
+RZ(-3*pi/2) 17
+RX(pi/2) 17
+RZ(3*pi/2) 17
+RX(pi) 10
+RX(pi) 10
+RZ(pi/2) 10
+RZ(-3*pi/2) 17
+RX(pi/2) 17
+RZ(pi) 17
+CZ 10 17
+RZ(-pi/2) 10
+RZ(-pi/2) 11
+RX(pi/2) 11
+RZ(pi/2) 11
+CZ 11 10
+RZ(pi) 10
+RZ(-3*pi/2) 11
+RX(pi/2) 11
+RZ(3*pi/2) 11
+RX(pi/2) 17
+RZ(pi/2) 17
+MEASURE 17 ro[2]
+MEASURE 11 ro[1]
+MEASURE 10 ro[0]
+
+Counter({&#39;000&#39;: 869, &#39;010&#39;: 84, &#39;100&#39;: 20, &#39;001&#39;: 19, &#39;011&#39;: 3, &#39;111&#39;: 2, &#39;101&#39;: 2, &#39;110&#39;: 1})
+</pre></div>
+</div>
+</div>
+</div>
+<p>Inspecting the compiled program, you can see that the <code class="docutils literal notranslate"><span class="pre">cnot</span></code> gates were nativized, however, the two <code class="docutils literal notranslate"><span class="pre">rx</span></code> gates in the middle of the circuit remain unaltered, and were not removed by the compiler.</p>
+</section>
+</section>
+<section id="programming-verbatim-circuits-onto-the-oxford-quantum-circuits-device-a-class-anchor-id-oqc-a">
+<h2>Programming verbatim circuits onto the Oxford Quantum Circuits device <a class="anchor" id="OQC"></a><a class="headerlink" href="#programming-verbatim-circuits-onto-the-oxford-quantum-circuits-device-a-class-anchor-id-oqc-a" title="Permalink to this heading">#</a></h2>
+<p>Oxford Quantum Circuits (OQC) also supports verbatim compilation. As mentioned above, a verbatim circuit does not allow automatic qubit rewiring. All qubits have to be allocated using the indices that exist on the device. The gates of a verbatim circuit have to come from the native gate set, and multi-qubits gates can only be applied according to the connectivity graph of the device. First, let’s look at OQC’s native gate set.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># set up the OQC Lucy device</span>
+<span class="n">oqc_device</span> <span class="o">=</span> <span class="n">AwsDevice</span><span class="p">(</span><span class="s2">&quot;arn:aws:braket:eu-west-2::device/qpu/oqc/Lucy&quot;</span><span class="p">)</span>
+
+<span class="c1"># list the native gate set</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The native gates for the&quot;</span><span class="p">,</span> <span class="n">oqc_device</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;device are:&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">gate</span> <span class="ow">in</span> <span class="n">oqc_device</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">paradigm</span><span class="o">.</span><span class="n">nativeGateSet</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The native gates for the Lucy device are:
+ecr
+i
+rz
+v
+x
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s check out the device connectivity graph to see what qubits are on the device and how they are connected. Notice that connections in the OQC device are unidirectional. This mean that two-qubits gates can only be applied one direction with verbatim compilation. In the topology graph, each arrow represents the direction that a two-qubit gate can be applied in verbatim mode. The tail of the arrow is the first qubit and the head is the second qubit. For example, <code class="docutils literal notranslate"><span class="pre">ecr(4,3)</span></code> is a valid gate while <code class="docutils literal notranslate"><span class="pre">ecr(3,4)</span></code> is not.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># access and visualize the device topology</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">oqc_device</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">paradigm</span><span class="o">.</span><span class="n">connectivity</span><span class="o">.</span><span class="n">connectivityGraph</span><span class="p">)</span>
+<span class="n">nx</span><span class="o">.</span><span class="n">draw_kamada_kawai</span><span class="p">(</span><span class="n">oqc_device</span><span class="o">.</span><span class="n">topology_graph</span><span class="p">,</span> <span class="n">with_labels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">font_color</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="n">arrows</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">arrowsize</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;0&#39;: [&#39;1&#39;, &#39;7&#39;], &#39;1&#39;: [&#39;2&#39;], &#39;2&#39;: [&#39;3&#39;], &#39;4&#39;: [&#39;3&#39;, &#39;5&#39;], &#39;6&#39;: [&#39;5&#39;], &#39;7&#39;: [&#39;6&#39;]}
+</pre></div>
+</div>
+<img alt="../../_images/dbf140c250cb7e2bd92d55ce9e6705c9bdd3926ee9b39f6408d32e035ed79a01.png" src="../../_images/dbf140c250cb7e2bd92d55ce9e6705c9bdd3926ee9b39f6408d32e035ed79a01.png" />
+</div>
+</div>
+<p>With this information, we can create a circuit and run it with verbatim mode. OQC currently only supports verbatim mode for the whole circuit, i.e. the verbatim box has to contain all the gates in a circuit when submitting to the device.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">circ</span> <span class="o">=</span> <span class="n">Circuit</span><span class="p">()</span><span class="o">.</span><span class="n">rz</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">pi</span><span class="o">/</span><span class="mi">4</span><span class="p">)</span><span class="o">.</span><span class="n">rz</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="n">pi</span><span class="o">/</span><span class="mi">4</span><span class="p">)</span><span class="o">.</span><span class="n">ecr</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">x</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">ecr</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">verbatim_circ</span> <span class="o">=</span> <span class="n">Circuit</span><span class="p">()</span><span class="o">.</span><span class="n">add_verbatim_box</span><span class="p">(</span><span class="n">circ</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">verbatim_circ</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>T  : |      0      |    1    |    2     | 3 |     4     |
+                                                         
+q0 : -StartVerbatim-Rz(0.785)-Rz(-0.785)-----EndVerbatim-
+      |                                      |           
+q1 : -|-------------ECR----------------------|-----------
+      |             |                        |           
+q2 : -|-------------ECR-------X----------ECR-|-----------
+      |                                  |   |           
+q3 : -*************----------------------ECR-***********-
+
+T  : |      0      |    1    |    2     | 3 |     4     |
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">oqc_device</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">verbatim_circ</span><span class="p">,</span> <span class="n">shots</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+<span class="n">compiledProgram</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">additional_metadata</span><span class="o">.</span><span class="n">oqcMetadata</span><span class="o">.</span><span class="n">compiledProgram</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">compiledProgram</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">measurement_counts</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>OPENQASM 2.0;
+include &quot;qelib1.inc&quot;;
+qreg q[4];
+creg b[4];
+
+rz(0.7853981633974483) q[0];
+rz(-0.7853981633974483) q[0];
+ecr q[1], q[2];
+x q[2];
+ecr q[2], q[3];
+measure q -&gt; b;
+Counter({&#39;0110&#39;: 419, &#39;0010&#39;: 243, &#39;0100&#39;: 210, &#39;0000&#39;: 103, &#39;0011&#39;: 5, &#39;0101&#39;: 5, &#39;0111&#39;: 4, &#39;0001&#39;: 3, &#39;1000&#39;: 2, &#39;1010&#39;: 2, &#39;1100&#39;: 2, &#39;1110&#39;: 2})
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="programming-verbatim-circuits-onto-the-ionq-device">
+<h2>Programming verbatim circuits onto the IonQ device<a class="headerlink" href="#programming-verbatim-circuits-onto-the-ionq-device" title="Permalink to this heading">#</a></h2>
+<p>IonQ also supports verbatim compilation. Because qubits in the IonQ device have all-to-all connection, there is no restriction in qubit connectivity; all qubit pairs are avaialbe for 2-qubit gates. Because there is no circuit optimization or gate decomposition in verbatim compilation, all gates in the circuit must be native gates. Let’s look at IonQ’s native gate set.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># set up the IonQ device</span>
+<span class="n">ionq_device</span> <span class="o">=</span> <span class="n">AwsDevice</span><span class="p">(</span><span class="s2">&quot;arn:aws:braket:::device/qpu/ionq/ionQdevice&quot;</span><span class="p">)</span>
+
+<span class="c1"># list the native gate set</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The native gates for the&quot;</span><span class="p">,</span> <span class="n">ionq_device</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;device are:&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">gate</span> <span class="ow">in</span> <span class="n">ionq_device</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">paradigm</span><span class="o">.</span><span class="n">nativeGateSet</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The native gates for the IonQ Device device are:
+GPI
+GPI2
+MS
+</pre></div>
+</div>
+</div>
+</div>
+<p>In <code class="docutils literal notranslate"><span class="pre">device.property</span></code>, you can see <code class="docutils literal notranslate"><span class="pre">fullyConnected=True</span></code>, showing that qubits are fully connected. This manifests as the device having a complete topology graph.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># access and visualize the device topology</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ionq_device</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">paradigm</span><span class="o">.</span><span class="n">connectivity</span><span class="p">)</span>
+<span class="n">nx</span><span class="o">.</span><span class="n">draw_kamada_kawai</span><span class="p">(</span><span class="n">ionq_device</span><span class="o">.</span><span class="n">topology_graph</span><span class="p">,</span> <span class="n">with_labels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">font_color</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="n">arrows</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">arrowsize</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>fullyConnected=True connectivityGraph={}
+</pre></div>
+</div>
+<img alt="../../_images/b8b0ba7d93cbf6a04e5168e28bd5e167a131a5d3d1941346b8593d8bfcbbcc74.png" src="../../_images/b8b0ba7d93cbf6a04e5168e28bd5e167a131a5d3d1941346b8593d8bfcbbcc74.png" />
+</div>
+</div>
+<p>With this information, you can write a circuit to run verbatim on the IonQ device. IonQ currently only supports verbatim compilation for the entire circuit, so every instruction in the circuit will need to be enclosed in a verbatim box. In other words, you cannot have any gates outside of the verbatim box. As well, note that IonQ native gates cannot be used outside of a verbatim box. To learn more about IonQ native gates and the best practice of using them, see the <a class="reference external" href="https://docs.aws.amazon.com/braket/latest/developerguide/braket-devices.html?tag=local002-20#braket-qpu-partner-ionq">Amazon Braket Developer Guide</a> and <a class="reference external" href="https://ionq.com/docs/getting-started-with-native-gates">IonQ’s documentation page</a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">circ</span> <span class="o">=</span> <span class="n">Circuit</span><span class="p">()</span><span class="o">.</span><span class="n">gpi</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">pi</span><span class="p">)</span><span class="o">.</span><span class="n">ms</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">verbatim_circ</span> <span class="o">=</span> <span class="n">Circuit</span><span class="p">()</span><span class="o">.</span><span class="n">add_verbatim_box</span><span class="p">(</span><span class="n">circ</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">verbatim_circ</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>T  : |      0      |    1    |   2    |     3     |
+                                                   
+q0 : -StartVerbatim-GPi(3.14)-MS(0, 0)-EndVerbatim-
+      |                       |        |           
+q1 : -*************-----------MS(0, 0)-***********-
+
+T  : |      0      |    1    |   2    |     3     |
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">task</span> <span class="o">=</span> <span class="n">ionq_device</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">verbatim_circ</span><span class="p">,</span> <span class="n">shots</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">result</span><span class="p">()</span><span class="o">.</span><span class="n">measurement_counts</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Counter({&#39;10&#39;: 5, &#39;01&#39;: 5})
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="conclusion">
+<h2>Conclusion<a class="headerlink" href="#conclusion" title="Permalink to this heading">#</a></h2>
+<p>This notebook introduced the basic functionality of verbatim compilation of Amazon Braket, that allows you to run circuits or subcircuits to be executed exactly as defined without any compiler modifications. You can find further information in the <a class="reference external" href="https://docs.aws.amazon.com/braket/">Amazon Braket documentation</a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Task Summary&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">quantum_tasks_statistics</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Note: Charges shown are estimates based on your Amazon Braket simulator and quantum processing unit (QPU) task usage. Estimated charges shown may differ from your actual charges. Estimated charges do not factor in any discounts or credits, and you may experience additional charges based on your use of other services such as Amazon Elastic Compute Cloud (Amazon EC2).&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Estimated cost to run this example: </span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="n">qpu_tasks_cost</span><span class="p">()</span> <span class="o">+</span> <span class="n">t</span><span class="o">.</span><span class="n">simulator_tasks_cost</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> USD&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Task Summary
+{&#39;arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-2&#39;: {&#39;shots&#39;: 5000, &#39;tasks&#39;: {&#39;COMPLETED&#39;: 5}}, &#39;arn:aws:braket:::device/qpu/ionq/ionQdevice&#39;: {&#39;shots&#39;: 10, &#39;tasks&#39;: {&#39;COMPLETED&#39;: 1}}}
+Note: Charges shown are estimates based on your Amazon Braket simulator and quantum processing unit (QPU) task usage. Estimated charges shown may differ from your actual charges. Estimated charges do not factor in any discounts or credits, and you may experience additional charges based on your use of other services such as Amazon Elastic Compute Cloud (Amazon EC2).
+Estimated cost to run this example: 3.650 USD
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Verbatim compilation</a><ul>
+<li><a class="reference internal" href="#table-of-contents">Table of contents:</a></li>
+<li><a class="reference internal" href="#recap-running-circuits-on-amazon-braket-a-class-anchor-id-recap-a">Recap: Running circuits on Amazon Braket  <a class="anchor" id="Recap"></a></a></li>
+<li><a class="reference internal" href="#using-verbatim-compilation-to-run-circuits-without-further-compilation-a-class-anchor-id-verbatim-a">Using verbatim compilation to run circuits without further compilation <a class="anchor" id="Verbatim"></a></a><ul>
+<li><a class="reference internal" href="#getting-started-with-a-minimal-example">Getting started with a minimal example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#programming-verbatim-circuits-onto-the-rigetti-device-a-class-anchor-id-rigetti-a">Programming verbatim circuits onto the Rigetti device  <a class="anchor" id="Rigetti"></a></a><ul>
+<li><a class="reference internal" href="#defining-verbatim-subcircuits">Defining verbatim subcircuits</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#programming-verbatim-circuits-onto-the-oxford-quantum-circuits-device-a-class-anchor-id-oqc-a">Programming verbatim circuits onto the Oxford Quantum Circuits device <a class="anchor" id="OQC"></a></a></li>
+<li><a class="reference internal" href="#programming-verbatim-circuits-onto-the-ionq-device">Programming verbatim circuits onto the IonQ device</a></li>
+<li><a class="reference internal" href="#conclusion">Conclusion</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/scripts/furo.js"></script>
+    </body>
+</html>

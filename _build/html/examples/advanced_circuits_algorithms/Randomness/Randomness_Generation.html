@@ -1,0 +1,1010 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
+
+    <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
+        <title>Robust randomness generation on quantum processing units - Amazon Braket Examples documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../../index.html"><div class="brand">Amazon Braket Examples  documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
+  
+  
+  <span class="sidebar-brand-text">Amazon Braket Examples  documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="robust-randomness-generation-on-quantum-processing-units">
+<h1>Robust randomness generation on quantum processing units<a class="headerlink" href="#robust-randomness-generation-on-quantum-processing-units" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use Braket SDK Cost Tracking to estimate the cost to run this example</span>
+<span class="kn">from</span> <span class="nn">braket.tracking</span> <span class="kn">import</span> <span class="n">Tracker</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">Tracker</span><span class="p">()</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Random numbers are a ubiquitous resource in computation and cryptography. For example, in security, random numbers are crucial to creating keys for encryption. Quantum random number generators (QRNGs), that make use of the inherent unpredictability in quantum physics, promise enhanced security compared to standard cryptographic pseudo-random number generators (CPRNGs) based on classical technologies.</p>
+<p>In this notebook, we implement our own QRNG. Namely, we program two separate quantum processor units (QPUs) from different suppliers in Amazon Braket to supply two streams of weakly random bits. We then show how to generate physically secure randomness from these two weak sources by means of classical post-processing based on randomness extractors. The prerequisites for the tutorial are a basic understanding of quantum states, quantum measurements, and quantum channels. For a detailed explanation of these concepts we refer to the Amazon Braket notebook <a class="reference external" href="https://github.com/aws/amazon-braket-examples/blob/main/examples/braket_features/Simulating_Noise_On_Amazon_Braket.ipynb">Simulating noise on Amazon Braket</a>.</p>
+<p>We believe that randomness generation is a practical application of nowadays available noisy and intermediate scale quantum (NISQ) technologies.</p>
+<section id="table-of-contents">
+<h2>Table of contents<a class="headerlink" href="#table-of-contents" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p><span class="xref myst">Amazon Braket</span></p></li>
+<li><p><span class="xref myst">Quantum circuit for randomness generation</span></p></li>
+<li><p><span class="xref myst">Quick implementation</span></p></li>
+<li><p><span class="xref myst">Critical assessment</span></p></li>
+<li><p><span class="xref myst">Interlude randomness extractors</span></p>
+<ul>
+<li><p><span class="xref myst">Quantum information</span></p></li>
+</ul>
+</li>
+<li><p><span class="xref myst">Extractor construction</span></p>
+<ul>
+<li><p><span class="xref myst">Example</span></p></li>
+<li><p><span class="xref myst">Implementation</span></p></li>
+</ul>
+</li>
+<li><p><span class="xref myst">Unpredictability of physical sources</span></p>
+<ul>
+<li><p><span class="xref myst">Noise as leakage</span></p></li>
+<li><p><span class="xref myst">Numerical evaluation</span></p></li>
+</ul>
+</li>
+<li><p><span class="xref myst">Putting everything together</span></p></li>
+<li><p><span class="xref myst">Beyond current implementation</span></p></li>
+<li><p><span class="xref myst">Literature</span></p></li>
+</ul>
+</section>
+<section id="amazon-braket-a-name-amazon-braket-a">
+<h2>Amazon Braket <a name="amazon_braket"></a><a class="headerlink" href="#amazon-braket-a-name-amazon-braket-a" title="Permalink to this heading">#</a></h2>
+<p>We start out with some general Amazon Braket imports, as well as some mathemtical tools needed.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># AWS imports: Import Braket SDK modules</span>
+<span class="kn">from</span> <span class="nn">braket.circuits</span> <span class="kn">import</span> <span class="n">Circuit</span>
+<span class="kn">from</span> <span class="nn">braket.devices</span> <span class="kn">import</span> <span class="n">LocalSimulator</span>
+<span class="kn">from</span> <span class="nn">braket.aws</span> <span class="kn">import</span> <span class="n">AwsDevice</span><span class="p">,</span> <span class="n">AwsQuantumTask</span>
+
+<span class="c1"># set up local simulator device</span>
+<span class="n">device</span> <span class="o">=</span> <span class="n">LocalSimulator</span><span class="p">()</span>
+
+<span class="c1"># general math imports</span>
+<span class="kn">import</span> <span class="nn">math</span><span class="o">,</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.fft</span> <span class="kn">import</span> <span class="n">fft</span><span class="p">,</span> <span class="n">ifft</span>
+
+<span class="c1"># magic word for producing visualizations in notebook</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+
+<span class="c1"># import convex solver</span>
+<span class="kn">import</span> <span class="nn">cvxpy</span> <span class="k">as</span> <span class="nn">cp</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># set up Rigetti quantum device</span>
+<span class="n">rigetti</span> <span class="o">=</span> <span class="n">AwsDevice</span><span class="p">(</span><span class="s2">&quot;arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-2&quot;</span><span class="p">)</span>
+
+<span class="c1"># set up IonQ quantum device</span>
+<span class="n">ionq</span> <span class="o">=</span> <span class="n">AwsDevice</span><span class="p">(</span><span class="s2">&quot;arn:aws:braket:::device/qpu/ionq/ionQdevice&quot;</span><span class="p">)</span>
+
+<span class="c1"># simulator alternative: set up the on-demand simulator SV1</span>
+<span class="n">simulator</span> <span class="o">=</span> <span class="n">AwsDevice</span><span class="p">(</span><span class="s2">&quot;arn:aws:braket:::device/quantum-simulator/amazon/sv1&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="quantum-circuit-for-randomness-generation-a-name-quantum-circuit-a">
+<h2>Quantum circuit for randomness generation <a name="quantum_circuit"></a><a class="headerlink" href="#quantum-circuit-for-randomness-generation-a-name-quantum-circuit-a" title="Permalink to this heading">#</a></h2>
+<p>Arguably the simplest way of generating a random bit on a quantum computer is as follows:</p>
+<ul class="simple">
+<li><p>Prepare the basis state vector $|0\rangle$</p></li>
+<li><p>Apply the Hadamard gate $H=\frac{1}{\sqrt{2}}\begin{pmatrix} 1 &amp; 1\ 1 &amp; 1 \end{pmatrix}$ leading to the state vector $|H\rangle=\frac{1}{\sqrt{2}}\big(|0\rangle+|1\rangle\big)$</p></li>
+<li><p>Measure in the computational basis $\big{|0\rangle\langle0|,|1\rangle\langle1|\big}$.</p></li>
+</ul>
+<p>By the laws of quantum physics, the post-measurement probability distribution is then the uniformly distributed $(1/2,1/2)$ and leads to one random bit $0/1$.</p>
+<p>In the following, we discuss how above protocol is conceptually different from randomness obtained from classical sources and show in detail how it is implemented reliable even when the underlying quantum processing units employed are noisy. By the end of this tutorial, you will be able to create your own random bits from the quantum processing units available on Amazon Braket.</p>
+</section>
+<section id="quick-implementation-a-name-quick-implementation-a">
+<h2>Quick implementation <a name="quick_implementation"></a><a class="headerlink" href="#quick-implementation-a-name-quick-implementation-a" title="Permalink to this heading">#</a></h2>
+<p>The Hadmard gate based quantum circuit for generating one random bit can be repeated or run in parallel $n$ times, leading to a random bit string of length $n$. The corresponding circuit is easily implemented in Amazon Braket:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># function for Hadamard cirquit</span>
+<span class="k">def</span> <span class="nf">hadamard_circuit</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    function to apply Hadamard gate on each qubit</span>
+<span class="sd">    input: number of qubits</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># instantiate circuit object</span>
+    <span class="n">circuit</span> <span class="o">=</span> <span class="n">Circuit</span><span class="p">()</span>
+
+    <span class="c1"># apply series of Hadamard gates</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">):</span>
+        <span class="n">circuit</span><span class="o">.</span><span class="n">h</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">circuit</span>
+
+<span class="c1"># define circuit</span>
+<span class="n">n_qubits</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">hadamard_circuit</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">)</span>
+
+<span class="c1"># print circuit</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>T  : |0|
+        
+q0 : -H-
+        
+q1 : -H-
+        
+q2 : -H-
+        
+q3 : -H-
+        
+q4 : -H-
+
+T  : |0|
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let us run this Hadamard circuit with $n=5$ qubits in the local quantum simulator for $m=1$ shots:</p>
+<p>(Note: We will work on actual QPUs towards the end of this tutorial.)</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># run circuit</span>
+<span class="n">m_shots</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">shots</span> <span class="o">=</span> <span class="n">m_shots</span><span class="p">)</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+
+<span class="c1"># get measurement shots</span>
+<span class="n">counts</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">measurement_counts</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+
+<span class="c1"># print counts</span>
+<span class="n">list_one</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">counts</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">array_one</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">list_one</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The output bit string is: &quot;</span><span class="p">,</span><span class="n">array_one</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The output bit string is:  [&#39;01000&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="critical-assessment-a-name-critical-assessment-a">
+<h2>Critical assessment <a name="critical_assessment"></a><a class="headerlink" href="#critical-assessment-a-name-critical-assessment-a" title="Permalink to this heading">#</a></h2>
+<p>The advantage of such quantum random number generators over implementations based on classical technologies is that the outcomes are intrinsically random. That is, according to the laws of quantum physics, the outcome of the measurement is not only hard to predict, but rather impossible to know before the measurement has taken place.</p>
+<p>However, since current quantum processing units are noisy to a certain degree, there are at least three potential problems that need to be addressed:</p>
+<ul class="simple">
+<li><p>First, the noise acting on all states and operations performed might lead to a systematic bias towards the probability of getting the measurement outcomes $0$ or $1$, respectively.</p></li>
+<li><p>Second, even if aforementioned noise is not biased towards certain measurement outcomes, the generated randomness is no longer solely based on intrinsically random quantum effects, but rather partly on the noise present.</p></li>
+<li><p>Third, whereas by the laws of quantum physics a pure quantum state cannot be correlated to the outside world, any noisy acting on the system corresponds to information leaking to the environment. This is because no information is destroyed in quantum physics and hence, a malicious third party knowing about the noise occurring will be able to guess the generated bits (at least up to a certain degree).</p></li>
+</ul>
+<p>When the noise model acting on the quantum processor units is characterized to some degree (e.g., by means of previous benchmarking), these shortcomings can be overcome by employing two independent quantum processor units, together with an appropriate classical post-processing. The latter is based on classical algorithms from the theory of pseudo-randomness, so-called two-source extractors. This is what we discuss next.</p>
+<p>In the following, we refer a few times to the theory paper [1] that features formal cryptographic security definitions, together with mathematical proofs, as well as some statistical methods tailored to intermediate scale quantum devices. These pointers can be safely ignored when only interested in the implementation of our QRNG.</p>
+</section>
+<section id="interlude-randomness-extractors-a-name-interlude-a">
+<h2>Interlude randomness extractors <a name="interlude"></a><a class="headerlink" href="#interlude-randomness-extractors-a-name-interlude-a" title="Permalink to this heading">#</a></h2>
+<p>Two-source extractors allow distillation of physically secure random bits from two independent weak sources of randomness whenever they are sufficiently unpredictable to start with. The relevant measure of unpredictability is thereby given by the min-entropy of the respective sources, defined for the probability distribution ${p_x}_{x\in X}$ as</p>
+<p>$$ \text{$H_{\min}(X)=-\log_2p_{\text{guess}(X)}$ with $p_{\text{guess}(X)}=\max_{x\in X}p_x$.} $$</p>
+<p>That is, the min-entropy exactly quantifies how well we can guess the value of the source, or in other words, how unpredictable the source is. For example, for $n$-bit distributions $X$ we have $H_{\min}(X)\in[0,n]$, where $0$ corresponds to a deterministic distribution containing no randomness and $n$ to the perfectly random, uniform distribution.</p>
+<p>A two-source extractor is a function $\text{Ext}:{0,1}^{n_1}\times{0,1}^{n_2}\to{0,1}^m$ such that for any two independent sources with min-entropy at least $H_{\min}(X_1)\geq k_1$ and $H_{\min}(X_2)\geq k_2$, respectively, the output of length $m$ is $\epsilon\in[0,1]$ close in variational distance to the perfectly random, uniform distribution $U_M$ of size $m$:</p>
+<p>$$ \frac{1}{2}\left|\text{Ext}(X_1,X_2)-U_M\right|_1\leq\epsilon. $$</p>
+<p>So, two inpedendent sources that are only weakly random get condensed by these algorithms to one output that is (nearly) perfectly random! Importantly, the output becomes truly physically random with no computational assumptions introduced.</p>
+<section id="quantum-information-a-name-quantum-information-a">
+<h3>Quantum information <a name="quantum_information"></a><a class="headerlink" href="#quantum-information-a-name-quantum-information-a" title="Permalink to this heading">#</a></h3>
+<p>For our setting we need an extension of this concept, as a potentially malicious third party can collect quantum information $Q$ about the weak source of randomness $X$. The corresponding conditional min-entropy is defined as</p>
+<p>$$ H_{\min}(X|Q)=-\log_2p_{\text{guess}(X|Q)}, $$</p>
+<p>where $p_{\text{guess}(X|Q)}$ denotes the maximal probability allowed by quantum physics to guess the classical value $X$ by applying any measurements on the quantum information $Q$. We notice that even though $p_{\text{guess}(X|Q)}$ does not have a closed form expression, it is efficiently computed by means of a semidefinite program (see the theory notes [1] for details). This is also how we will evaluate the conditional min-entropy quantity later on.</p>
+<p>Accordingly, a quantum-proof two-source extractor is then function $\text{Ext}:{0,1}^{n_1}\times{0,1}^{n_2}\to{0,1}^m$ such that for any two independent sources with quantum conditional min-entropy at least $H_{\min}(X_1|Q_1)\geq k_1$ and $H_{\min}(X_2|Q_2)\geq k_2$, respectively, we have for $\epsilon\in[0,1]$ in quantum variational distance</p>
+<p>$$ \frac{1}{2}\left|\rho_{\text{Ext}(X_1,X_2)Q_1Q_2}-\tau_{M}\otimes\rho_{Q_1}\otimes\rho_{Q_2}\right|_1\leq\epsilon,$$</p>
+<p>where $\tau_M$ denotes the fully mixed $m$ qubit state. That is, the extractor should not only make the $m$ output bits perfectly random, but also decouple them from any outside correlations initially present - up to the security parameter $\epsilon\in[0,1]$.</p>
+<p>For more details about these concepts, we refer to the theory notes [1] and references therein. All that is important to us here, is that there exist quantum-proof two-source extractors with good parameters. Next, we discuss one particular such construction that we subsequently implement in an efficient manner.</p>
+</section>
+</section>
+<section id="extractor-construction-a-name-extractor-construction-a">
+<h2>Extractor construction <a name="extractor_construction"></a><a class="headerlink" href="#extractor-construction-a-name-extractor-construction-a" title="Permalink to this heading">#</a></h2>
+<p>In this paragraph, we provide an explicit construction of a quantum-proof two-source extractor that efficiently provides non-zero output $M$ for a wide range of sizes of the inputs $X_1$ and $X_2$. Namely, we employ a Toeplitz matrices based construction originally discussed in [2]:</p>
+<p>For the security parameter $\epsilon\in(0,1]$ and inputs $X_1,X_2$ of size $n$ and $n-1$, respectively, the function $\text{Ext}:{0,1}^n\times{0,1}^{n-1}\to{0,1}^m$ defined below is a quantum-proof two-source randomness extractor with output size</p>
+<p>$$ m=\left\lfloor(k_1+k_2-n)+1-2\log\left(1/\epsilon\right)\right\rfloor. $$</p>
+<p>The function is explicitly given via the vector-matrix multiplication</p>
+<p>$$ (x,y)\mapsto \text{Ext}(x,y)=x\cdot(T(y)|1_m)^T \mod{2}$$</p>
+<p>featuring the Toeplitz matrix</p>
+<p>$$ T(y)=\begin{pmatrix}
+y_0 &amp; y_1 &amp; \ldots &amp; y_{n-m-1}\
+y_{-1} &amp; y_0 &amp; \ldots &amp; y_{n-m-2}\
+\vdots &amp; \vdots &amp; \vdots &amp; \vdots\
+y_{1-m} &amp; y_{2-m} &amp; \ldots &amp; y_{n-2m}
+\end{pmatrix};\text{from};y=(y_{1-m},\ldots,y_0,\ldots,y_{n-m-1})\in{0,1}^{n-1}, $$</p>
+<p>The quantum-proof property of this construction, as well as its complexity, is explicitly disccused in the theory notes [1].</p>
+<p>For our setting, we will have sources with linear min-entropy rates $k_i=\alpha_i\cdot n$ for $i=1,2$. The Toeplitz construction then works whenever $\alpha_1+\alpha_2-1&gt;0$ and we can compute the required input size for fixed output size as</p>
+<p>$$ n=\left\lfloor\frac{m-1+2\log(1/\epsilon)}{\alpha_1+\alpha_2-1}\right\rfloor.$$</p>
+<p>A simple example shows that these numbers work well in practice, even for very small input sizes around $n\approx100$.</p>
+<section id="example-a-name-example-a">
+<h3>Example <a name="example"></a><a class="headerlink" href="#example-a-name-example-a" title="Permalink to this heading">#</a></h3>
+<p>Let us set the security parameter to $\epsilon=10^{-8}$, say that we have min-entropy sources with linear rates $k_1=n\cdot0.8$ and $k_2=(n-1)\cdot0.8$, and ask for $m=100$ fully random bits. According to the formulae above, $n=253$ together with $n-1=252$ weakly random bits can be condensed into $100$ fully random bits (up to the security parameter $\epsilon=10^{-8}$).</p>
+<p>Next, we give an efficient implementation of this Toeplitz based construction.</p>
+</section>
+<section id="implementation-a-name-implementation-a">
+<h3>Implementation <a name="implementation"></a><a class="headerlink" href="#implementation-a-name-implementation-a" title="Permalink to this heading">#</a></h3>
+<p>The vector-matrix multiplication $x\cdot(T(y)|1_m)^T$ a priori has asymptotic complexity $O(n^2)$ in big O-notation, which is prohibitive for larger input sizes $n\geq10^4$. However, we discuss in the theory notes [1] that the operation is actually implemented in asymptotic complexity $O(n\log n)$ by first embedding the problem into circulant matrices and then making use of the Fast Fourier Transform (FFT). The corresponding code then performs well up to input sizes $n\geq10^7$. The following example demonstrates this implementation:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># work with local simulator for testing Toeplitz construction</span>
+<span class="n">device</span> <span class="o">=</span> <span class="n">LocalSimulator</span><span class="p">()</span>
+
+<span class="c1"># set security parameter</span>
+<span class="n">power</span> <span class="o">=</span> <span class="mi">8</span>
+<span class="n">eps</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="n">power</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Security parameter: </span><span class="si">{</span><span class="n">eps</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+<span class="c1"># set number of output bits </span>
+<span class="n">m</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Desired output length: </span><span class="si">{</span><span class="n">m</span><span class="si">}</span><span class="s2"> bits.&quot;</span><span class="p">)</span>
+
+<span class="c1"># set min-entropy rates for sources</span>
+<span class="n">k_1</span> <span class="o">=</span> <span class="mf">0.8</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Min-entropy rate of first source: </span><span class="si">{</span><span class="n">k_1</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+<span class="n">k_2</span> <span class="o">=</span> <span class="mf">0.8</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Min-entropy rate of second source: </span><span class="si">{</span><span class="n">k_2</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># required number of input bits (for each source)</span>
+<span class="n">n</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">((</span><span class="n">m</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">eps</span><span class="p">))</span>
+    <span class="o">/</span><span class="p">(</span><span class="n">k_1</span><span class="o">+</span><span class="n">k_2</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Required length of each input source: </span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2"> bits.&quot;</span><span class="p">)</span>
+
+<span class="c1"># quantum circuit for generating weakly random bit string one</span>
+<span class="n">n1_qubits</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">m1_shots</span> <span class="o">=</span> <span class="n">n</span>
+<span class="n">state1</span> <span class="o">=</span> <span class="n">hadamard_circuit</span><span class="p">(</span><span class="n">n1_qubits</span><span class="p">)</span>
+<span class="n">result1</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">state1</span><span class="p">,</span> <span class="n">shots</span><span class="o">=</span><span class="n">m1_shots</span><span class="p">)</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+<span class="n">array_one</span> <span class="o">=</span> <span class="n">result1</span><span class="o">.</span><span class="n">measurements</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">m1_shots</span><span class="o">*</span><span class="n">n1_qubits</span><span class="p">)</span>
+<span class="c1"># print(array_one)</span>
+
+<span class="c1"># quantum circuit for generating weakly random bit string two</span>
+<span class="n">n2_qubits</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">m2_shots</span> <span class="o">=</span> <span class="n">n</span>
+<span class="n">state2</span> <span class="o">=</span> <span class="n">hadamard_circuit</span><span class="p">(</span><span class="n">n2_qubits</span><span class="p">)</span>
+<span class="n">result2</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">state2</span><span class="p">,</span> <span class="n">shots</span><span class="o">=</span><span class="n">m2_shots</span><span class="p">)</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+<span class="n">array_two</span> <span class="o">=</span> <span class="n">result2</span><span class="o">.</span><span class="n">measurements</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">m2_shots</span><span class="o">*</span><span class="n">n2_qubits</span><span class="p">)</span>
+<span class="c1"># print(array_two)</span>
+
+<span class="c1">###</span>
+<span class="c1"># alternative for generating two bit strings when no quantum source is available:</span>
+
+<span class="c1"># create first list of pseudo-random bits</span>
+<span class="c1"># alternative when no quantum source is available</span>
+<span class="c1"># list_one = []</span>
+<span class="c1"># for number in range(n):</span>
+<span class="c1">#    b = int(random.randint(0, 1))</span>
+<span class="c1">#    list_one.append(b)</span>
+<span class="c1"># array_one = np.array([list_one])</span>
+
+<span class="c1"># create second list of pseudo-random bits</span>
+<span class="c1"># list_two = []</span>
+<span class="c1"># for number in range(n):</span>
+<span class="c1">#    b = int(random.randint(0, 1))</span>
+<span class="c1">#    list_two.append(b)</span>
+<span class="c1"># array_two = np.array([list_two])</span>
+<span class="c1">###</span>
+
+<span class="c1"># computing output of Toeplitz extractor by vector-matrix multiplication</span>
+<span class="c1"># via efficient Fast Fourier Transform (FFT) as discussed in [1]</span>
+
+<span class="c1"># setting up arrays for FFT implementation of Toeplitz</span>
+<span class="n">array_two_under</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">array_two</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="n">n</span><span class="o">-</span><span class="n">m</span><span class="p">])[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+<span class="n">zero_vector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="n">m</span><span class="o">-</span><span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">array_two_zeros</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">array_two_under</span><span class="p">,</span><span class="n">zero_vector</span><span class="p">))</span>
+<span class="n">array_two_over</span> <span class="o">=</span> <span class="n">array_two</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">n</span><span class="o">-</span><span class="n">m</span><span class="p">:</span><span class="n">n</span><span class="p">][</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+<span class="n">array_one_merged</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">n</span><span class="o">-</span><span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
+    <span class="n">array_one_merged</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">array_one</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">m</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">i</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="n">m</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+    <span class="n">array_one_merged</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="n">m</span><span class="o">-</span><span class="mi">2</span><span class="o">+</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">array_one</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">n</span><span class="o">-</span><span class="mi">2</span><span class="o">-</span><span class="n">j</span><span class="p">]</span>
+
+<span class="c1"># FFT multplication output of Toeplitz</span>
+<span class="n">output_fft</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">around</span><span class="p">(</span><span class="n">ifft</span><span class="p">(</span><span class="n">fft</span><span class="p">(</span><span class="n">array_one_merged</span><span class="p">)</span><span class="o">*</span><span class="n">fft</span><span class="p">(</span><span class="n">array_two_zeros</span><span class="p">))</span><span class="o">.</span><span class="n">real</span><span class="p">)</span>
+<span class="n">output_addition</span> <span class="o">=</span> <span class="n">output_fft</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="n">m</span><span class="p">]</span> <span class="o">+</span> <span class="n">array_two_over</span>
+<span class="n">output_final</span> <span class="o">=</span> <span class="n">output_addition</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The </span><span class="si">{</span><span class="n">m</span><span class="si">}</span><span class="s2"> random output bits are:</span><span class="se">\n</span><span class="si">{</span><span class="n">output_final</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Security parameter: 1e-08.
+Desired output length: 10 bits.
+Min-entropy rate of first source: 0.8.
+Min-entropy rate of second source: 0.8
+Required length of each input source: 103 bits.
+The 10 random output bits are:
+[[0 1 0 0 1 0 1 0 0 1]].
+</pre></div>
+</div>
+</div>
+</div>
+<p>As an alternative, we note that efficient implementations of other quantum-proof two-source extractors are discussed in [3].</p>
+</section>
+</section>
+<section id="unpredictability-of-physical-sources-a-name-physical-sources-a">
+<h2>Unpredictability of physical sources <a name="physical_sources"></a><a class="headerlink" href="#unpredictability-of-physical-sources-a-name-physical-sources-a" title="Permalink to this heading">#</a></h2>
+<p>Given above methods on randomness extraction, the next step is to give lower bounds on the min-entropy present in the output distributions generated from our $n$-fold Hadamard circuit. For that, we need to model the noise present in the quantum processing units.</p>
+<p>Generally, for any given quantum processing unit, the supplier typically publishes some type of noise specification with it. This includes both, the noise characterization of state preparation, as well as the read-out measurements. In case such specifications are not available, or if one wants to double check them, it is in principle possible to benchmark the device. We refer to the theory notes [1] for more details on this and just mention here that we do not need a full characterization of the device, but rather only conservative upper bounds on the noise strength. This then translates into lower bounds on the min-entropy present in the system.</p>
+<p>For our case, since we are only applying single qubit gates for our Hadamard circuit, the noise is captured well by single qubit noise models. Moreover, for the state preparation step via Hadamard gates, the typical noise in quantum architectures is uniform, depolarizing noise of some strength $\lambda\in[0,1]$. That is, all possible single qubit errors such as bit flip or phase flip errors are equally likely, leading to the effective evolution</p>
+<p>$$ \psi=|\psi\rangle\langle\psi|\mapsto\text{Dep}^\lambda(\psi)=(1-\lambda)\cdot\psi+\lambda\cdot\frac{|0\rangle\langle0|+|1\rangle\langle1|}{2}, $$</p>
+<p>mapping any input qubit state $\psi$ onto a linear combination of itself and the maximally mixed qubit state $\frac{|0\rangle\langle0|+|1\rangle\langle1|}{2}$. Note that we now work with general mixed states in order to model classical statistical uncertainty coming from the noise model.</p>
+<p>So effectively, before the measurement step, instead of the perfect pure state $|H\rangle\langle H|_A$ as defined by the vector $|H\rangle_A=\frac{1}{\sqrt{2}}\big(|0\rangle_A+|1\rangle_A\big)$, we have the mixed state</p>
+<p>$$ \rho_A^\lambda=\frac{1}{2}\big(|0\rangle\langle0|_A+(1-\lambda)|0\rangle\langle1|_A+(1-\lambda)|1\rangle\langle0|_A+|1\rangle\langle1|_A\big) $$</p>
+<p>at hand.</p>
+<p>Next, we note that instead of the ideal measurement device given by $\mathcal{M}=\big{|0\rangle\langle0|_A,|1\rangle\langle1|_A\big}$, the typical noisy measurement device is described by</p>
+<p>$$ \mathcal{N}^\mu=\big{1_A-\mu|1\rangle\langle1|_A,\mu|1\rangle\langle1|_A\big} $$</p>
+<p>with some bias $\mu\in(0,1)$ towards reading-out the ground state $|0\rangle\langle0|_A$ over $|1\rangle\langle1|_A$. The post-measurement probability distribution is then given as</p>
+<p>$$ Q^{\lambda,\mu}=(q_0=1-\mu/2,q_1=\mu/2) $$</p>
+<p>instead of the perfectly uniform distribution $P=(p_0=1/2,p_1=1/2)$. Note that the former distribution has non-maximal min-entropy</p>
+<p>$$ H_{\min}(X)<em>{Q^{\lambda,\mu}}=1-\log\mu\leq1=H</em>{\min}(X)_P. $$</p>
+<p>More generally, as measurement devices are the most sensitive element of quantum randomness generation, we discuss in the theory notes [1] methods for benchmarking them (even when only noisy state preparation is available).</p>
+<section id="noise-as-leakage-a-name-noise-leakage-a">
+<h3>Noise as leakage <a name="noise_leakage"></a><a class="headerlink" href="#noise-as-leakage-a-name-noise-leakage-a" title="Permalink to this heading">#</a></h3>
+<p>It is, however, crucial to realize that $H_{\min}(X)_{Q^{\lambda,\mu}}$ is not yet the quantity relevant for secure quantum randomness generation. As information is never lost in quantum mechanics, all the noise carries information to the environment, where it can in principle be picked up by an attacker. That is, we need to estimate the conditional min-entropy of the post-measurement probability distribution $X$ given any complementary information that leaked into the environment [5].</p>
+<p>This is worked out in detail in the theory notes [1] by means of so-called purifications of both, the noisy qubit state $\rho_A^\lambda$, as well as the noisy measurement device $\mathcal{N}^\mu$, leading to the additional qubit registers $A’$ and $E_2$, respectively. The relevant so-called classical-quantum state to consider then takes the form</p>
+<p>$$ \omega_{XA’E_2}^{\lambda,\mu}= q_0\cdot|0\rangle\langle0|<em>X\otimes\omega</em>{A’E_2}^{\lambda,\mu}(0) + q_1\cdot|1\rangle\langle1|<em>X\otimes\omega</em>{A’E_2}^{\lambda,\mu}(1) $$</p>
+<p>with a classing part $X$ and the quantum parts $A’E_2$ depending on both noise parameters $\lambda,\mu$. The corresponding conditional min-entropy is</p>
+<p>$$ H_{\min}(X|A’E_2)<em>{\omega^{\lambda,\mu}}\leq H</em>{\min}(X)_{Q^{\lambda,\mu}} $$</p>
+<p>with the gap between the conditional and the unconditional term typically being strict.</p>
+<p>We reiterate that the reason for mathematically introducing the purification registers $AE_2$ and working with the conditional min-entropy, is to make sure that the output bits generated are random even conditioned on the knowledge of the noise. This ensures that the randomness created is from a purely quantum origin and is secure against any eavesdropping from a malicious third party.</p>
+<p>We mention that a more detailed discussion of this point is given in the work [5].</p>
+</section>
+<section id="numerical-evaluation-a-name-numerical-evaluation-a">
+<h3>Numerical evaluation <a name="numerical_evaluation"></a><a class="headerlink" href="#numerical-evaluation-a-name-numerical-evaluation-a" title="Permalink to this heading">#</a></h3>
+<p>In the following, we use the noise parameters $\lambda=0.02$ and $\mu=0.98$ for the quantum processing units and this immediately gives</p>
+<p>$$H_{\min}(X)\approx0.944. $$</p>
+<p>The next step is to numerically evaluate the conditional min-entropy</p>
+<p>$$ H_{\min}(X|A’E_2)=-\log p_{\text{guess}}(X|A’E_2). $$</p>
+<p>This is done by means of a standard semidefinite program (sdp) solver as follows:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># fix noise parameters</span>
+<span class="n">lamb</span> <span class="o">=</span> <span class="mf">0.02</span>
+<span class="n">mu</span> <span class="o">=</span> <span class="mf">0.98</span>
+
+<span class="c1"># purification of rho input state</span>
+<span class="n">rho</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="o">-</span><span class="n">lamb</span><span class="p">],[</span><span class="mi">1</span><span class="o">-</span><span class="n">lamb</span><span class="p">,</span><span class="mi">1</span><span class="p">]])</span>
+<span class="n">eigvals</span><span class="p">,</span> <span class="n">eigvecs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eig</span><span class="p">(</span><span class="n">rho</span><span class="p">)</span>
+
+<span class="n">rho_vector</span> <span class="o">=</span>\
+    <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">eigvals</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">eigvecs</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">eigvecs</span><span class="p">[:,</span><span class="mi">0</span><span class="p">])[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>\
+    <span class="o">+</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">eigvals</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">eigvecs</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span><span class="n">eigvecs</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+<span class="n">rho_pure</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">rho_vector</span><span class="p">,</span><span class="n">rho_vector</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+
+<span class="c1"># sigma state of noisy measurement device</span>
+<span class="n">sigma_vector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">mu</span><span class="p">),</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">mu</span><span class="p">)]])</span>
+<span class="n">sigma_pure</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">sigma_vector</span><span class="p">,</span><span class="n">sigma_vector</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+
+<span class="c1"># omega state relevant for conditional min-entropy</span>
+<span class="n">rho_sigma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">rho_pure</span><span class="p">,</span><span class="n">sigma_pure</span><span class="p">)</span>
+
+<span class="n">id_2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">zero</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]])</span>
+<span class="n">one</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]])</span>
+
+<span class="n">zerozero</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">zero</span><span class="p">,</span><span class="n">id_2</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">zero</span><span class="p">,</span><span class="n">id_2</span><span class="p">))</span>
+<span class="n">zeroone</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">zero</span><span class="p">,</span><span class="n">id_2</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">one</span><span class="p">,</span><span class="n">id_2</span><span class="p">))</span>
+<span class="n">onezero</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">one</span><span class="p">,</span><span class="n">id_2</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">zero</span><span class="p">,</span><span class="n">id_2</span><span class="p">))</span>
+<span class="n">oneone</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">one</span><span class="p">,</span><span class="n">id_2</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">one</span><span class="p">,</span><span class="n">id_2</span><span class="p">))</span>
+
+<span class="n">omega_0</span> <span class="o">=</span> <span class="n">zerozero</span><span class="nd">@rho_sigma@zerozero</span><span class="o">.</span><span class="n">T</span><span class="o">+</span><span class="n">zeroone</span><span class="nd">@rho_sigma@zeroone</span><span class="o">.</span><span class="n">T</span><span class="o">+</span><span class="n">onezero</span><span class="nd">@rho_sigma@onezero</span><span class="o">.</span><span class="n">T</span>
+<span class="n">omega_1</span> <span class="o">=</span> <span class="n">oneone</span><span class="nd">@rho_sigma@oneone</span><span class="o">.</span><span class="n">T</span>
+
+<span class="n">omega</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">omega</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">omega_0</span><span class="p">)</span>
+<span class="n">omega</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">omega_1</span><span class="p">)</span>
+
+<span class="c1"># sdp solver</span>
+<span class="n">m</span> <span class="o">=</span> <span class="mi">4</span> <span class="c1"># dimension of quantum side information states</span>
+<span class="n">c</span> <span class="o">=</span> <span class="mi">2</span> <span class="c1"># number of classical measurement outcomes</span>
+
+<span class="n">sigma</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">Variable</span><span class="p">((</span><span class="n">m</span><span class="p">,</span><span class="n">m</span><span class="p">),</span> <span class="nb">complex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1"># complex variable</span>
+<span class="n">constraints</span> <span class="o">=</span> <span class="p">[</span><span class="n">sigma</span> <span class="o">&gt;&gt;</span> <span class="mi">0</span><span class="p">]</span> <span class="c1"># positive semi-definite</span>
+<span class="n">constraints</span> <span class="o">+=</span> <span class="p">[</span><span class="n">sigma</span> <span class="o">&gt;&gt;</span> <span class="n">omega</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">c</span><span class="p">)]</span> <span class="c1"># min-entropy constraints</span>
+<span class="n">obj</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">Minimize</span><span class="p">(</span><span class="n">cp</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">cp</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="n">sigma</span><span class="p">)))</span> <span class="c1"># objective function</span>
+
+<span class="n">prob</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">Problem</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span><span class="n">constraints</span><span class="p">)</span> <span class="c1"># set up sdp problem</span>
+<span class="n">prob</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">solver</span><span class="o">=</span><span class="n">cp</span><span class="o">.</span><span class="n">SCS</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1"># solve sdp problem using splitting conic solver (SCS)</span>
+<span class="n">guess</span> <span class="o">=</span> <span class="n">prob</span><span class="o">.</span><span class="n">value</span>
+<span class="n">qmin_entropy</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">guess</span><span class="p">)</span>
+<span class="n">min_entropy</span> <span class="o">=</span> <span class="mi">1</span><span class="o">-</span><span class="n">math</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="mi">2</span><span class="o">-</span><span class="n">mu</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">lamb</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[1m&quot;</span> <span class="o">+</span> <span class="s2">&quot;The coditional min-entropy is: &quot;</span><span class="p">,</span> <span class="n">qmin_entropy</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;As a comparison, the unconditional min-entropy is: &quot;</span><span class="p">,</span> <span class="n">min_entropy</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>===============================================================================
+                                     CVXPY                                     
+                                    v1.1.15                                    
+===============================================================================
+(CVXPY) Aug 26 08:35:40 PM: Your problem has 16 variables, 3 constraints, and 0 parameters.
+(CVXPY) Aug 26 08:35:40 PM: It is compliant with the following grammars: DCP, DQCP
+(CVXPY) Aug 26 08:35:40 PM: (If you need to solve this problem multiple times, but with different data, consider using parameters.)
+(CVXPY) Aug 26 08:35:40 PM: CVXPY will first compile your problem; then, it will invoke a numerical solver to obtain a solution.
+-------------------------------------------------------------------------------
+                                  Compilation                                  
+-------------------------------------------------------------------------------
+(CVXPY) Aug 26 08:35:40 PM: Compiling problem (target solver=SCS).
+(CVXPY) Aug 26 08:35:40 PM: Reduction chain: Complex2Real -&gt; Dcp2Cone -&gt; CvxAttr2Constr -&gt; ConeMatrixStuffing -&gt; SCS
+(CVXPY) Aug 26 08:35:40 PM: Applying reduction Complex2Real
+(CVXPY) Aug 26 08:35:40 PM: Applying reduction Dcp2Cone
+(CVXPY) Aug 26 08:35:40 PM: Applying reduction CvxAttr2Constr
+(CVXPY) Aug 26 08:35:40 PM: Applying reduction ConeMatrixStuffing
+(CVXPY) Aug 26 08:35:40 PM: Applying reduction SCS
+(CVXPY) Aug 26 08:35:40 PM: Finished problem compilation (took 2.013e-02 seconds).
+-------------------------------------------------------------------------------
+                                Numerical solver                               
+-------------------------------------------------------------------------------
+(CVXPY) Aug 26 08:35:40 PM: Invoking solver SCS  to obtain a solution.
+WARN: A-&gt;p (column pointers) not strictly increasing, column 16 empty
+WARN: A-&gt;p (column pointers) not strictly increasing, column 21 empty
+WARN: A-&gt;p (column pointers) not strictly increasing, column 26 empty
+WARN: A-&gt;p (column pointers) not strictly increasing, column 31 empty
+----------------------------------------------------------------------------
+	SCS v2.1.4 - Splitting Conic Solver
+	(c) Brendan O&#39;Donoghue, Stanford University, 2012
+----------------------------------------------------------------------------
+Lin-sys: sparse-direct, nnz in A = 168
+eps = 1.00e-04, alpha = 1.50, max_iters = 5000, normalize = 1, scale = 1.00
+acceleration_lookback = 10, rho_x = 1.00e-03
+Variables n = 32, constraints m = 108
+Cones:	sd vars: 108, sd blks: 3
+Setup time: 7.31e-03s
+----------------------------------------------------------------------------
+ Iter | pri res | dua res | rel gap | pri obj | dua obj | kap/tau | time (s)
+----------------------------------------------------------------------------
+     0| 1.86e+19  1.06e+20  8.77e-01  9.27e+18  1.42e+20  2.88e+19  8.96e-03 
+    36| 1.63e-11  8.53e-11  2.77e-11  6.08e-01  6.08e-01  9.05e-17  1.10e-02 
+----------------------------------------------------------------------------
+Status: Solved
+Timing: Solve time: 1.10e-02s
+	Lin-sys: nnz in L factor: 332, avg solve time: 1.50e-06s
+	Cones: avg projection time: 4.09e-05s
+	Acceleration: avg step time: 1.31e-05s
+----------------------------------------------------------------------------
+Error metrics:
+dist(s, K) = 3.1891e-09, dist(y, K*) = 2.1524e-09, s&#39;y/|s||y| = -2.0344e-11
+primal res: |Ax + s - b|_2 / (1 + |b|_2) = 1.6274e-11
+dual res:   |A&#39;y + c|_2 / (1 + |c|_2) = 8.5282e-11
+rel gap:    |c&#39;x + b&#39;y| / (1 + |c&#39;x| + |b&#39;y|) = 2.7680e-11
+----------------------------------------------------------------------------
+c&#39;x = 0.6075, -b&#39;y = 0.6075
+============================================================================
+-------------------------------------------------------------------------------
+                                    Summary                                    
+-------------------------------------------------------------------------------
+(CVXPY) Aug 26 08:35:40 PM: Problem status: optimal
+(CVXPY) Aug 26 08:35:40 PM: Optimal value: 6.075e-01
+(CVXPY) Aug 26 08:35:40 PM: Compilation took 2.013e-02 seconds
+(CVXPY) Aug 26 08:35:40 PM: Solver (including time spent in interface) took 3.882e-02 seconds
+<span class=" -Color -Color-Bold">The coditional min-entropy is:  0.7190228620489293</span>
+<span class=" -Color -Color-Bold">As a comparison, the unconditional min-entropy is:  0.9439714610772487</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>That is, for the chosen noise parameters $\lambda=0.02$ and $\mu=0.98$ we find</p>
+<p>$$ H_{\min}(X|A’E_2)\approx0.719&lt;0.944\approx H_{\min}(X).$$</p>
+<p>By varying the noise parameter to other values, one also sees by inspection that the conditional min-entropy is monotone in both $\lambda$ and $\mu$. Importantly, this ensures that the outputted randomness will be safe to use whenever we put a conservative estimate on the noisy strength, even in the absence of an exact characterization of the underlying quantum processing units.</p>
+<p>Finally, whenever we run our Hadamard circuit $n$ times or on $n$ qubits in parallel, the overall conditional min-entropy is just given by</p>
+<p>$$ H_{\min}(X|RE_2)<em>{\omega^{\otimes n}} = n\cdot H</em>{\min}(X|RE_2)_\omega. $$</p>
+<p>This reason is that we only consider single qubit product noise together with the min-entropy being additive on product states. This then leads to the promised linear min-entropy rates $k_i=\alpha_i\cdot n$ for $i=1,2$ going into the Toeplitz two-source extractor.</p>
+<p>As an added bonus, the Toeplitz two-source extractor used has the so-called strong property. That is, even conditioned on the knowledge of one input string of weakly random bits, the output bits are still fully random. We refer to the technical notes [1] for discussion, a consequence being that if one provider builds in some backdoors in the provided unit, the random generation scheme is still not broken unless the two providers come together to cooperate.</p>
+</section>
+</section>
+<section id="putting-everything-together-a-name-putting-together-a">
+<h2>Putting everything together <a name="putting-together"></a><a class="headerlink" href="#putting-everything-together-a-name-putting-together-a" title="Permalink to this heading">#</a></h2>
+<p>Now that we have determined the conditional min-entropy of our physical sources and have an efficient quantum-proof two-source extractor in place, all that remains is to put the two pieces together.</p>
+<ol class="arabic simple">
+<li><p>First, we specify how many random bits we want to generate, the desired security parameter, and the conditional min-entropy of our weak sources of randomness from the quantum processing units:</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># set security parameter</span>
+<span class="n">power</span> <span class="o">=</span> <span class="mi">8</span>
+<span class="n">eps</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="n">power</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Security parameter: </span><span class="si">{</span><span class="n">eps</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+<span class="c1"># set number of output bits </span>
+<span class="n">m</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Desired output length: </span><span class="si">{</span><span class="n">m</span><span class="si">}</span><span class="s2"> bits.&quot;</span><span class="p">)</span>
+
+<span class="c1"># set min-entropy rates for sources - qmin_entropy from above</span>
+<span class="n">k_one</span> <span class="o">=</span> <span class="n">qmin_entropy</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Min-entropy rate of first source: </span><span class="si">{</span><span class="n">k_1</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+<span class="n">k_two</span> <span class="o">=</span> <span class="n">qmin_entropy</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Min-entropy rate of second source: </span><span class="si">{</span><span class="n">k_2</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+<span class="c1"># required number of input bits (for each source)</span>
+<span class="n">n</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">((</span><span class="n">m</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">eps</span><span class="p">))</span>
+    <span class="o">/</span><span class="p">(</span><span class="n">k_one</span><span class="o">+</span><span class="n">k_two</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Required length of each input source: </span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2"> bits.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Security parameter: 1e-08.
+Desired output length: 10 bits.
+Min-entropy rate of first source: 0.8.
+Min-entropy rate of second source: 0.8.
+Required length of each input source: 141 bits.
+</pre></div>
+</div>
+</div>
+</div>
+<ol class="arabic" start="2">
+<li><p>At the beginning of the notebook, we loaded two separate QPUs as available in Amazon Braket. We now run on the respective QPUs the Hadamard circuit followed by measurements in the computational basis:</p>
+<p>(Note: If preferred, one can alternatively use the pre-loaded on-demand simulator SV1. In this case, please comment out the QPU code in the cell below and instead uncomment the provided SV1 code.)</p>
+</li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Rigetti: quantum circuit for generating weakly random bit string one</span>
+<span class="n">n1_q</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1"># alternatively use more than one qubit (attention: 32 max + lower bounds on number of shots)</span>
+<span class="n">m1_s</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">n</span><span class="o">/</span><span class="n">n1_q</span><span class="p">))</span>
+<span class="n">state_rigetti</span> <span class="o">=</span> <span class="n">hadamard_circuit</span><span class="p">(</span><span class="n">n1_q</span><span class="p">)</span>
+<span class="n">rigetti_task</span> <span class="o">=</span> <span class="n">rigetti</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">state_rigetti</span><span class="p">,</span> <span class="n">shots</span><span class="o">=</span><span class="n">m1_s</span><span class="p">,</span> <span class="n">poll_timeout_seconds</span><span class="o">=</span><span class="mi">5</span><span class="o">*</span><span class="mi">24</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="mi">60</span><span class="p">)</span>
+
+<span class="n">rigetti_task_id</span> <span class="o">=</span> <span class="n">rigetti_task</span><span class="o">.</span><span class="n">id</span>
+<span class="n">rigetti_status</span> <span class="o">=</span> <span class="n">rigetti_task</span><span class="o">.</span><span class="n">state</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Status of Rigetti task:&quot;</span><span class="p">,</span> <span class="n">rigetti_status</span><span class="p">)</span>
+
+<span class="c1"># IonQ: quantum circuit for generating weakly random bit string two</span>
+<span class="n">n2_q</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1"># alternatively use more than one qubit (attention: 11 max + lower bounds on number of shots)</span>
+<span class="n">m2_s</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">n</span><span class="o">/</span><span class="n">n2_q</span><span class="p">))</span>
+<span class="n">state_ionq</span> <span class="o">=</span> <span class="n">hadamard_circuit</span><span class="p">(</span><span class="n">n2_q</span><span class="p">)</span>
+<span class="n">ionq_task</span> <span class="o">=</span> <span class="n">ionq</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">state_ionq</span><span class="p">,</span> <span class="n">shots</span><span class="o">=</span><span class="n">m2_s</span><span class="p">,</span> <span class="n">poll_timeout_seconds</span><span class="o">=</span><span class="mi">5</span><span class="o">*</span><span class="mi">24</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="mi">60</span><span class="p">)</span>
+
+<span class="n">ionq_task_id</span> <span class="o">=</span> <span class="n">ionq_task</span><span class="o">.</span><span class="n">id</span>
+<span class="n">ionq_status</span> <span class="o">=</span> <span class="n">ionq_task</span><span class="o">.</span><span class="n">state</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Status of IonQ task:&quot;</span><span class="p">,</span> <span class="n">ionq_status</span><span class="p">)</span>
+
+<span class="c1">###</span>
+<span class="c1"># alternative via on-demand simulator SV1</span>
+
+<span class="c1"># quantum circuit for generating weakly random bit string one (simulate Rigetti source)</span>
+<span class="c1"># n1_q = 1 # alternatively run multiple qubits in parallel</span>
+<span class="c1"># m1_s = int(math.ceil(n/n1_q))</span>
+<span class="c1"># state1 = hadamard_circuit(n1_q)</span>
+<span class="c1"># result1 = simulator.run(state1, shots=m1_s).result()</span>
+<span class="c1"># array_rigetti = result1.measurements.reshape(1,m1_s*n1_q)</span>
+<span class="c1"># print(&quot;The first raw bit string is: &quot;,array_one)</span>
+
+<span class="c1"># quantum circuit for generating weakly random bit string two (simulate IonQ source)</span>
+<span class="c1"># n2_q = 1 # alternatively run multiple qubits in parallel</span>
+<span class="c1"># m2_s = int(math.ceil(n/n2_q))</span>
+<span class="c1"># state2 = hadamard_circuit(n2_q)</span>
+<span class="c1"># result2 = simulator.run(state2, shots=m2_s).result()</span>
+<span class="c1"># array_ionq = result2.measurements.reshape(1,m2_s*n2_q)</span>
+<span class="c1"># print(&quot;The second raw bit string is: &quot;,array_two)</span>
+<span class="c1">###</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Status of Rigetti task: CREATED
+Status of IonQ task: CREATED
+</pre></div>
+</div>
+</div>
+</div>
+<ol class="arabic" start="3">
+<li><p>The tasks have now been sent to the respective QPUs and we can recover the results at any point in time once the status is completed:</p>
+<p>(Note: In case you opted to use the on-demand simulator SV1 instead of the QPUs, please do not run the following cell.)</p>
+</li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># recover Rigetti task</span>
+<span class="n">task_load_rigetti</span> <span class="o">=</span> <span class="n">AwsQuantumTask</span><span class="p">(</span><span class="n">arn</span><span class="o">=</span><span class="n">rigetti_task_id</span><span class="p">)</span>
+
+<span class="c1"># print status</span>
+<span class="n">status_rigetti</span> <span class="o">=</span> <span class="n">task_load_rigetti</span><span class="o">.</span><span class="n">state</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Status of Rigetti task:&#39;</span><span class="p">,</span> <span class="n">status_rigetti</span><span class="p">)</span>
+<span class="c1"># wait for job to complete</span>
+<span class="c1"># terminal_states = [&#39;COMPLETED&#39;, &#39;FAILED&#39;, &#39;CANCELLED&#39;]</span>
+<span class="k">if</span> <span class="n">status_rigetti</span> <span class="o">==</span> <span class="s1">&#39;COMPLETED&#39;</span><span class="p">:</span>
+    <span class="c1"># get results</span>
+    <span class="n">rigetti_results</span> <span class="o">=</span> <span class="n">task_load_rigetti</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+    
+    <span class="c1"># array</span>
+    <span class="n">array_rigetti</span> <span class="o">=</span> <span class="n">rigetti_results</span><span class="o">.</span><span class="n">measurements</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">m1_s</span><span class="o">*</span><span class="n">n1_q</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The first raw bit string is: &quot;</span><span class="p">,</span><span class="n">array_rigetti</span><span class="p">)</span>
+    
+<span class="k">elif</span> <span class="n">status_rigetti</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;FAILED&#39;</span><span class="p">,</span> <span class="s1">&#39;CANCELLED&#39;</span><span class="p">]:</span>
+    <span class="c1"># print terminal message </span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Your Rigetti task is in terminal status, but has not completed.&#39;</span><span class="p">)</span>
+
+<span class="k">else</span><span class="p">:</span>
+    <span class="c1"># print current status</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Sorry, your Rigetti task is still being processed and has not been finalized yet.&#39;</span><span class="p">)</span>
+    
+<span class="c1"># recover IonQ task</span>
+<span class="n">task_load_ionq</span> <span class="o">=</span> <span class="n">AwsQuantumTask</span><span class="p">(</span><span class="n">arn</span><span class="o">=</span><span class="n">ionq_task_id</span><span class="p">)</span>
+
+<span class="c1"># print status</span>
+<span class="n">status_ionq</span> <span class="o">=</span> <span class="n">task_load_ionq</span><span class="o">.</span><span class="n">state</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Status of IonQ task:&#39;</span><span class="p">,</span> <span class="n">status_ionq</span><span class="p">)</span>
+<span class="c1"># wait for job to complete</span>
+<span class="c1"># terminal_states = [&#39;COMPLETED&#39;, &#39;FAILED&#39;, &#39;CANCELLED&#39;]</span>
+<span class="k">if</span> <span class="n">status_ionq</span> <span class="o">==</span> <span class="s1">&#39;COMPLETED&#39;</span><span class="p">:</span>
+    <span class="c1"># get results</span>
+    <span class="n">ionq_results</span> <span class="o">=</span> <span class="n">task_load_ionq</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+    
+    <span class="c1"># array</span>
+    <span class="c1">#print(m1_shots,n1_qubits)</span>
+    <span class="c1">#print(m2_shots,n2_qubits)</span>
+    <span class="c1">#print(ionq_results.measurements)</span>
+    <span class="n">array_ionq</span> <span class="o">=</span> <span class="n">ionq_results</span><span class="o">.</span><span class="n">measurements</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">m2_s</span><span class="o">*</span><span class="n">n2_q</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The second raw bit string is: &quot;</span><span class="p">,</span><span class="n">array_ionq</span><span class="p">)</span>
+    
+<span class="k">elif</span> <span class="n">status_ionq</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;FAILED&#39;</span><span class="p">,</span> <span class="s1">&#39;CANCELLED&#39;</span><span class="p">]:</span>
+    <span class="c1"># print terminal message </span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Your IonQ task is in terminal status, but has not completed.&#39;</span><span class="p">)</span>
+
+<span class="k">else</span><span class="p">:</span>
+    <span class="c1"># print current status</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Sorry, your IonQ task is still being processed and has not been finalized yet.&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Status of Rigetti task: QUEUED
+Sorry, your Rigetti task is still being processed and has not been finalized yet.
+Status of IonQ task: COMPLETED
+The second raw bit string is:  [[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+  1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]]
+</pre></div>
+</div>
+</div>
+</div>
+<ol class="arabic simple" start="4">
+<li><p>We run the Toeplitz two-source extractor on the two sequences of raw random input bits:</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># setting up arrays for fft implementation of Toeplitz</span>
+<span class="k">if</span> <span class="n">status_ionq</span> <span class="o">==</span> <span class="s1">&#39;COMPLETED&#39;</span><span class="p">:</span>
+    <span class="n">array_two_under</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">array_ionq</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="n">n</span><span class="o">-</span><span class="n">m</span><span class="p">])[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+    <span class="n">zero_vector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="n">m</span><span class="o">-</span><span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">array_two_zeros</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">array_two_under</span><span class="p">,</span><span class="n">zero_vector</span><span class="p">))</span>
+    <span class="n">array_two_over</span> <span class="o">=</span> <span class="n">array_ionq</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">n</span><span class="o">-</span><span class="n">m</span><span class="p">:</span><span class="n">n</span><span class="p">][</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+    <span class="n">array_one_merged</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">n</span><span class="o">-</span><span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">status_rigetti</span> <span class="o">==</span> <span class="s1">&#39;COMPLETED&#39;</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
+            <span class="n">array_one_merged</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">array_rigetti</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">m</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="n">m</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">array_one_merged</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="n">m</span><span class="o">-</span><span class="mi">2</span><span class="o">+</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">array_rigetti</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">n</span><span class="o">-</span><span class="mi">2</span><span class="o">-</span><span class="n">j</span><span class="p">]</span>
+
+        <span class="c1"># fft multplication output of Toeplitz</span>
+        <span class="n">output_fft</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">around</span><span class="p">(</span><span class="n">ifft</span><span class="p">(</span><span class="n">fft</span><span class="p">(</span><span class="n">array_one_merged</span><span class="p">)</span><span class="o">*</span><span class="n">fft</span><span class="p">(</span><span class="n">array_two_zeros</span><span class="p">))</span><span class="o">.</span><span class="n">real</span><span class="p">)</span>
+        <span class="n">output_addition</span> <span class="o">=</span> <span class="n">output_fft</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="n">m</span><span class="p">]</span> <span class="o">+</span> <span class="n">array_two_over</span>
+        <span class="n">output_final</span> <span class="o">=</span> <span class="n">output_addition</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The </span><span class="si">{</span><span class="n">m</span><span class="si">}</span><span class="s2"> random output bits are:</span><span class="se">\n</span><span class="si">{</span><span class="n">output_final</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span> 
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Your Rigetti task is in </span><span class="si">{</span><span class="n">status_rigetti</span><span class="si">}</span><span class="s2"> state.&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span> 
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Your IonQ task is in </span><span class="si">{</span><span class="n">status_ionq</span><span class="si">}</span><span class="s2"> state.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Your Rigetti task is in QUEUED state.
+</pre></div>
+</div>
+</div>
+</div>
+<ol class="arabic simple" start="5">
+<li><p>That is it, above bits are random up to the chosen security parameter!</p></li>
+</ol>
+<p>If one of the two QPUs works better or provides more immediate results, you can also run the quantum circuit twice on QPUs from the same provider (while being aware of the potentially violated independence assumption).</p>
+</section>
+<section id="beyond-current-implementation-a-name-beyond-current-a">
+<h2>Beyond current implementation <a name="beyond_current"></a><a class="headerlink" href="#beyond-current-implementation-a-name-beyond-current-a" title="Permalink to this heading">#</a></h2>
+<p>Different quantum processing units are potentially governed by different noise models. Correspondingly, this will lead to different conditional min-entropy rates for the raw sources of randomness. In this notebook and following the theory notes [1], we can change the noise model for the numerical evaluation of the min-entropy (with all other parts remaining the same).</p>
+<p>From a cryptographic viewpoint, the quantum hardware providers as well as Amazon Braket have to be trusted in order to end up with secure random numbers. More broadly, we note that there are more intricate ways of generating randomness from quantum sources than presented here, in particular for the use case when one is not ready to trust the underlying quantum hardware because of potential backdoors inbuilt. Such a so-called (semi) device-independent scheme is for example given in [3], with a corresponding implementation in Amazon Braket [7]. For a general in-depth discussion of QRNGs, we refer to the review article [4], as well as the extensive security report [6].</p>
+</section>
+<section id="literature-a-name-literature-a">
+<h2>Literature <a name="literature"></a><a class="headerlink" href="#literature-a-name-literature-a" title="Permalink to this heading">#</a></h2>
+<p>[1] M. Berta and F. Brandão, Robust randomness generation on quantum computers, <a class="reference external" href="http://marioberta.info/wp-content/uploads/2021/07/randomness-theory.pdf">available online</a>.</p>
+<p>[2] M. Hayashi and T. Tsurumaru, More Efficient Privacy Amplification With Less Random Seeds via Dual Universal Hash Function, IEEE Transactions on Information Theory, <a class="reference external" href="https://ieeexplore.ieee.org/document/7399404">10.1109/TIT.2016.2526018</a>.</p>
+<p>[3] C. Foreman, S. Wright, A. Edgington, M. Berta, F. Curchod, Practical randomness and privacy amplification, <a class="reference external" href="https://arxiv.org/abs/2009.06551">arXiv:2009.06551</a>.</p>
+<p>[4] M. Herrero-Collantes and J.-C. Garcia-Escartin, Quantum random number generators, Review of Modern Physics, <a class="reference external" href="https://doi.org/10.1103/RevModPhys.89.015004">10.1103/RevModPhys.89.015004</a>.</p>
+<p>[5] D. Frauchiger, R. Renner, M. Troyer, True randomness from realistic quantum devices, <a class="reference external" href="https://arxiv.org/abs/1311.4547">arXiv:1311.4547</a>.</p>
+<p>[6] M. Piani, M. Mosca, B. Neill, Quantum random-number generators: practical considerations and use cases, <a class="reference external" href="https://evolutionq.com/quantum-safe-publications/qrng-report-2021-evolutionQ.pdf">evolutionQ</a>.</p>
+<p>[7] Quantum-Proof Cryptography with IronBridge, TKET and Amazon Braket, A. Edgington, C. Foreman, D. Jones, <a class="reference external" href="https://medium.com/cambridge-quantum-computing/quantum-proof-cryptography-with-ironbridge-tket-and-amazon-braket-e8e96777cacc">Cambridge Quantum Computing</a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Task Summary&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">quantum_tasks_statistics</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Note: Charges shown are estimates based on your Amazon Braket simulator and quantum processing unit (QPU) task usage. Estimated charges shown may differ from your actual charges. Estimated charges do not factor in any discounts or credits, and you may experience additional charges based on your use of other services such as Amazon Elastic Compute Cloud (Amazon EC2).&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Estimated cost to run this example: </span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="n">qpu_tasks_cost</span><span class="p">()</span> <span class="o">+</span> <span class="n">t</span><span class="o">.</span><span class="n">simulator_tasks_cost</span><span class="p">()</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> USD&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Task Summary
+{&#39;arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-2&#39;: {&#39;shots&#39;: 141, &#39;tasks&#39;: {&#39;RUNNING&#39;: 1}}, &#39;arn:aws:braket:::device/qpu/ionq/ionQdevice&#39;: {&#39;shots&#39;: 141, &#39;tasks&#39;: {&#39;CREATED&#39;: 1}}}
+Note: Charges shown are estimates based on your Amazon Braket simulator and quantum processing unit (QPU) task usage. Estimated charges shown may differ from your actual charges. Estimated charges do not factor in any discounts or credits, and you may experience additional charges based on your use of other services such as Amazon Elastic Compute Cloud (Amazon EC2).
+Estimated cost to run this example: 2.06 USD
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Robust randomness generation on quantum processing units</a><ul>
+<li><a class="reference internal" href="#table-of-contents">Table of contents</a></li>
+<li><a class="reference internal" href="#amazon-braket-a-name-amazon-braket-a">Amazon Braket <a name="amazon_braket"></a></a></li>
+<li><a class="reference internal" href="#quantum-circuit-for-randomness-generation-a-name-quantum-circuit-a">Quantum circuit for randomness generation <a name="quantum_circuit"></a></a></li>
+<li><a class="reference internal" href="#quick-implementation-a-name-quick-implementation-a">Quick implementation <a name="quick_implementation"></a></a></li>
+<li><a class="reference internal" href="#critical-assessment-a-name-critical-assessment-a">Critical assessment <a name="critical_assessment"></a></a></li>
+<li><a class="reference internal" href="#interlude-randomness-extractors-a-name-interlude-a">Interlude randomness extractors <a name="interlude"></a></a><ul>
+<li><a class="reference internal" href="#quantum-information-a-name-quantum-information-a">Quantum information <a name="quantum_information"></a></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#extractor-construction-a-name-extractor-construction-a">Extractor construction <a name="extractor_construction"></a></a><ul>
+<li><a class="reference internal" href="#example-a-name-example-a">Example <a name="example"></a></a></li>
+<li><a class="reference internal" href="#implementation-a-name-implementation-a">Implementation <a name="implementation"></a></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#unpredictability-of-physical-sources-a-name-physical-sources-a">Unpredictability of physical sources <a name="physical_sources"></a></a><ul>
+<li><a class="reference internal" href="#noise-as-leakage-a-name-noise-leakage-a">Noise as leakage <a name="noise_leakage"></a></a></li>
+<li><a class="reference internal" href="#numerical-evaluation-a-name-numerical-evaluation-a">Numerical evaluation <a name="numerical_evaluation"></a></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#putting-everything-together-a-name-putting-together-a">Putting everything together <a name="putting-together"></a></a></li>
+<li><a class="reference internal" href="#beyond-current-implementation-a-name-beyond-current-a">Beyond current implementation <a name="beyond_current"></a></a></li>
+<li><a class="reference internal" href="#literature-a-name-literature-a">Literature <a name="literature"></a></a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/scripts/furo.js"></script>
+    </body>
+</html>

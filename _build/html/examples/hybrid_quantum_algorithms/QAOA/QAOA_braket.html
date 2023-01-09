@@ -1,0 +1,1290 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
+
+    <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
+        <title>QUANTUM APPROXIMATE OPTIMIZATION ALGORITHM (QAOA) - Amazon Braket Examples documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../../index.html"><div class="brand">Amazon Braket Examples  documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
+  
+  
+  <span class="sidebar-brand-text">Amazon Braket Examples  documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use Braket SDK Cost Tracking to estimate the cost to run this example</span>
+<span class="kn">from</span> <span class="nn">braket.tracking</span> <span class="kn">import</span> <span class="n">Tracker</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">Tracker</span><span class="p">()</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="quantum-approximate-optimization-algorithm-qaoa">
+<h1>QUANTUM APPROXIMATE OPTIMIZATION ALGORITHM (QAOA)<a class="headerlink" href="#quantum-approximate-optimization-algorithm-qaoa" title="Permalink to this heading">#</a></h1>
+<p>In this tutorial we show how to (approximately) solve binary combinatorial optimization problems, using the <strong>Quantum Approximate Optimization Algorithm (QAOA)</strong>, as introduced in Ref.[1].
+The QAOA algorithm belongs to the class of <strong>hybrid quantum algorithms</strong> (leveraging both classical as well as quantum compute), that are widely believed to be the working horse for the current <strong>NISQ (noisy intermediate-scale quantum) era</strong>.
+In this NISQ era QAOA is also an emerging approach for benchmarking quantum devices and is a prime candidate for demonstrating a practical quantum speed-up on near-term NISQ device [1,4].
+To validate our approach we benchmark our results with exact results as obtained from classical QUBO solvers.</p>
+<p>We provide a step-by-step walkthrough explaining the QAOA quantum algorithm and show how to build the corresponding parametrized quantum circuit ansatz using the <code class="docutils literal notranslate"><span class="pre">Braket</span></code> SDK, with simple modular building blocks (that can be re-used for other purposes).
+We use open-source off-the-shelf <code class="docutils literal notranslate"><span class="pre">scipy</span></code> optimizers for classical numerical optimization.
+While we demonstrate our proof-of-concept approach using classical simulators for circuit execution, our code could in principle be run on actual quantum hardware by simply changing the definition of the <code class="docutils literal notranslate"><span class="pre">device</span></code> object (provided that the gate set used in the ansatz is supported by the device, as is the case here for IonQ; for Rigetti we need to apply one more extra trick as shown below).</p>
+<section id="background-hybrid-quantum-algorithms">
+<h2>BACKGROUND: HYBRID QUANTUM ALGORITHMS<a class="headerlink" href="#background-hybrid-quantum-algorithms" title="Permalink to this heading">#</a></h2>
+<p>Quantum computers hold the promise to outperform even the most-powerful classical computers on a range of computational problems in (for example) optimization, chemistry, material science and cryptography.
+The canonical set of quantum algorithms (such as Shor’s or Grover’s quantum algorithms), however, comes with hardware requirements (such as a large number of quantum gates) that are currently not available with state-of-the-art technology.
+Specifically, these algorithms are typically believed to be feasible only with fault-tolerance as provided by quantum error correction.
+In the current <strong>noisy intermediate-scale (NISQ) era</strong>, near-term quantum computers do not have a large enough number of physical qubits for the implementation of error correction protocols, making this canonical set of quantum algorithms unsuitable for near-term devices. Against this background, the near-term focus has widely shifted to the class of <strong>hybrid quantum algorithms</strong> that do not require quantum error correction.
+In these hybrid quantum algorithms, the noisy <strong>near-term quantum computers are used as co-processors</strong> only, within a larger classical optimization loop, as sketched in the schematic figure below.
+Here, the undesired effects of noise are suppressed by deliberately limiting the quantum circuits on the quantum processing unit (QPU) to short bursts of the calculation, and the need for long coherence times (as required for the standard set of quantum algorithms) is traded for a classical overhead due to (possibly many) measurement repetitions and (essentially error-free) classical processing.</p>
+<div align="center"><img src="hybrid_quantum.png"/></div><p><strong>Variational Quantum Algorithms</strong>: Specifically, variational quantum algorithms such as the Quantum Approximate Optimization Algorithm (QAOA) [1] belong to this emerging class of hybrid quantum algorithms.
+These are widely believed to be promising candidates for the demonstration of a <strong>quantum advantage</strong>, already with near-term (NISQ) devices in areas such as quantum chemistry [2], condensed matter simulations [3], and discrete optimization tasks [4].</p>
+<p><strong>Variational Quantum Computing vs. Deep Learning</strong>: The working principle of variational quantum computing is very much reminiscent of training deep neural networks:
+when you train a neural network, you have an objective function that you want to minimize, typically characterized by the error on your training set.
+To minimize that error, typically you start out with an initial guess for the weights in your network.
+The coprocessor, in that case a GPU, takes these weights which define the exact operation to execute and the output of the neural network is computed.
+This output is then used to calculate the value of your objective function, which in turn is used by the CPU to make an educated guess to update the weights and the cycle continues.
+Variational quantum algorithms, a specific form of hybrid algorithms, work in the very same way, using parametrized quantum circuits rather than parametrized neural networks and replacing the GPU with a QPU.
+Here, you start with an initial guess for the parameters that define your circuit, have the QPU execute that circuit, perform measurements to calculate an objective function, pass this value (together with the current values of the parameters) back to the CPU and have this <em>classical</em> CPU update the parameters based on that information.</p>
+<p>Of course, coordinating that workflow for quantum computers is much more challenging than in the previous case. Quantum computers are located in specialized laboratory facilities, are typically single threaded, and have special latency requirements.
+This is exactly the undifferentiated heavy-lifting that Amazon Braket handles for us, such that we can focus on our scientific problem.
+For the sake of this introductory tutorial, we simply use a classical circuit simulator (that mimic the behavior of a quantum machine) as the device to execute our quantum circuits.
+Within Amazon Braket, the workflow, however, is exactly the same.</p>
+</section>
+<section id="background-quadratic-binary-optimization-problems">
+<h2>BACKGROUND: QUADRATIC BINARY OPTIMIZATION PROBLEMS<a class="headerlink" href="#background-quadratic-binary-optimization-problems" title="Permalink to this heading">#</a></h2>
+<p><strong>Combinatorial optimization</strong>:
+Combinatorial optimization problems are ubiquitous across many areas of science and application areas.
+Applications can be found (for example) in logistics, scheduling, planning, and portfolio optimization.
+In a nutshell combinatorial optimization problems are problems involving a large number of yes/no decisions with each set of decisions yielding a corresponding objective function value, like a cost or profit value.
+Because of the combinatorial explosion of the solution space with the number of variables, finding good solutions is a daunting task and extremely difficult.</p>
+<p><strong>QUBO problems</strong>: The QUBO (<a class="reference external" href="https://en.wikipedia.org/wiki/Quadratic_unconstrained_binary_optimization">Quadratic Unconstrained Binary Optimization</a>) model unifies a rich variety of NP-hard combinatorial optimization problems:
+Famous examples include Quadratic Assignment Problems, Capital Budgeting Problems, Task Allocation Problems and Maximum-Cut Problems.
+For more details we refer to the excellent review and tutorial on QUBO problems presented in Ref.[5].</p>
+<p><strong>Maximum Cut</strong>: Among the class of QUBO problems, Maximum Cut (MaxCut) is paradigm combinatorial optimization problem.
+Given a graph $G=(V,E)$ with vertex set $V$ and edge set $E$, we seek partition of $V$ into two subsets with maximum cut.
+In short, we have to color every node either blue or red and we score a point whenever an edge connects two nodes with different colors.
+We then would like to find the solution with the highest score.
+Applications thereof can be found in, for example, (i) clustering for marketing purposes (segment your customer base into different clusters for targeted marketing) or (ii) portfolio optimization in finance (vertex corresponds to asset, with color referring to sell or buy decisions.
+Again, the problem in this specific graph coloring problem is that there are $2^𝑁$ possible solutions for $N$ nodes (an exponential explosion in possibilities), making it impossible to enumerate all possible candidates for relevant system sizes.</p>
+<p><strong>Ising Hamiltonian</strong>: Importantly, there is a fundamental correspondence between QUBO problems and Ising problems in physics.
+Specifically, we can encode the Maximum Cut problem as a <strong>minimization problem</strong> of an Ising Hamiltonian, where the (classical) cost function reads</p>
+<p>$$H_{C}=\sum_{i&gt;j} J_{i,j} z_{i} z_{j},$$</p>
+<p>with Ising variables $z_{i}=-1,1$ and the Ising matrix $J$ encoding the weights of the edges.
+For the sake of this discussion, we ignore potential linear terms and constant offsets (that do not affect the optimal solution $z$ anyway).
+In short, the cost Hamiltonian $H_{C}$ assigns a number to every bitstring $z=(z_{1},z_{2},\dots)$, and we would like to find the lowest number possible.
+This will be the optimal assignment and solution to our problem.</p>
+</section>
+<section id="background-the-quantum-approximate-optimization-algorithm">
+<h2>BACKGROUND: THE QUANTUM APPROXIMATE OPTIMIZATION ALGORITHM<a class="headerlink" href="#background-the-quantum-approximate-optimization-algorithm" title="Permalink to this heading">#</a></h2>
+<p>In this tutorial we will try to solve for the optimal <em>classical</em> bitstring $z$ using the Quantum Approximate Optimization Algorithm (QAOA).
+To this end, we first promote the classical spin variables $z_{i}=-1,1$ to quantum-mechanical variables $\sigma_{i}^{z}$ (with the Pauli matrix $\sigma_{i}^{z}$ representing the observable corresponding to spin along the $z$ coordinate axis in three-dimensional Euclidean space $\mathbb{R}^{3}$).
+This leads to the following quantum mechanical cost Hamiltonian encoding the optimization problem</p>
+<p>$$\hat{H}<em>{C}=\sum</em>{i&gt;j} J_{i,j} \sigma_{i}^{z} \sigma_{j}^{z},$$</p>
+<p>which can be written as a matrix of size $(2^{N}, 2^{N})$ with diagonal elements only corresponding to all possible classical values for the cost function $H_{C}$.
+The ground state of $\hat{H}_{C}$ corresponds to the optimal solution of the classical combinatorial problem.</p>
+<p><strong>QAOA ansatz</strong>: Finding this ground state is generically hard.
+To approximate this groundstate, QAOA prepares a parametrized ansatz state (corresponding to a parameterized  gate  sequence),  whose  parameters  are iteratively updated by a classical optimizer in a closed loop.
+Specifically, QAOA involves a specific ansatz wavefunction parametrized by a parameter family $(\vec{\beta}, \vec{\gamma})$, embedded into a larger classical optimization loop to find the optimal values for these parameters.
+As shown in Ref.[1], good approximate solutions to the problem class considered here can be found by preparing the variational state</p>
+<p>$$|\gamma, \beta \rangle = U_{x}(\beta_{p})U_{zz}(\gamma_{p}) \cdots U_{x}(\beta_{1})U_{zz}(\gamma_{1}) |s\rangle$$</p>
+<p>with single qubit rotations induced by $U_{x}(\beta) = \exp(-i\beta \sum_{i}\sigma_{i}^{x})$,
+and interactions described by $U_{zz}(\gamma) = \exp(-i\gamma H_{C})$,
+starting initially from a product of $\sigma^{x}$ eigenstates, i.e.,
+$|s\rangle =|-,-,\dots\rangle$, with $|-\rangle = (|0\rangle -|1\rangle  )/\sqrt{2}$.
+The family of states $|\gamma, \beta \rangle$ is prepared by alternating single-qubit operations $U_{x}(\beta_{p})$ with targeted spin-spin interactions generated by the cost Hamiltonian $H_{C}$.
+The depth $p$ can be interpreted as a hyperparameter.
+For $p$ layers of QAOA blocks, there are $2p$ classical parameters to optimize over,
+since each layer $k$ is characterized by just two variational parameters, $\gamma_{k}$ and $\beta_{k}$.
+The preparation step outlined above is followed by a measurement in the computational basis, giving a classical string $z$, with which one can evaluate the objective function $H_{C}$ of the underlying combinatorial problem at hand.
+Taking several measurements shots one can build the expectation value $E(\beta, \gamma) = \langle H_{C} \rangle$ that we report as the objective function to the classical minimizer (while other choices could be possible as well).
+Repeating this procedure will provide an optimized string $z$, with the quality of the result improving as the depth of the quantum circuit $\sim 2p$ is increased [1].
+In fact, in principle (in the absence of noise and other imperfections), QAOA can reach the global optimum of any cost function in the limit $p \rightarrow \infty$ [1], approaching the adiabatic protocol.
+Thus, in theory the computational power of QAOA increases with $p$, but in practice the number of layers that can be executed without errors on NISQ devices is limited due noise and imperfections.</p>
+<p><strong>Optimization</strong>: Since we are primarily interested in solving the classical optimization problem, within this routine it is sufficient to keep track of the best classical bitstring.
+This means that the wavefunction prepared by the quantum circuit $|\gamma, \beta \rangle$ has to have some overlap with the optimal solution $|z^{<em>} \rangle$ that we can read out as bitstring $z^{</em>}$ in the measurement shots.
+To this end, in principle (i.e., without any training), we could just sample from a completely uniform state that is prepared in a superposition of all computational basis states, as prepared by applying Hadamard gates to all qubits: $|\mathrm{uniform}\rangle = 1/\sqrt{2^{N}}\sum_{i}|z_{i}\rangle$.
+In that case (assuming a single optimal solution) the success probability per shot amounts to $p_{\mathrm{success}}=1/2^{N}$.
+We can then amplify our success chances by just taking many measurement shots.
+For large systems, however, this approach is not scalable as we would need to take an exponentially increasing number of measurements.
+That is why we train our circuits, update the parameters, with the goal to increase our success chances to find the optimal bitstring.
+We can quantify our success chances as follows [6].
+For a given wavefunction $|\gamma, \beta \rangle$ the probability to find the optimal solution in a single shot is given by</p>
+<p>$$ p_{\mathrm{success}}(\gamma, \beta) = |\langle z^{*}|\gamma, \beta \rangle |^{2},$$</p>
+<p>where $z^{*}$ denotes the optimal bitstring.
+If we perform $M$ repeated measurements, the overall probability $P$ for observing this solution at least once is given by</p>
+<p>$$ P = 1 - (1-p_{\mathrm{success}}(\gamma, \beta))^{M}, $$</p>
+<p>since the term $(1-p_{\mathrm{success}}(\gamma, \beta))^{M}$ gives the probability of <em>not</em> obtaining $z^{*}$ in repeated $M$ trials.
+Therefore, to have an overall success chance up to $\epsilon$ close to 100%, i.e., $P \geq 1-\epsilon$, the number of required shots has to be</p>
+<p>$$ M \geq \frac{\log(\epsilon)}{\log(1-p_{\mathrm{success}}(\gamma, \beta))}.$$</p>
+<p>Let us illustrate this results as follows:
+If we do not know anything and just resort to a uniform superposition $|\mathrm{uniform}\rangle$, for a small system with $N=10$ qubits we can find the optimal solutions with 80% success probability by taking at least $\sim 1650$ shots.
+For just $N=20$ qubits, however, this number amounts to $\sim 1.7 \times 10^{6}$, making this naive approach unfeasible.
+Conversely, if we can train the quantum circuit to obtain $p_{\mathrm{success}}(\gamma, \beta) \sim 0.1$, we only need $\sim 15$ shots to have $P\geq 80%$.
+Below we will track and illustrate the best classical optimum as our algorithm proceeds towards a local or (ideally) global optimum.</p>
+<p><strong>Objective function</strong>: Finally, some more details on the definition of the cost function are in order.
+Following the standard approach [1, 4], QAOA tries to minimize the expectation value $\langle \hat{H}<em>{C} \rangle$, but does <em>not</em> explicitly maximize the success probability [6].
+However, a low expectation value for $\langle \hat{H}</em>{C} \rangle$ does not necessarily translate to a high success probability $p_{\mathrm{success}}(\gamma, \beta)$, as can be understood from the following example:
+Consider (for example) a variational state that is a linear combination of low energy excited eigenstates of the cost Hamiltonian $\hat{H}<em>{C}$ other than the ground state $|z^{*}\rangle$.
+By definition, this state will have a relatively low expectation value $\langle \hat{H}</em>{C} \rangle$ while the success probability is zero (as this low energy state does not have any overlap with the ground state).
+Similarly, a variational state that is a linear combination of the ground state with very high energy eigenstates could have a high success probability $p_{\mathrm{success}}(\gamma, \beta)$, while (at the same time) reporting a high cost value to the classical optimizer.
+To address this issue, alternative methods for the optimization of the variational parameters have recently been proposed.
+While for simplicity we follow the majority of the literature and take $\langle \hat{H}<em>{C} \rangle$ as cost value that we report to the classical optimizer, here we do mention a potential alternative for future research:
+One approach is to use the Gibbs objective function, defined as $\mathrm{cost}=-\mathrm{log} \langle \exp(-\eta \hat{H}</em>{C})\rangle$, with the hyperparameter $\eta&gt;0$ [7].
+As compared to the simple expectation value $\langle \hat{H}_{C} \rangle$, this definition of the cost value shows stronger rewards for low energy states, thereby increasing the success probability.</p>
+</section>
+<section id="imports-and-setup">
+<h2>IMPORTS and SETUP<a class="headerlink" href="#imports-and-setup" title="Permalink to this heading">#</a></h2>
+<p>For classical benchmarking we will be using the python library <code class="docutils literal notranslate"><span class="pre">pyqubo</span></code>, as used in our helper script <code class="docutils literal notranslate"><span class="pre">utils_classical</span></code>. If not already present in your virtual environment, you can install this library simply with <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">pyqubo</span></code>. Similarly, as <code class="docutils literal notranslate"><span class="pre">seaborn</span></code> are not expected to be present in the virtual environment by default, we will install them via <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">seaborn</span></code>. Note the <code class="docutils literal notranslate"><span class="pre">-q</span></code> to suppress install updates from <code class="docutils literal notranslate"><span class="pre">pip</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># If these have already been installed, this cell can be commented out.</span>
+<span class="o">!</span>pip install pyqubo -q
+<span class="o">!</span>pip install seaborn -q
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># general imports</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">minimize</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">random</span>
+
+<span class="c1"># magic line for producing visualizations in notebook</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># fix random seed for reproducibility</span>
+<span class="n">seed</span> <span class="o">=</span> <span class="mi">42</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+<span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
+
+<span class="c1"># switch to trigger writing training results to disk</span>
+<span class="n">store_results</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="c1"># switch to trigger printing results of each optimization cycle</span>
+<span class="n">verbose</span> <span class="o">=</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># AWS imports: Import Braket SDK modules</span>
+<span class="kn">from</span> <span class="nn">braket.circuits</span> <span class="kn">import</span> <span class="n">Circuit</span><span class="p">,</span> <span class="n">Observable</span><span class="p">,</span> <span class="n">FreeParameter</span>
+<span class="kn">from</span> <span class="nn">braket.aws</span> <span class="kn">import</span> <span class="n">AwsSession</span><span class="p">,</span> <span class="n">AwsDevice</span>
+<span class="kn">from</span> <span class="nn">braket.devices</span> <span class="kn">import</span> <span class="n">LocalSimulator</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">utils_classical</span> <span class="kn">import</span> <span class="n">plot_colored_graph</span><span class="p">,</span> <span class="n">plot_colored_graph_simple</span><span class="p">,</span> <span class="n">solve_classical_ising</span>
+<span class="c1"># auto reload external files, so that we can edit the external .py file and immediately see the changes here</span>
+<span class="o">%</span><span class="k">load_ext</span> autoreload
+<span class="o">%</span><span class="k">autoreload</span> 2
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set up device: Local Simulator</span>
+<span class="n">device</span> <span class="o">=</span> <span class="n">LocalSimulator</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## example code for other backends</span>
+<span class="c1">## choose the on-demand simulator to run your circuit</span>
+<span class="c1"># device = AwsDevice(&quot;arn:aws:braket:::device/quantum-simulator/amazon/sv1&quot;)</span>
+<span class="c1">## choose the Rigetti device to run your circuit</span>
+<span class="c1"># device = AwsDevice(&quot;arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-2&quot;)</span>
+<span class="c1">## choose the Ionq device to run your circuit</span>
+<span class="c1"># device = AwsDevice(&quot;arn:aws:braket:::device/qpu/ionq/ionQdevice&quot;)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="problem-setup">
+<h2>PROBLEM SETUP<a class="headerlink" href="#problem-setup" title="Permalink to this heading">#</a></h2>
+<p>We consider a graph coloring problem.
+Given a graph $G=(V,E)$, made of a set vertices (also called nodes) $V$ and edges $E$, our goal is to color each node red or blue, then score a point for each node that is next to a node of different color.
+We strive to find the optimal coloring that scores the largest number of points.
+To this end, we will address the dual problem of finding the minimum energy of the corresponding Ising Hamiltonian.
+To get started, we first use the open-source <code class="docutils literal notranslate"><span class="pre">networkx</span></code> library to visualize the problem graph.
+Feel free to play with the parameters $n$ (for the number of nodes) and $m$ (for the number of edges) below to consider other graphs of your choice.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># setup Erdos Renyi graph</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># number of nodes/vertices</span>
+<span class="n">m</span> <span class="o">=</span> <span class="mi">20</span>  <span class="c1"># number of edges</span>
+
+<span class="c1"># define graph object</span>
+<span class="n">G</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">gnm_random_graph</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
+<span class="c1"># positions for all nodes</span>
+<span class="n">pos</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">spring_layout</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+
+<span class="c1"># choose random weights</span>
+<span class="k">for</span> <span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="ow">in</span> <span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">():</span>
+    <span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">u</span><span class="p">,</span><span class="n">v</span><span class="p">][</span><span class="s1">&#39;weight&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># draw graph</span>
+<span class="n">nx</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">pos</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../../_images/d6f46e6c045a572d9107d49149248a5489f056a3f8e380e97e20c6aefa82c6f0.png" src="../../../_images/d6f46e6c045a572d9107d49149248a5489f056a3f8e380e97e20c6aefa82c6f0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># set Ising matrix </span>
+<span class="n">Jfull</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">adjacency_matrix</span><span class="p">(</span><span class="n">G</span><span class="p">)</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span>
+<span class="n">Jfull</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Jfull</span><span class="p">)</span>
+
+<span class="c1"># get off-diagonal upper triangular matrix</span>
+<span class="n">J</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="n">Jfull</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># plot Ising matrix</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">annot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="n">linewidths</span><span class="o">=</span><span class="mf">.5</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;YlGnBu&quot;</span><span class="p">,</span> <span class="n">annot_kws</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;alpha&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Ising distance matrix&#39;</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">();</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../../_images/5d6b52bdee23b40567a382e8ad783a9924dc2ce625016f0addd41228ddd40029.png" src="../../../_images/5d6b52bdee23b40567a382e8ad783a9924dc2ce625016f0addd41228ddd40029.png" />
+</div>
+</div>
+</section>
+<section id="implementation-of-qaoa-with-braket">
+<h2>IMPLEMENTATION OF QAOA WITH BRAKET<a class="headerlink" href="#implementation-of-qaoa-with-braket" title="Permalink to this heading">#</a></h2>
+<p>In this section we load a set of useful helper functions that we will explain in detail below.
+Specifically in <code class="docutils literal notranslate"><span class="pre">utils_qaoa.py</span></code> we provide simple building blocks for the core modules of our QAOA algorithm, that is (i) a function called <code class="docutils literal notranslate"><span class="pre">circuit</span></code> that defines the parametrized ansatz, (ii) a function called <code class="docutils literal notranslate"><span class="pre">objective_function</span></code> that takes a list of variational parameters as input, and returns the cost associated with those parameters and finally (iii) a function <code class="docutils literal notranslate"><span class="pre">train</span></code> to run the entire QAOA algorithm for given ansatz.
+This way we can solve the problem in a clean and modular approach.
+Here, we show in markdown the definition of the parametrized QAOA circuit.
+For more details, see the corresponding file <code class="docutils literal notranslate"><span class="pre">utils_qaoa.py</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">utils_qaoa</span> <span class="kn">import</span> <span class="n">circuit</span><span class="p">,</span> <span class="n">train</span> 
+<span class="c1"># auto reload external files, so that we can edit the external .py file and immediately see the changes here</span>
+<span class="o">%</span><span class="k">load_ext</span> autoreload
+<span class="o">%</span><span class="k">autoreload</span> 2
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The autoreload extension is already loaded. To reload it, use:
+  %reload_ext autoreload
+</pre></div>
+</div>
+</div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># function to implement evolution with driver Hamiltonian</span>
+<span class="k">def</span> <span class="nf">driver</span><span class="p">(</span><span class="n">beta</span><span class="p">,</span> <span class="n">n_qubits</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns circuit for driver Hamiltonian U(Hb, beta)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># instantiate circuit object</span>
+    <span class="n">circ</span> <span class="o">=</span> <span class="n">Circuit</span><span class="p">()</span>
+    
+    <span class="k">for</span> <span class="n">qubit</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">):</span>
+        <span class="n">gate</span> <span class="o">=</span> <span class="n">Circuit</span><span class="p">()</span><span class="o">.</span><span class="n">rx</span><span class="p">(</span><span class="n">qubit</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">beta</span><span class="p">)</span>
+        <span class="n">circ</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">circ</span>
+
+
+<span class="c1"># helper function for evolution with cost Hamiltonian</span>
+<span class="k">def</span> <span class="nf">cost_circuit</span><span class="p">(</span><span class="n">gamma</span><span class="p">,</span> <span class="n">n_qubits</span><span class="p">,</span> <span class="n">ising</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    returns circuit for evolution with cost Hamiltonian</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># instantiate circuit object</span>
+    <span class="n">circ</span> <span class="o">=</span> <span class="n">Circuit</span><span class="p">()</span>
+
+    <span class="c1"># get all non-zero entries (edges) from Ising matrix </span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="n">ising</span><span class="o">.</span><span class="n">nonzero</span><span class="p">()</span>
+    <span class="n">edges</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">idx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">idx</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+    
+    <span class="k">for</span> <span class="n">qubit_pair</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">:</span>
+        <span class="c1"># get interaction strength</span>
+        <span class="n">int_strength</span> <span class="o">=</span> <span class="n">ising</span><span class="p">[</span><span class="n">qubit_pair</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">qubit_pair</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="c1"># for Rigetti we decompose ZZ using CNOT gates</span>
+        <span class="k">if</span> <span class="n">device</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;Rigetti&#39;</span><span class="p">:</span>
+            <span class="n">gate</span> <span class="o">=</span> <span class="n">ZZgate</span><span class="p">(</span><span class="n">qubit_pair</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">qubit_pair</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">gamma</span><span class="o">*</span><span class="n">int_strength</span><span class="p">)</span>
+            <span class="n">circ</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+        <span class="c1"># classical simulators and IonQ support ZZ gate</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">gate</span> <span class="o">=</span> <span class="n">Circuit</span><span class="p">()</span><span class="o">.</span><span class="n">zz</span><span class="p">(</span><span class="n">qubit_pair</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">qubit_pair</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">angle</span><span class="o">=</span><span class="mi">2</span><span class="o">*</span><span class="n">gamma</span><span class="o">*</span><span class="n">int_strength</span><span class="p">)</span>
+            <span class="n">circ</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">circ</span>
+
+
+<span class="c1"># function to build the QAOA circuit with depth p</span>
+<span class="k">def</span> <span class="nf">circuit</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">n_qubits</span><span class="p">,</span> <span class="n">ising</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    function to return full QAOA circuit</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># initialize qaoa circuit with first Hadamard layer: for minimization start in |-&gt;</span>
+    <span class="n">circ</span> <span class="o">=</span> <span class="n">Circuit</span><span class="p">()</span>
+    <span class="n">X_on_all</span> <span class="o">=</span> <span class="n">Circuit</span><span class="p">()</span><span class="o">.</span><span class="n">x</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_qubits</span><span class="p">))</span>
+    <span class="n">circ</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">X_on_all</span><span class="p">)</span>
+    <span class="n">H_on_all</span> <span class="o">=</span> <span class="n">Circuit</span><span class="p">()</span><span class="o">.</span><span class="n">h</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_qubits</span><span class="p">))</span>
+    <span class="n">circ</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">H_on_all</span><span class="p">)</span>
+
+    <span class="c1"># setup two parameter families</span>
+    <span class="n">circuit_length</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">params</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">gammas</span> <span class="o">=</span> <span class="n">params</span><span class="p">[:</span><span class="n">circuit_length</span><span class="p">]</span>
+    <span class="n">betas</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="n">circuit_length</span><span class="p">:]</span>
+
+    <span class="c1"># add circuit layers</span>
+    <span class="k">for</span> <span class="n">mm</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">circuit_length</span><span class="p">):</span>
+        <span class="n">circ</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">cost_circuit</span><span class="p">(</span><span class="n">gammas</span><span class="p">[</span><span class="n">mm</span><span class="p">],</span> <span class="n">n_qubits</span><span class="p">,</span> <span class="n">ising</span><span class="p">))</span>
+        <span class="n">circ</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">driver</span><span class="p">(</span><span class="n">betas</span><span class="p">[</span><span class="n">mm</span><span class="p">],</span> <span class="n">n_qubits</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">circ</span>
+
+</pre></div>
+</div>
+</section>
+<section id="visualization-of-the-qaoa-ansatz">
+<h2>VISUALIZATION OF THE QAOA ANSATZ<a class="headerlink" href="#visualization-of-the-qaoa-ansatz" title="Permalink to this heading">#</a></h2>
+<p>Let us first visualize our parametrized QAOA ansatz for a small number of qubits and fixed (i.e., not optimized) parameters.
+For convenience, the parameters are displayed in the circuit (up to a factor of $2$ we have added in our ansatz definition).
+First we prepare the state $|0,0,\dots\rangle \rightarrow |-,-,\dots\rangle$, with the superposition state $|-\rangle = (|0\rangle -|1\rangle  )/\sqrt{2}$.
+Following the discussion above, we choose to start out with this state as it is the minimal energy state of the simple driver Hamiltonian $H_{B}$.
+This state preparation is followed by one layer of the QAOA ansatz, consisting of evolution with the cost Hamiltonian by $\exp(-i\gamma H_{C})= \prod_{j,l}\exp(-i\gamma J_{j,l}\sigma_{j}^{z}\sigma_{l}^{z}) = \prod_{j,l} ZZ_{j,l}(2\gamma J_{j,l})$, followed by the single-qubit driving term, $\exp(-i\beta H_{B})= \prod_{j} \exp(-i\beta \sigma_{j}^{x})= \prod_{j} R_{j}^{(x)}(2\beta)$.
+Note that the circuit definition depends on the <code class="docutils literal notranslate"><span class="pre">device</span></code> object, as the implementation of the ZZ gate depends on the specific gate set supported by the device.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># create parameters</span>
+<span class="n">gammas</span> <span class="o">=</span> <span class="p">[</span><span class="n">FreeParameter</span><span class="p">(</span><span class="s1">&#39;gamma&#39;</span><span class="p">)]</span>
+<span class="n">betas</span> <span class="o">=</span> <span class="p">[</span><span class="n">FreeParameter</span><span class="p">(</span><span class="s1">&#39;beta&#39;</span><span class="p">)]</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">gammas</span> <span class="o">+</span> <span class="n">betas</span>
+
+<span class="c1"># for demonstration purposes use small Ising matrix</span>
+<span class="n">J_sub</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
+<span class="n">N</span> <span class="o">=</span> <span class="n">J_sub</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># get circuit ansatz</span>
+<span class="n">my_simple_circuit</span> <span class="o">=</span> <span class="n">circuit</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">J_sub</span><span class="p">)</span>
+
+<span class="c1"># print test ansatz circuit</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Printing test circuit:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">my_simple_circuit</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Printing test circuit:
+T  : |0|1|     2     |    3     |
+                                 
+q0 : -X-H-ZZ(2*gamma)-Rx(2*beta)-
+          |                      
+q1 : -X-H-ZZ(2*gamma)-Rx(2*beta)-
+
+T  : |0|1|     2     |    3     |
+
+Unassigned parameters: [beta, gamma].
+</pre></div>
+</div>
+</div>
+</div>
+<p>We see that our ansatz produces the expected result for shallow QAOA with $p=1$.
+We run one more sanity check for $p=2$ below.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># set number of qubits and fix parameters</span>
+<span class="n">gammas</span> <span class="o">=</span> <span class="p">[</span><span class="n">FreeParameter</span><span class="p">(</span><span class="s1">&#39;gamma_1&#39;</span><span class="p">),</span> <span class="n">FreeParameter</span><span class="p">(</span><span class="s1">&#39;gamma_2&#39;</span><span class="p">)]</span>
+<span class="n">betas</span> <span class="o">=</span> <span class="p">[</span><span class="n">FreeParameter</span><span class="p">(</span><span class="s1">&#39;beta_1&#39;</span><span class="p">),</span> <span class="n">FreeParameter</span><span class="p">(</span><span class="s1">&#39;beta_2&#39;</span><span class="p">)]</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">gammas</span> <span class="o">+</span> <span class="n">betas</span>
+
+<span class="c1"># for demonstration purposes use small Ising matrix</span>
+<span class="n">J_sub</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
+<span class="n">N</span> <span class="o">=</span> <span class="n">J_sub</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># get circuit ansatz</span>
+<span class="n">my_simple_circuit</span> <span class="o">=</span> <span class="n">circuit</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">J_sub</span><span class="p">)</span>
+
+<span class="c1"># print test ansatz circuit</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Printing test circuit:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">my_simple_circuit</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Printing test circuit:
+T  : |0|1|      2      |     3      |      4      |     5      |
+                                                                
+q0 : -X-H-ZZ(2*gamma_1)-Rx(2*beta_1)-ZZ(2*gamma_2)-Rx(2*beta_2)-
+          |                          |                          
+q1 : -X-H-ZZ(2*gamma_1)-Rx(2*beta_1)-ZZ(2*gamma_2)-Rx(2*beta_2)-
+
+T  : |0|1|      2      |     3      |      4      |     5      |
+
+Unassigned parameters: [beta_1, beta_2, gamma_1, gamma_2].
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="qaoa-simulation-on-local-schroedinger-simulator">
+<h2>QAOA SIMULATION ON LOCAL SCHROEDINGER SIMULATOR<a class="headerlink" href="#qaoa-simulation-on-local-schroedinger-simulator" title="Permalink to this heading">#</a></h2>
+<p>We are now all set to run some QAOA simulation experiments.
+First of all, you can play and experiment yourself with the number of qubits $N$.
+Secondly, you may also experiment with the classical optimizer.
+Since we are using an off-the-shelf, black-box <code class="docutils literal notranslate"><span class="pre">scipy</span></code> minimizer (as described in more detail <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html">here</a>), you can simply swap between different optimizers by setting the <code class="docutils literal notranslate"><span class="pre">OPT_METHOD</span></code> parameter below.
+Some popular options readily available within this library include <em>Nelder-Mead</em>, <em>BFGS</em> and <em>COBYLA</em>.
+As a precautionary warning, note that the classical optimization step may get stuck in a local optimum, rather than finding the global minimum for our parametrized QAOA ansatz wavefunction.
+To address this issue, we may run several optimization loops, starting from different random parameter seeds.
+While this brute-force approach does not provide any guarantee to find the global optimum, from a pragmatic point of view at least it does increase the odds of finding an acceptable solution, at the expense of potentially having to run many more circuits on the simulator or QPU, respectively.
+Finally, the optimization loop may require the execution of many individual quantum tasks (i.e., single circuit executions for fixed parameters).
+For example, when choosing the classical <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/optimize.minimize-powell.html#optimize-minimize-powell">Powell</a> optimizer for the graph considered here, we find $\sim 270$ cycles in the for loop.
+For the local simulator device chosen here by default this is not an issue, but if you run this algorithm on any QPU you may want to adjust the <code class="docutils literal notranslate"><span class="pre">maxfev</span></code> parameter to control the maximum allowed number function evaluations (compare comment in the next code block below).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">##################################################################################</span>
+<span class="c1"># set up hyperparameters</span>
+<span class="c1">##################################################################################</span>
+
+<span class="c1"># User-defined hypers</span>
+<span class="n">DEPTH</span> <span class="o">=</span> <span class="mi">3</span>  <span class="c1"># circuit depth for QAOA</span>
+<span class="n">SHOTS</span> <span class="o">=</span> <span class="mi">1000</span>  <span class="c1"># number measurements to make on circuit</span>
+<span class="n">OPT_METHOD</span> <span class="o">=</span> <span class="s1">&#39;Powell&#39;</span>  <span class="c1"># SLSQP, COBYLA, Nelder-Mead, BFGS, Powell, ...</span>
+
+<span class="c1"># set up the problem</span>
+<span class="n">n_qubits</span> <span class="o">=</span> <span class="n">J</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># initialize reference solution (simple guess)</span>
+<span class="n">bitstring_init</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">([</span><span class="n">n_qubits</span><span class="p">])</span>
+<span class="n">energy_init</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">bitstring_init</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">bitstring_init</span><span class="p">))</span>
+
+<span class="c1"># set tracker to keep track of results</span>
+<span class="n">tracker</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;count&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>                           <span class="c1"># Elapsed optimization steps</span>
+    <span class="s1">&#39;optimal_energy&#39;</span><span class="p">:</span> <span class="n">energy_init</span><span class="p">,</span>        <span class="c1"># Global optimal energy</span>
+    <span class="s1">&#39;opt_energies&#39;</span><span class="p">:</span> <span class="p">[],</span>                   <span class="c1"># Optimal energy at each step</span>
+    <span class="s1">&#39;global_energies&#39;</span><span class="p">:</span> <span class="p">[],</span>                <span class="c1"># Global optimal energy at each step</span>
+    <span class="s1">&#39;optimal_bitstring&#39;</span><span class="p">:</span> <span class="n">bitstring_init</span><span class="p">,</span>  <span class="c1"># Global optimal bitstring</span>
+    <span class="s1">&#39;opt_bitstrings&#39;</span><span class="p">:</span> <span class="p">[],</span>                 <span class="c1"># Optimal bitstring at each step</span>
+    <span class="s1">&#39;costs&#39;</span><span class="p">:</span> <span class="p">[],</span>                          <span class="c1"># Cost (average energy) at each step</span>
+    <span class="s1">&#39;res&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>                          <span class="c1"># Quantum result object</span>
+    <span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="p">[]</span>                          <span class="c1"># Track parameters</span>
+<span class="p">}</span>
+
+<span class="c1"># set options for classical optimization</span>
+<span class="n">options</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;disp&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;maxiter&#39;</span><span class="p">:</span> <span class="mi">500</span><span class="p">}</span>
+<span class="c1"># options = {&#39;disp&#39;: True, &#39;ftol&#39;: 1e-08, &#39;maxiter&#39;: 100, &#39;maxfev&#39;: 50}  # example options</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">##################################################################################</span>
+<span class="c1"># run QAOA optimization on graph </span>
+<span class="c1">##################################################################################</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Circuit depth hyperparameter:&#39;</span><span class="p">,</span> <span class="n">DEPTH</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Problem size:&#39;</span><span class="p">,</span> <span class="n">n_qubits</span><span class="p">)</span>
+
+<span class="c1"># kick off training</span>
+<span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">result_energy</span><span class="p">,</span> <span class="n">result_angle</span><span class="p">,</span> <span class="n">tracker</span> <span class="o">=</span> <span class="n">train</span><span class="p">(</span>
+    <span class="n">device</span> <span class="o">=</span> <span class="n">device</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">DEPTH</span><span class="p">,</span> <span class="n">ising</span><span class="o">=</span><span class="n">J</span><span class="p">,</span> <span class="n">n_qubits</span><span class="o">=</span><span class="n">n_qubits</span><span class="p">,</span> <span class="n">n_shots</span><span class="o">=</span><span class="n">SHOTS</span><span class="p">,</span> 
+    <span class="n">opt_method</span><span class="o">=</span><span class="n">OPT_METHOD</span><span class="p">,</span> <span class="n">tracker</span><span class="o">=</span><span class="n">tracker</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+<span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+<span class="c1"># print execution time</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Code execution time [sec]:&#39;</span><span class="p">,</span> <span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span>
+
+<span class="c1"># print optimized results</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Optimal energy:&#39;</span><span class="p">,</span> <span class="n">tracker</span><span class="p">[</span><span class="s1">&#39;optimal_energy&#39;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Optimal classical bitstring:&#39;</span><span class="p">,</span> <span class="n">tracker</span><span class="p">[</span><span class="s1">&#39;optimal_bitstring&#39;</span><span class="p">])</span>
+
+<span class="c1">##################################################################################</span>
+<span class="c1"># Compute output and dump to pickle</span>
+<span class="c1">##################################################################################</span>
+
+<span class="k">if</span> <span class="n">store_results</span><span class="p">:</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;p&#39;</span><span class="p">:</span> <span class="n">DEPTH</span><span class="p">,</span> <span class="s1">&#39;N&#39;</span><span class="p">:</span> <span class="n">n_qubits</span><span class="p">,</span>
+           <span class="s1">&#39;ENERGY_OPTIMAL&#39;</span><span class="p">:</span> <span class="n">tracker</span><span class="p">[</span><span class="s1">&#39;optimal_energy&#39;</span><span class="p">],</span> <span class="s1">&#39;BITSTRING&#39;</span><span class="p">:</span> <span class="n">tracker</span><span class="p">[</span><span class="s1">&#39;optimal_bitstring&#39;</span><span class="p">],</span>
+           <span class="s1">&#39;result_energy&#39;</span><span class="p">:</span> <span class="n">result_energy</span><span class="p">,</span> <span class="s1">&#39;result_angle&#39;</span><span class="p">:</span> <span class="n">result_angle</span><span class="p">}</span>
+
+    <span class="c1"># store results: dump output to pickle with timestamp in filename</span>
+    <span class="n">time_now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span> <span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">%H%M%S&#39;</span><span class="p">)</span>
+    <span class="n">results_file</span> <span class="o">=</span> <span class="s1">&#39;results-&#39;</span><span class="o">+</span><span class="n">time_now</span><span class="o">+</span><span class="s1">&#39;.pkl&#39;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Writing results to file: </span><span class="si">{</span><span class="n">results_file</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">results_file</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">))</span>
+    
+    <span class="c1"># you can load results as follows</span>
+    <span class="c1"># out = pickle.load(open(results_file, &quot;rb&quot;))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Circuit depth hyperparameter: 3
+Problem size: 10
+Starting the training.
+====================================================================
+OPTIMIZATION for circuit depth p=3
+Param &quot;verbose&quot; set to False. Will not print intermediate steps.
+====================================================================
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+This program uses OpenQASM language features that may not be supported on QPUs or on-demand simulators.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Optimization terminated successfully.
+         Current function value: -0.528222
+         Iterations: 2
+         Function evaluations: 242
+Final average energy (cost): -0.5282224514612025
+Final angles: [3.80351695 1.4014099  1.39004847 1.16778289 2.18602397 1.93468655]
+Training complete.
+Code execution time [sec]: 37.18410015106201
+Optimal energy: -6.486032631497276
+Optimal classical bitstring: [ 1 -1  1  1 -1  1 -1 -1  1  1]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="postprocessing-and-comparison-of-our-qaoa-results-with-classical-results">
+<h2>POSTPROCESSING AND COMPARISON OF OUR QAOA RESULTS WITH CLASSICAL RESULTS<a class="headerlink" href="#postprocessing-and-comparison-of-our-qaoa-results-with-classical-results" title="Permalink to this heading">#</a></h2>
+<p>In this section we visualize the results we have found with QAOA.
+Specifically, we display the results found for the variational parameters $\beta$ and $\gamma$ for every layer in our QAOA ansatz.
+Moreover, we show the solution to our graph coloring problem with every node colored either red or blue (recall that there are just two colors since we solve a <em>binary</em> optimization problem).
+Finally, we compare these results to results found classically using the open-source <code class="docutils literal notranslate"><span class="pre">pyqubo</span></code> package.
+Ideally, the two results should agree with each other but this is not necessarily the case for several reasons:
+First of all, for the original small toy problem we have set up there are several degenerate classical solutions with the same optimal quality.
+The classical and the QAOA approach may find solutions with different coloring configurations but the same quality (that is energy).
+Secondly, with QAOA we are not guaranteed to find the optimal solutions.
+Specifically, the deeper the circuit, the harder the classical optimization problem, and we may get stuck in a local rather than global optimum.
+One brute-force approach is then to just re-run QAOA with different random initial seeds for the parameters $(\beta, \gamma)$.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># visualize the optimization process</span>
+<span class="n">cycles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">tracker</span><span class="p">[</span><span class="s1">&#39;count&#39;</span><span class="p">])</span>
+<span class="n">optim_classical</span> <span class="o">=</span> <span class="n">tracker</span><span class="p">[</span><span class="s1">&#39;global_energies&#39;</span><span class="p">]</span>
+
+<span class="c1"># print information</span>
+<span class="n">info</span> <span class="o">=</span> <span class="s1">&#39;Optimization on graph with n=</span><span class="si">{}</span><span class="s1"> vertices, m=</span><span class="si">{}</span><span class="s1"> edges, optimized with </span><span class="si">{}</span><span class="s1"> and </span><span class="si">{}</span><span class="s1"> shots per call; seed=</span><span class="si">{}</span><span class="s1">.&#39;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">info</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">OPT_METHOD</span><span class="p">,</span> <span class="n">SHOTS</span><span class="p">,</span> <span class="n">seed</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cycles</span><span class="p">,</span> <span class="n">optim_classical</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;optimization cycle&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;best classical minimum&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Optimization on graph with n=10 vertices, m=20 edges, optimized with Powell and 1000 shots per call; seed=42.
+</pre></div>
+</div>
+<img alt="../../../_images/d36a9d3158fa762a3cf86c518bb95d3d6bd2acaf0ed383396f82078c4d7f031b.png" src="../../../_images/d36a9d3158fa762a3cf86c518bb95d3d6bd2acaf0ed383396f82078c4d7f031b.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># print the optimal energy found with QAOA </span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Optimal energy found with QAOA:&#39;</span><span class="p">,</span> <span class="n">tracker</span><span class="p">[</span><span class="s1">&#39;optimal_energy&#39;</span><span class="p">])</span>
+<span class="c1"># print the corresponding bitstring</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Optimal bit-string found with QAOA:&#39;</span><span class="p">,</span> <span class="n">tracker</span><span class="p">[</span><span class="s1">&#39;optimal_bitstring&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Optimal energy found with QAOA: -6.486032631497276
+Optimal bit-string found with QAOA: [ 1 -1  1  1 -1  1 -1 -1  1  1]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># get results for variational angles</span>
+<span class="n">gamma</span> <span class="o">=</span> <span class="n">result_angle</span><span class="p">[:</span><span class="n">DEPTH</span><span class="p">]</span>
+<span class="n">beta</span> <span class="o">=</span> <span class="n">result_angle</span><span class="p">[</span><span class="n">DEPTH</span><span class="p">:]</span>
+<span class="c1"># get array [1, 2, ..., p]</span>
+<span class="n">pa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">DEPTH</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pa</span><span class="p">,</span> <span class="n">gamma</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="s1">&#39;-o&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;gamma&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pa</span><span class="p">,</span> <span class="n">beta</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="s1">&#39;-s&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;beta&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;circuit depth (layer) p&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;optimal angles [pi]&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">pa</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Variational QAOA angles:&#39;</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper left&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../../_images/6544a9a777315702f3c9f72e108e5776d74cbdc86f23ad293923b2484431cc11.png" src="../../../_images/6544a9a777315702f3c9f72e108e5776d74cbdc86f23ad293923b2484431cc11.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># visualize solution</span>
+<span class="n">colorlist</span> <span class="o">=</span> <span class="n">tracker</span><span class="p">[</span><span class="s1">&#39;optimal_bitstring&#39;</span><span class="p">]</span>
+<span class="n">colorlist</span><span class="p">[</span><span class="n">colorlist</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="c1"># plot_colored_graph(J, N, colorlist, pos)</span>
+<span class="n">plot_colored_graph_simple</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">colorlist</span><span class="p">,</span> <span class="n">pos</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Minimal energy found with QAOA:&#39;</span><span class="p">,</span> <span class="n">tracker</span><span class="p">[</span><span class="s1">&#39;optimal_energy&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Minimal energy found with QAOA: -6.486032631497276
+</pre></div>
+</div>
+<img alt="../../../_images/011c89fa2c75c3869277930520432b1146680d4a6cfd356e1d6653477ae29c24.png" src="../../../_images/011c89fa2c75c3869277930520432b1146680d4a6cfd356e1d6653477ae29c24.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># validate quantum results with classical algorithm</span>
+<span class="n">solution</span><span class="p">,</span> <span class="n">energy_min</span><span class="p">,</span> <span class="n">colors_classical</span> <span class="o">=</span> <span class="n">solve_classical_ising</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">n_qubits</span><span class="p">,</span> <span class="n">pos</span><span class="p">)</span>
+<span class="c1"># plot classical solution</span>
+<span class="n">plot_colored_graph_simple</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">colors_classical</span><span class="p">,</span> <span class="n">pos</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Classical solution: {&#39;s0&#39;: -1, &#39;s1&#39;: 1, &#39;s2&#39;: -1, &#39;s3&#39;: -1, &#39;s4&#39;: 1, &#39;s5&#39;: -1, &#39;s6&#39;: 1, &#39;s7&#39;: 1, &#39;s8&#39;: -1, &#39;s9&#39;: -1}
+Minimal energy found classically: -6.486032631497276
+</pre></div>
+</div>
+<img alt="../../../_images/7a587d5eb7632340044e6a4092460981ea8bd5231b514e5ce0574ce29cadb8e8.png" src="../../../_images/7a587d5eb7632340044e6a4092460981ea8bd5231b514e5ce0574ce29cadb8e8.png" />
+</div>
+</div>
+<p>Note that QAOA may arrive at a different solution than our classical benchmark code.
+First of all, the classical optimization routine may get stuck in a local rather than global optimum.
+To avoid this, more sophisticated optimization strategies may be employed (as proposed for example in Ref.[4]), going beyond the scope of this introductory notebook tutorial.
+Secondly, even if QAOA arrives at the same classical energy as our classical approach, the coloring may differ since the solution space may be degenerate for the specific example shown here (this means, two different classical bitstrings have the same energy).
+At minimum, you may find an inverted coloring (by swapping red and blue colors), because of the underlying $\mathbb{Z}_{2}$ symmetry.</p>
+</section>
+<section id="summary">
+<h2>SUMMARY<a class="headerlink" href="#summary" title="Permalink to this heading">#</a></h2>
+<p>In this notebook we have gone through an end-to-end demo on QAOA and its implementation on Amazon Braket.
+We have built modular core building blocks that may easily adapted to other problems.
+The QAOA routine is tailored towards solving combinatorial optimization problems such as <em>Maximum Cut</em> [4] and arguably one of the most prominent examples of the emerging class of hybrid, variational algorithms and still very much a field of active research today.
+For example, as we increase the circuit depth of QAOA, the classical optimization step becomes increasingly difficult (because of the curse of dimensionality as well known in classical machine learning) and may easily get stuck in local sub-optimal solutions.
+To address this issue some heuristics have already been developed, for example in Ref.[4], but further improvements will arguably be necessary to fully unlock the potential of this approach.</p>
+</section>
+<hr class="docutils" />
+<section id="references">
+<h2>REFERENCES<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h2>
+<p>[1] E. Farhi, J. Goldstone, and S. Gutmann, “A Quantum Approximate Optimization Algorithm”, arXiv: 1411.4028 (2014).</p>
+<p>[2] Y. Cao, J. Romero, J. P. Olson, M. Degroote, P. D. Johnson, M. Kieferova, I. D. Kivlichan, T. Menke, B. Peropadre, N. P. Sawaya, et al., “Quantum Chemistry in the Age of Quantum Computing”, Chemical reviews 119, 10856 (2019).</p>
+<p>[3] A. Smith, M. Kim, F. Pollmann, and J. Knolle, “Simulating quantum many-body dynamics on a current digital quantum computer”, npj Quantum Information 5, 1 (2019).</p>
+<p>[4] L. Zhou, S.-T. Wang, S. Choi, H. Pichler, and M. D. Lukin, “Quantum Approximate Optimization Algorithm: Performance, Mechanism,and Implementation on Near-Term Devices”, arXiv: 1812.01041 (2018).</p>
+<p>[5] F. Glover, G. Kochenberger, “A Tutorial on Formulating and Using QUBO Models”, arXiv:1811.11538 (2018).</p>
+<p>[6] P. Vikstal, M. Groenkvist, M. Svensson, M. Andersson, G. Johansson, and G. Ferrini, “Applying the Quantum Approximate Optimization Algorithm to the Tail Assignment Problem”, arXiv:1912.10499 (2019).</p>
+<p>[7] L. Li, M. Fan, M. Coram, P. Riley, and S. Leichenauer, “Quantum optimization with a novel gibbs objective function and ansatz architecture search”, arXiv:1909.07621 (2019).</p>
+</section>
+<hr class="docutils" />
+<section id="appendix">
+<h2>APPENDIX<a class="headerlink" href="#appendix" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check SDK version</span>
+<span class="o">!</span>pip show amazon-braket-sdk <span class="p">|</span> grep Version
+<span class="o">!</span>pip show amazon-braket-default-simulator <span class="p">|</span> grep Version
+<span class="c1"># !pip list --outdated --format=freeze | grep -v &#39;^\-e&#39; | cut -d = -f 1  | xargs -n1 pip install -U</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Version: 1.33.2.dev0
+Version: 1.10.1.dev0
+</pre></div>
+</div>
+</div>
+</div>
+<section id="appendix-example-for-ising-matrix-syntax">
+<h3>APPENDIX: Example for Ising Matrix Syntax<a class="headerlink" href="#appendix-example-for-ising-matrix-syntax" title="Permalink to this heading">#</a></h3>
+<p>In this appendix we provide a small code example to showcase how we obtain all edges with corresponding weights.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># example Ising matrix with edges between qubit 0 and qubit 1 (weight=1) and qubit 1 and qubit 2 (weight=3)</span>
+<span class="n">ising</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Ising matrix:</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">ising</span><span class="p">)</span>
+
+<span class="c1"># get all non-zero entries (edges) from Ising matrix </span>
+<span class="n">idx</span> <span class="o">=</span> <span class="n">ising</span><span class="o">.</span><span class="n">nonzero</span><span class="p">()</span>
+<span class="n">edges</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">idx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">idx</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Edges:&#39;</span><span class="p">,</span> <span class="n">edges</span><span class="p">)</span>
+
+<span class="c1"># for every edge print interaction strength</span>
+<span class="k">for</span> <span class="n">qubit_pair</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">:</span>
+    <span class="c1"># get interaction strength</span>
+    <span class="n">int_strength</span> <span class="o">=</span> <span class="n">ising</span><span class="p">[</span><span class="n">qubit_pair</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">qubit_pair</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Interaction strength:&#39;</span><span class="p">,</span> <span class="n">int_strength</span><span class="p">)</span>
+
+<span class="c1"># get all non-zero entries from Ising, with proper order</span>
+<span class="n">interactions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">ising</span><span class="p">[</span><span class="n">q</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">q</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;All interactions:&#39;</span><span class="p">,</span> <span class="n">interactions</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Ising matrix:
+ [[0 1 0]
+ [0 0 3]
+ [0 0 0]]
+Edges: [(0, 1), (1, 2)]
+Interaction strength: 1
+Interaction strength: 3
+All interactions: [1 3]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Task Summary&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">quantum_tasks_statistics</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Estimated cost to run this example with SV1: </span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="n">qpu_tasks_cost</span><span class="p">()</span> <span class="o">+</span> <span class="n">t</span><span class="o">.</span><span class="n">simulator_tasks_cost</span><span class="p">()</span><span class="si">}</span><span class="s2"> USD&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Task Summary
+{}
+Estimated cost to run this example with SV1: 0 USD
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">QUANTUM APPROXIMATE OPTIMIZATION ALGORITHM (QAOA)</a><ul>
+<li><a class="reference internal" href="#background-hybrid-quantum-algorithms">BACKGROUND: HYBRID QUANTUM ALGORITHMS</a></li>
+<li><a class="reference internal" href="#background-quadratic-binary-optimization-problems">BACKGROUND: QUADRATIC BINARY OPTIMIZATION PROBLEMS</a></li>
+<li><a class="reference internal" href="#background-the-quantum-approximate-optimization-algorithm">BACKGROUND: THE QUANTUM APPROXIMATE OPTIMIZATION ALGORITHM</a></li>
+<li><a class="reference internal" href="#imports-and-setup">IMPORTS and SETUP</a></li>
+<li><a class="reference internal" href="#problem-setup">PROBLEM SETUP</a></li>
+<li><a class="reference internal" href="#implementation-of-qaoa-with-braket">IMPLEMENTATION OF QAOA WITH BRAKET</a></li>
+<li><a class="reference internal" href="#visualization-of-the-qaoa-ansatz">VISUALIZATION OF THE QAOA ANSATZ</a></li>
+<li><a class="reference internal" href="#qaoa-simulation-on-local-schroedinger-simulator">QAOA SIMULATION ON LOCAL SCHROEDINGER SIMULATOR</a></li>
+<li><a class="reference internal" href="#postprocessing-and-comparison-of-our-qaoa-results-with-classical-results">POSTPROCESSING AND COMPARISON OF OUR QAOA RESULTS WITH CLASSICAL RESULTS</a></li>
+<li><a class="reference internal" href="#summary">SUMMARY</a></li>
+<li><a class="reference internal" href="#references">REFERENCES</a></li>
+<li><a class="reference internal" href="#appendix">APPENDIX</a><ul>
+<li><a class="reference internal" href="#appendix-example-for-ising-matrix-syntax">APPENDIX: Example for Ising Matrix Syntax</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/scripts/furo.js"></script>
+    </body>
+</html>

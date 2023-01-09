@@ -1,0 +1,600 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
+
+    <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
+        <title>Getting started with Amazon Braket Hybrid Jobs - Amazon Braket Examples documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../../index.html"><div class="brand">Amazon Braket Examples  documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
+  
+  
+  <span class="sidebar-brand-text">Amazon Braket Examples  documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="getting-started-with-amazon-braket-hybrid-jobs">
+<h1>Getting started with Amazon Braket Hybrid Jobs<a class="headerlink" href="#getting-started-with-amazon-braket-hybrid-jobs" title="Permalink to this heading">#</a></h1>
+<p>This tutorial shows how to run your first Amazon Braket Hybrid Job. To get started, we consider small circuits with only one qubit and one gate.</p>
+<section id="learning-outcomes">
+<h2>Learning outcomes<a class="headerlink" href="#learning-outcomes" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Get setup to run your first job</p></li>
+<li><p>Write an algorithm script to run on Braket Jobs</p></li>
+<li><p>Understand how to run scripts or functions</p></li>
+<li><p>Create a job on Braket simulators or QPUs</p></li>
+<li><p>Monitoring the job state</p></li>
+<li><p>Save results from a job</p></li>
+<li><p>Using a specific AWS session</p></li>
+<li><p>Running jobs with priority on QPUs</p></li>
+<li><p>Use local jobs to quickly test and debug scripts</p></li>
+<li><p>Create a Braket Job using the Braket console</p></li>
+</ul>
+</section>
+<section id="getting-setup-to-run-braket-jobs">
+<h2>Getting setup to run Braket Jobs<a class="headerlink" href="#getting-setup-to-run-braket-jobs" title="Permalink to this heading">#</a></h2>
+<p>When you use Amazon Braket Hybrid Jobs for the first time, you need to create an IAM role with the right <a class="reference external" href="https://docs.aws.amazon.com/braket/latest/developerguide/braket-manage-access.html#about-amazonbraketjobsexecution">permissions</a>. This role allows your job to perform actions on your behalf while it is executing your algorithm, for instance, access S3 to return the results of your job. To create the role or check if you already have one please visit the Permissions tab from the left menu of the Braket Console.</p>
+</section>
+<section id="writing-an-algorithm-script">
+<h2>Writing an algorithm script<a class="headerlink" href="#writing-an-algorithm-script" title="Permalink to this heading">#</a></h2>
+<p>To create a Braket Job, you first need a Python script to run. In this example, it’s contained in <code class="docutils literal notranslate"><span class="pre">algorithm_script.py</span></code>. The script is printed in the code cell below for convenience.</p>
+<p>As shown, each of the circuits has only one $X$ rotation gate with a random angle. The circuit is repeated five times with different random rotations. Note that the algorithm script does not specify the backend Amazon Braket device ARN explicitly. Instead, it is provided through environment variables such as <code class="docutils literal notranslate"><span class="pre">os.environ[&quot;AMZN_BRAKET_DEVICE_ARN&quot;]</span></code> that are passed to the algorithm script when creating the job.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">script</span> echo &quot;This block is a copy of the algorithm script.&quot;
+
+import os
+import numpy as np
+
+from braket.aws import AwsDevice
+from braket.circuits import Circuit
+from braket.jobs import save_job_result
+from braket.tracking import Tracker
+
+t = Tracker().start()
+
+print(&quot;Test job started!&quot;)
+
+# Use the device declared in the creation script
+device = AwsDevice(os.environ[&quot;AMZN_BRAKET_DEVICE_ARN&quot;])
+
+counts_list = []
+angle_list = []
+for _ in range(5):
+    angle = np.pi * np.random.randn()
+    random_circuit = Circuit().rx(0, angle)
+
+    task = device.run(random_circuit, shots=100)
+    counts = task.result().measurement_counts
+
+    angle_list.append(angle)
+    counts_list.append(counts)
+    print(counts)
+
+# Save the variables of interest so that we can access later
+save_job_result({&quot;counts&quot;: counts_list, &quot;angle&quot;: angle_list, &quot;estimated cost&quot;: t.qpu_tasks_cost() + t.simulator_tasks_cost()})
+
+print(&quot;Test job completed!&quot;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>This block is a copy of the algorithm script.
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="creating-your-first-job">
+<h2>Creating your first job<a class="headerlink" href="#creating-your-first-job" title="Permalink to this heading">#</a></h2>
+<p>Once the script is finalized, you can create a Braket Job with <code class="docutils literal notranslate"><span class="pre">AwsQuantumJob</span></code>. When the job is created, Amazon Braket starts the job instance (based on EC2) and spins up a Docker container to run your algorithm script. Other configurations can be specified via keyword arguments. See the <a class="reference external" href="https://docs.aws.amazon.com/braket/latest/developerguide/what-is-braket.html">developer guide</a> and other example notebooks to learn more about how to customize your jobs</p>
+<p>This example uses the following inputs for <code class="docutils literal notranslate"><span class="pre">AwsQuantumJob</span></code>:</p>
+<ul class="simple">
+<li><p><b>device</b>: The ARN of the Braket simulator or QPU to use in the job. It will be passed as an environment variable to the algorithm script.</p></li>
+<li><p><b>source_module</b>: The path to a file or a Python module that contains your algorithm script. It will be uploaded to the container for running the Braket Job.</p></li>
+<li><p><b>wait_until_complete (optional)</b>: If True, the function call will wait until the Braket Job is completed and will additionally print logs to the local console. Otherwise, it will run asynchronously. The default is False.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">braket.aws</span> <span class="kn">import</span> <span class="n">AwsQuantumJob</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># This cell should take about 5 mins</span>
+<span class="n">job</span> <span class="o">=</span> <span class="n">AwsQuantumJob</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">device</span><span class="o">=</span><span class="s2">&quot;arn:aws:braket:::device/quantum-simulator/amazon/sv1&quot;</span><span class="p">,</span>
+    <span class="n">source_module</span><span class="o">=</span><span class="s2">&quot;algorithm_script.py&quot;</span><span class="p">,</span>
+    <span class="n">wait_until_complete</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initializing Braket Job: arn:aws:braket:&lt;region&gt;:&lt;account-id&gt;:job/&lt;job-name&gt;
+...............................................
+<span class=" -Color -Color-Blue">2021-11-10 20:55:24,467 sagemaker-training-toolkit INFO     Invoking user script</span>
+<span class=" -Color -Color-Blue">Training Env:</span>
+<span class=" -Color -Color-Blue">{</span>
+<span class=" -Color -Color-Blue">    &quot;additional_framework_parameters&quot;: {},</span>
+<span class=" -Color -Color-Blue">    &quot;channel_input_dirs&quot;: {},</span>
+<span class=" -Color -Color-Blue">    &quot;current_host&quot;: &quot;algo-1&quot;,</span>
+<span class=" -Color -Color-Blue">    &quot;framework_module&quot;: null,</span>
+<span class=" -Color -Color-Blue">    &quot;hosts&quot;: [</span>
+<span class=" -Color -Color-Blue">        &quot;algo-1&quot;</span>
+<span class=" -Color -Color-Blue">    ],</span>
+<span class=" -Color -Color-Blue">    &quot;hyperparameters&quot;: {},</span>
+<span class=" -Color -Color-Blue">    &quot;input_config_dir&quot;: &quot;/opt/ml/input/config&quot;,</span>
+<span class=" -Color -Color-Blue">    &quot;input_data_config&quot;: {},</span>
+<span class=" -Color -Color-Blue">    &quot;input_dir&quot;: &quot;/opt/ml/input&quot;,</span>
+<span class=" -Color -Color-Blue">    &quot;is_master&quot;: true,</span>
+<span class=" -Color -Color-Blue">    &quot;job_name&quot;: &quot;BraketJob-&lt;account-id&gt;-&lt;job-name&gt;&quot;,</span>
+<span class=" -Color -Color-Blue">    &quot;log_level&quot;: 20,</span>
+<span class=" -Color -Color-Blue">    &quot;master_hostname&quot;: &quot;algo-1&quot;,</span>
+<span class=" -Color -Color-Blue">    &quot;model_dir&quot;: &quot;/opt/ml/model&quot;,</span>
+<span class=" -Color -Color-Blue">    &quot;module_dir&quot;: &quot;/opt/ml/code&quot;,</span>
+<span class=" -Color -Color-Blue">    &quot;module_name&quot;: &quot;braket_container&quot;,</span>
+<span class=" -Color -Color-Blue">    &quot;network_interface_name&quot;: &quot;eth0&quot;,</span>
+<span class=" -Color -Color-Blue">    &quot;num_cpus&quot;: 2,</span>
+<span class=" -Color -Color-Blue">    &quot;num_gpus&quot;: 0,</span>
+<span class=" -Color -Color-Blue">    &quot;output_data_dir&quot;: &quot;/opt/ml/output/data&quot;,</span>
+<span class=" -Color -Color-Blue">    &quot;output_dir&quot;: &quot;/opt/ml/output&quot;,</span>
+<span class=" -Color -Color-Blue">    &quot;output_intermediate_dir&quot;: &quot;/opt/ml/output/intermediate&quot;,</span>
+<span class=" -Color -Color-Blue">    &quot;resource_config&quot;: {</span>
+<span class=" -Color -Color-Blue">        &quot;current_host&quot;: &quot;algo-1&quot;,</span>
+<span class=" -Color -Color-Blue">        &quot;hosts&quot;: [</span>
+<span class=" -Color -Color-Blue">            &quot;algo-1&quot;</span>
+<span class=" -Color -Color-Blue">        ],</span>
+<span class=" -Color -Color-Blue">        &quot;network_interface_name&quot;: &quot;eth0&quot;</span>
+<span class=" -Color -Color-Blue">    },</span>
+<span class=" -Color -Color-Blue">    &quot;user_entry_point&quot;: &quot;braket_container.py&quot;</span>
+...............................................
+...............................................
+<span class=" -Color -Color-Blue">Running Code As Subprocess</span>
+<span class=" -Color -Color-Blue">Test job started!!!!!</span>
+<span class=" -Color -Color-Blue">Counter({&#39;0&#39;: 88, &#39;1&#39;: 12})</span>
+<span class=" -Color -Color-Blue">Counter({&#39;1&#39;: 58, &#39;0&#39;: 42})</span>
+<span class=" -Color -Color-Blue">Counter({&#39;1&#39;: 54, &#39;0&#39;: 46})</span>
+<span class=" -Color -Color-Blue">Counter({&#39;0&#39;: 100})</span>
+<span class=" -Color -Color-Blue">Counter({&#39;0&#39;: 100})</span>
+<span class=" -Color -Color-Blue">Test job completed!!!!!</span>
+<span class=" -Color -Color-Blue">Code Run Finished</span>
+<span class=" -Color -Color-Blue">2021-11-10 20:55:58,953 sagemaker-training-toolkit INFO     Reporting training SUCCESS</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>In this example, the algorithm is defined by a single file, so the <code class="docutils literal notranslate"><span class="pre">source_module</span></code> is <code class="docutils literal notranslate"><span class="pre">algorithm_script.py</span></code>. Depending on your application, there are other options for setting the source module. For example, if you wish to only execute a part of <code class="docutils literal notranslate"><span class="pre">algorithm_script.py</span></code> at the start of a Braket Job, you can package that part to be a <code class="docutils literal notranslate"><span class="pre">starting_function()</span></code>. Then assign the function as the entry point by adding the <code class="docutils literal notranslate"><span class="pre">entry_point</span></code> input argument.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">source_module</span> <span class="o">=</span> <span class="s2">&quot;algorithm_script.py&quot;</span>
+<span class="n">entry_point</span> <span class="o">=</span> <span class="s2">&quot;algorithm_script:starting_function&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>If your algorithm script requires other dependencies, you can put them all in one folder, say the <code class="docutils literal notranslate"><span class="pre">algorithm_folder</span></code>. The input arguments would then be</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">source_module</span> <span class="o">=</span> <span class="s2">&quot;algorithm_folder&quot;</span>
+<span class="n">entry_point</span> <span class="o">=</span> <span class="s2">&quot;algorithm_folder.algorithm_script:starting_function&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="checking-job-state-and-loading-results">
+<h2>Checking job state and loading results<a class="headerlink" href="#checking-job-state-and-loading-results" title="Permalink to this heading">#</a></h2>
+<p>The status of a Braket Job can be checked by calling <code class="docutils literal notranslate"><span class="pre">job.state()</span></code>. The state will be one of “QUEUED”, “RUNNING”, “FAILED”, “COMPLETED”, “CANCELLING”, or “CANCELLED”.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">job</span><span class="o">.</span><span class="n">state</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;COMPLETED&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<p>Once completed, the result can be retrieved using <code class="docutils literal notranslate"><span class="pre">job.result()</span></code>. Logs and metadata are also accessible via <code class="docutils literal notranslate"><span class="pre">job.logs()</span></code> and <code class="docutils literal notranslate"><span class="pre">job.metadata()</span></code>. If you lose the reference to the job object, you can always reinstantiate it using your job ARN as <code class="docutils literal notranslate"><span class="pre">job=AwsQuantumJob(&quot;your-job-arn&quot;)</span></code>. The ARN of a job can be found in the Amazon Braket Console. By default the ARN of a job will be “<code class="docutils literal notranslate"><span class="pre">arn:aws:braket:&lt;region&gt;:&lt;account_id&gt;:job/&lt;job_name&gt;</span></code>”.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">results</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>  <span class="c1"># will return once job.state() = &quot;COMPLETED&quot;, should be 6 minutes</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;counts: &quot;</span><span class="p">,</span> <span class="n">results</span><span class="p">[</span><span class="s2">&quot;counts&quot;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;angles: &quot;</span><span class="p">,</span> <span class="n">results</span><span class="p">[</span><span class="s2">&quot;angles&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>counts:  [{&#39;1&#39;: 12, &#39;0&#39;: 88}, {&#39;0&#39;: 42, &#39;1&#39;: 58}, {&#39;0&#39;: 46, &#39;1&#39;: 54}, {&#39;0&#39;: 100}, {&#39;0&#39;: 100}]
+angles:  [-0.6634809825751307, 1.8729107298836103, -1.8816578492668359, -0.04308463076559567, 0.03224990551866221]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># print(job.logs()) # uncomment to print logs</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>You can also download the result to a local directory.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">job</span><span class="o">.</span><span class="n">download_result</span><span class="p">()</span>  <span class="c1"># download job result to local directory</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Task Summary&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">job</span><span class="o">.</span><span class="n">result</span><span class="p">()[</span><span class="s1">&#39;task summary&#39;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Note: Charges shown are estimates based on your Amazon Braket simulator and quantum processing unit (QPU) task usage. Estimated charges shown may differ from your actual charges. Estimated charges do not factor in any discounts or credits, and you may experience additional charges based on your use of other services such as Amazon Elastic Compute Cloud (Amazon EC2).&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Estimated cost to run tasks in this job: </span><span class="si">{</span><span class="n">job</span><span class="o">.</span><span class="n">result</span><span class="p">()[</span><span class="s1">&#39;estimated cost&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> USD&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Task Summary
+{&#39;arn:aws:braket:::device/quantum-simulator/amazon/sv1&#39;: {&#39;shots&#39;: 500, &#39;tasks&#39;: {&#39;COMPLETED&#39;: 5}, &#39;execution_duration&#39;: 0.081, &#39;billed_execution_duration&#39;: 15.0}}
+Note: Charges shown are estimates based on your Amazon Braket simulator and quantum processing unit (QPU) task usage. Estimated charges shown may differ from your actual charges. Estimated charges do not factor in any discounts or credits, and you may experience additional charges based on your use of other services such as Amazon Elastic Compute Cloud (Amazon EC2).
+Estimated cost to run tasks in this job: 0.01875 USD
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="running-jobs-with-priority-on-qpus">
+<h2>Running jobs with priority on QPUs<a class="headerlink" href="#running-jobs-with-priority-on-qpus" title="Permalink to this heading">#</a></h2>
+<p>With Braket Jobs, you can run hybrid algorithms on all QPUs available through Amazon Braket. When you select a QPU as your device, your job will have priority access for the duration of your job. Quantum tasks created as part of your job will be executed ahead of other tasks in the device queue. This reduces the risk of certain tasks being delayed or drifting calibrations on the device.</p>
+<p>You can seamlessly swap the SV1 simulator for a QPU by changing the device argument in <code class="docutils literal notranslate"><span class="pre">AwsQuantumJob.create()</span></code>. For instance, the code below will create a job with priority access on the Rigetti Aspen-M-2 device:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">qpu_job</span> <span class="o">=</span> <span class="n">AwsQuantumJob</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">device</span><span class="o">=</span><span class="s2">&quot;arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-2&quot;</span><span class="p">,</span>
+    <span class="n">source_module</span><span class="o">=</span><span class="s2">&quot;algorithm_script.py&quot;</span><span class="p">,</span>
+    <span class="n">wait_until_complete</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>When you create the job, Amazon Braket will wait for the QPU to become available before initializing the job. Note that the Braket Job will automatically select the AWS region where the device is available. As mentioned earlier, the specified device is provided to the job in the environment variable <code class="docutils literal notranslate"><span class="pre">AMZN_BRAKET_DEVICE_ARN</span></code>; the script <code class="docutils literal notranslate"><span class="pre">algorithm_script.py</span></code> uses this variable to choose the Braket device to use.</p>
+</section>
+<section id="aws-sessions">
+<h2>AWS Sessions<a class="headerlink" href="#aws-sessions" title="Permalink to this heading">#</a></h2>
+<p>You can customize the default location where Braket Jobs saves and loads results in Amazon S3 by providing the AWS session information. The name of the S3 bucket needs to start with “amazon-braket-”, and it must be in the same region as the job being created.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">braket.aws</span> <span class="kn">import</span> <span class="n">AwsSession</span>
+
+<span class="c1"># Set Amazon S3 bucket</span>
+<span class="n">aws_session</span> <span class="o">=</span> <span class="n">AwsSession</span><span class="p">(</span><span class="n">default_bucket</span><span class="o">=</span><span class="s2">&quot;amazon-braket-bucket-name&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>To create a Braket Job with this S3 bucket, pass <code class="docutils literal notranslate"><span class="pre">aws_session</span></code> as an argument to <code class="docutils literal notranslate"> <span class="pre">AwsQuantumJob.create()</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">job</span> <span class="o">=</span> <span class="n">AwsQuantumJob</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">device</span><span class="o">=</span><span class="s2">&quot;arn:aws:braket:::device/quantum-simulator/amazon/sv1&quot;</span><span class="p">,</span>
+    <span class="n">source_module</span><span class="o">=</span><span class="s2">&quot;algorithm_script.py&quot;</span><span class="p">,</span>
+    <span class="n">aws_session</span><span class="o">=</span><span class="n">aws_session</span> <span class="c1"># using specific S3 bucket</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="debugging-with-local-braket-jobs">
+<h2>Debugging with local Braket Jobs<a class="headerlink" href="#debugging-with-local-braket-jobs" title="Permalink to this heading">#</a></h2>
+<p>For faster testing and debugging of your code, you can run a job locally in your own environment. This feature requires Docker to be installed in your local environment. Amazon Braket notebooks have Docker pre-installed, so you can test local jobs in hosted notebooks instantly. To install Docker in your local environment, follow these <a class="reference external" href="https://docs.docker.com/get-docker/">instructions</a>. When a local job is created for the first time, it will take longer because it needs to build the container. The subsequent runs will be faster. Note that local jobs will not be visible in the Amazon Braket Console.</p>
+<p>To run a job in local mode, make sure the Docker daemon is running, and then simply create a <code class="docutils literal notranslate"><span class="pre">LocalQuantumJob</span></code> instead of an <code class="docutils literal notranslate"><span class="pre">AwsQuantumJob</span></code>. Local jobs always run synchronously and display the logs.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">braket.jobs.local.local_job</span> <span class="kn">import</span> <span class="n">LocalQuantumJob</span>
+
+<span class="c1"># This cell should take about 2 min</span>
+<span class="n">job</span> <span class="o">=</span> <span class="n">LocalQuantumJob</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">device</span><span class="o">=</span><span class="s2">&quot;arn:aws:braket:::device/quantum-simulator/amazon/sv1&quot;</span><span class="p">,</span>
+    <span class="n">source_module</span><span class="o">=</span><span class="s2">&quot;algorithm_script.py&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Using the short-lived AWS credentials found in session. They might expire while running.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Boto3 Version:  1.18.33
+Beginning Setup
+Completed 50.5 KiB/50.5 KiB (72.5 KiB/s) with 1 file(s) remaining
+...............................................
+...............................................
+Running Code As Subprocess
+Test job started!!!!!
+Counter({&#39;0&#39;: 79, &#39;1&#39;: 21})
+Counter({&#39;0&#39;: 84, &#39;1&#39;: 16})
+Counter({&#39;0&#39;: 91, &#39;1&#39;: 9})
+Counter({&#39;0&#39;: 85, &#39;1&#39;: 15})
+Counter({&#39;1&#39;: 94, &#39;0&#39;: 6})
+Test job completed!!!!!
+Code Run Finished
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Task Summary&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">job</span><span class="o">.</span><span class="n">result</span><span class="p">()[</span><span class="s1">&#39;task summary&#39;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Note: Charges shown are estimates based on your Amazon Braket simulator and quantum processing unit (QPU) task usage. Estimated charges shown may differ from your actual charges. Estimated charges do not factor in any discounts or credits, and you may experience additional charges based on your use of other services such as Amazon Elastic Compute Cloud (Amazon EC2).&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Estimated cost to run tasks in this job: </span><span class="si">{</span><span class="n">job</span><span class="o">.</span><span class="n">result</span><span class="p">()[</span><span class="s1">&#39;estimated cost&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> USD&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Task Summary
+{&#39;arn:aws:braket:::device/quantum-simulator/amazon/sv1&#39;: {&#39;shots&#39;: 500, &#39;tasks&#39;: {&#39;COMPLETED&#39;: 5}, &#39;execution_duration&#39;: 0.046, &#39;billed_execution_duration&#39;: 15.0}}
+Note: Charges shown are estimates based on your Amazon Braket simulator and quantum processing unit (QPU) task usage. Estimated charges shown may differ from your actual charges. Estimated charges do not factor in any discounts or credits, and you may experience additional charges based on your use of other services such as Amazon Elastic Compute Cloud (Amazon EC2).
+Estimated cost to run tasks in this job: 0.01875 USD
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="creating-a-braket-job-from-the-braket-console">
+<h2>Creating a Braket Job from the Braket console<a class="headerlink" href="#creating-a-braket-job-from-the-braket-console" title="Permalink to this heading">#</a></h2>
+<p>Besides creating a Braket Job programmatically using <code class="docutils literal notranslate"><span class="pre">AwsQuantumJob.create</span></code>, there is also an option to create a job in the Braket console. Follow <a class="reference external" href="https://us-west-2.console.aws.amazon.com/braket/home#/job/create">this link</a> to the “Create job” page. First, we need to give our new job a unique name. By default, Amazon Braket leverages the AmazonBraketJobsExecutionRole for your job to ensure all the necessary permissions to AWS resources exist during execution. The default S3 folder, where all inputs and outputs for your job are saved, follows the convention <code class="docutils literal notranslate"><span class="pre">amazon-braket-&lt;region&gt;-&lt;account</span> <span class="pre">number&gt;/jobs/&lt;job-name&gt;</span></code>. Amazon Braket will create the S3 bucket and folder on your behalf if it doesn’t exist. You have the option to customize these defaults in the “Advanced settings” tab.</p>
+<div align="center"><img src="console_figures/1-create.png"/></div><p>Next, select the algorithm script for the job. The script can be uploaded directly in the console as a single file. If there are many files, such as helper functions or other dependencies that go with the algorithm script, you have the option to upload the files to a S3 bucket and provide the S3 folder.</p>
+<div align="center"><img src="console_figures/2-algorithm.png"/></div><p>Third, select a container environment for your job. The “Base” container is enough for the example in this notebook. For information about using other pre-built or custom containers, see the Pennylane and the BYOC example notebooks.</p>
+<div align="center"><img src="console_figures/3-container.png"/></div><p>You must also select a Braket on-demand simulator or QPU for your job and configure the execution settings. Finally, there are optional hyperparameter and data inputs, as well as the possibility to customize the default locations for checkpoints and output data. We will dive deeper into these advanced use cases in other example notebooks. After finishing all the settings, you can create the job by clicking the “Create job” button. We can now view the progress in the Braket console.</p>
+<div align="center"><img src="console_figures/4-execution.png"/></div></section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Permalink to this heading">#</a></h2>
+<p>In this tutorial, we have created our first Braket Job with a simple batch of five circuits using the Amazon Braket SDK and, as an alternative, from the Braket console. We learned how to change the Amazon S3 folder and the AWS region for a job, and how to save results. We learned how to seamlessly change the device to run on simulators or QPUs. We used local mode to quickly test code. Finally, we created the same job using the Braket console.</p>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Getting started with Amazon Braket Hybrid Jobs</a><ul>
+<li><a class="reference internal" href="#learning-outcomes">Learning outcomes</a></li>
+<li><a class="reference internal" href="#getting-setup-to-run-braket-jobs">Getting setup to run Braket Jobs</a></li>
+<li><a class="reference internal" href="#writing-an-algorithm-script">Writing an algorithm script</a></li>
+<li><a class="reference internal" href="#creating-your-first-job">Creating your first job</a></li>
+<li><a class="reference internal" href="#checking-job-state-and-loading-results">Checking job state and loading results</a></li>
+<li><a class="reference internal" href="#running-jobs-with-priority-on-qpus">Running jobs with priority on QPUs</a></li>
+<li><a class="reference internal" href="#aws-sessions">AWS Sessions</a></li>
+<li><a class="reference internal" href="#debugging-with-local-braket-jobs">Debugging with local Braket Jobs</a></li>
+<li><a class="reference internal" href="#creating-a-braket-job-from-the-braket-console">Creating a Braket Job from the Braket console</a></li>
+<li><a class="reference internal" href="#summary">Summary</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/scripts/furo.js"></script>
+    </body>
+</html>

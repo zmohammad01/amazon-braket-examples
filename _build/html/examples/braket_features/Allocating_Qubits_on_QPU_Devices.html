@@ -1,0 +1,577 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
+
+    <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
+        <title>Allocating Qubits on QPU Devices - Amazon Braket Examples documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">Amazon Braket Examples  documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  
+  
+  <span class="sidebar-brand-text">Amazon Braket Examples  documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="allocating-qubits-on-qpu-devices">
+<h1>Allocating Qubits on QPU Devices<a class="headerlink" href="#allocating-qubits-on-qpu-devices" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use Braket SDK Cost Tracking to estimate the cost to run this example</span>
+<span class="kn">from</span> <span class="nn">braket.tracking</span> <span class="kn">import</span> <span class="n">Tracker</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">Tracker</span><span class="p">()</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>This notebook demonstrates how you can specify explicitly which qubits to use when you run a quantum circuit on QPU devices from Rigetti.</p>
+<p>When you submit a circuit for execution on a QPU, Amazon Braket performs a series of compilation steps: it maps the <em>abstract qubits</em> in your circuit to <em>physical qubits</em> in the device; it synthesizes gates into the native gate set of the device; it optimizes the circuit to reduce the number of gates; and finally, it translates the gates into executable pulses.</p>
+<p>This section shows how the first step, called qubit allocation, works for the Rigetti Aspen-M-2 device.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># general imports</span>
+<span class="kn">from</span> <span class="nn">braket.aws</span> <span class="kn">import</span> <span class="n">AwsDevice</span>
+<span class="kn">from</span> <span class="nn">braket.circuits</span> <span class="kn">import</span> <span class="n">Circuit</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">random</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="automatic-qubit-allocation">
+<h2>Automatic qubit allocation<a class="headerlink" href="#automatic-qubit-allocation" title="Permalink to this heading">#</a></h2>
+<p>Qubit allocation for Rigetti devices on Amazon Braket utilizes <a class="reference external" href="https://pyquil-docs.rigetti.com/en/latest/compiler.html#the-quil-compiler">the Quil Compilers</a>’s <em>rewiring</em> strategies. By default, when you submit a circuit on Amazon Braket to a Rigetti device, the circuit is rewired according to the <a class="reference external" href="https://pyquil-docs.rigetti.com/en/latest/compiler.html#partial">PARTIAL</a> rewiring strategy. Specifically, the compiler starts with an empty mapping from logical to physical qubits. Taking into account the latest calibration data of the device, the compiler fills in the mapping with the goal, sequentially, to maximize the overall fidelity of the circuit.</p>
+<p>The example that follows shows how to create a GHZ state on qubits that are not physically connected. After the task is completed, you can obtain a list of the actual gates executed on the device, by viewing the result metadata.</p>
+<p>First, instantiate the Rigetti Aspen-M-2 device and retrieve its connectivity graph, which shows the qubits that are directly connected on the chip.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">device</span> <span class="o">=</span> <span class="n">AwsDevice</span><span class="p">(</span><span class="s2">&quot;arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-2&quot;</span><span class="p">)</span>
+
+<span class="n">connectivity_graph</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">paradigm</span><span class="o">.</span><span class="n">connectivity</span><span class="o">.</span><span class="n">connectivityGraph</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;the connectivity of </span><span class="si">{</span><span class="n">device</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> is: </span><span class="si">{</span><span class="n">connectivity_graph</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>the connectivity of Aspen-M-2 is: {&#39;0&#39;: [&#39;1&#39;, &#39;7&#39;], &#39;1&#39;: [&#39;0&#39;, &#39;16&#39;, &#39;2&#39;], &#39;10&#39;: [&#39;11&#39;, &#39;113&#39;, &#39;17&#39;], &#39;100&#39;: [&#39;101&#39;, &#39;107&#39;], &#39;101&#39;: [&#39;100&#39;, &#39;102&#39;, &#39;116&#39;], &#39;102&#39;: [&#39;101&#39;, &#39;103&#39;, &#39;115&#39;], &#39;103&#39;: [&#39;102&#39;, &#39;104&#39;], &#39;104&#39;: [&#39;103&#39;, &#39;105&#39;, &#39;7&#39;], &#39;105&#39;: [&#39;104&#39;, &#39;106&#39;], &#39;106&#39;: [&#39;105&#39;, &#39;107&#39;], &#39;107&#39;: [&#39;100&#39;, &#39;106&#39;], &#39;11&#39;: [&#39;10&#39;, &#39;12&#39;, &#39;26&#39;], &#39;110&#39;: [&#39;111&#39;, &#39;117&#39;], &#39;111&#39;: [&#39;110&#39;, &#39;112&#39;, &#39;126&#39;], &#39;112&#39;: [&#39;111&#39;, &#39;113&#39;], &#39;113&#39;: [&#39;10&#39;, &#39;112&#39;, &#39;114&#39;], &#39;114&#39;: [&#39;113&#39;, &#39;115&#39;, &#39;17&#39;], &#39;115&#39;: [&#39;102&#39;, &#39;114&#39;, &#39;116&#39;], &#39;116&#39;: [&#39;101&#39;, &#39;115&#39;, &#39;117&#39;], &#39;117&#39;: [&#39;110&#39;, &#39;116&#39;], &#39;12&#39;: [&#39;11&#39;, &#39;13&#39;, &#39;25&#39;], &#39;120&#39;: [&#39;121&#39;, &#39;127&#39;], &#39;121&#39;: [&#39;120&#39;, &#39;122&#39;, &#39;136&#39;], &#39;122&#39;: [&#39;121&#39;, &#39;123&#39;, &#39;135&#39;], &#39;123&#39;: [&#39;122&#39;, &#39;124&#39;, &#39;20&#39;], &#39;124&#39;: [&#39;123&#39;, &#39;125&#39;, &#39;27&#39;], &#39;125&#39;: [&#39;124&#39;, &#39;126&#39;], &#39;126&#39;: [&#39;111&#39;, &#39;125&#39;, &#39;127&#39;], &#39;127&#39;: [&#39;120&#39;, &#39;126&#39;], &#39;13&#39;: [&#39;12&#39;, &#39;14&#39;], &#39;130&#39;: [&#39;131&#39;, &#39;137&#39;], &#39;131&#39;: [&#39;130&#39;, &#39;132&#39;, &#39;146&#39;], &#39;132&#39;: [&#39;131&#39;, &#39;133&#39;, &#39;145&#39;], &#39;133&#39;: [&#39;132&#39;, &#39;134&#39;, &#39;30&#39;], &#39;134&#39;: [&#39;133&#39;, &#39;135&#39;, &#39;37&#39;], &#39;135&#39;: [&#39;122&#39;, &#39;134&#39;, &#39;136&#39;], &#39;136&#39;: [&#39;121&#39;, &#39;135&#39;, &#39;137&#39;], &#39;137&#39;: [&#39;130&#39;, &#39;136&#39;], &#39;14&#39;: [&#39;13&#39;, &#39;15&#39;], &#39;140&#39;: [&#39;141&#39;, &#39;147&#39;], &#39;141&#39;: [&#39;140&#39;, &#39;142&#39;], &#39;142&#39;: [&#39;141&#39;, &#39;143&#39;], &#39;143&#39;: [&#39;142&#39;, &#39;144&#39;, &#39;40&#39;], &#39;144&#39;: [&#39;143&#39;, &#39;145&#39;, &#39;47&#39;], &#39;145&#39;: [&#39;132&#39;, &#39;144&#39;, &#39;146&#39;], &#39;146&#39;: [&#39;131&#39;, &#39;145&#39;, &#39;147&#39;], &#39;147&#39;: [&#39;140&#39;, &#39;146&#39;], &#39;15&#39;: [&#39;14&#39;, &#39;16&#39;, &#39;2&#39;], &#39;16&#39;: [&#39;1&#39;, &#39;15&#39;, &#39;17&#39;], &#39;17&#39;: [&#39;10&#39;, &#39;16&#39;, &#39;114&#39;], &#39;2&#39;: [&#39;1&#39;, &#39;15&#39;, &#39;3&#39;], &#39;20&#39;: [&#39;123&#39;, &#39;21&#39;, &#39;27&#39;], &#39;21&#39;: [&#39;20&#39;, &#39;22&#39;, &#39;36&#39;], &#39;22&#39;: [&#39;21&#39;, &#39;23&#39;, &#39;35&#39;], &#39;23&#39;: [&#39;22&#39;, &#39;24&#39;], &#39;24&#39;: [&#39;23&#39;, &#39;25&#39;], &#39;25&#39;: [&#39;12&#39;, &#39;24&#39;, &#39;26&#39;], &#39;26&#39;: [&#39;11&#39;, &#39;25&#39;, &#39;27&#39;], &#39;27&#39;: [&#39;20&#39;, &#39;26&#39;, &#39;124&#39;], &#39;3&#39;: [&#39;2&#39;, &#39;4&#39;], &#39;30&#39;: [&#39;133&#39;, &#39;31&#39;, &#39;37&#39;], &#39;31&#39;: [&#39;30&#39;, &#39;32&#39;, &#39;46&#39;], &#39;32&#39;: [&#39;31&#39;, &#39;33&#39;, &#39;45&#39;], &#39;33&#39;: [&#39;32&#39;, &#39;34&#39;], &#39;34&#39;: [&#39;33&#39;, &#39;35&#39;], &#39;35&#39;: [&#39;22&#39;, &#39;34&#39;, &#39;36&#39;], &#39;36&#39;: [&#39;21&#39;, &#39;35&#39;, &#39;37&#39;], &#39;37&#39;: [&#39;30&#39;, &#39;36&#39;, &#39;134&#39;], &#39;4&#39;: [&#39;3&#39;, &#39;5&#39;], &#39;40&#39;: [&#39;143&#39;, &#39;41&#39;, &#39;47&#39;], &#39;41&#39;: [&#39;40&#39;, &#39;42&#39;], &#39;42&#39;: [&#39;41&#39;, &#39;43&#39;], &#39;43&#39;: [&#39;42&#39;, &#39;44&#39;], &#39;44&#39;: [&#39;43&#39;, &#39;45&#39;], &#39;45&#39;: [&#39;32&#39;, &#39;44&#39;, &#39;46&#39;], &#39;46&#39;: [&#39;31&#39;, &#39;45&#39;, &#39;47&#39;], &#39;47&#39;: [&#39;40&#39;, &#39;46&#39;, &#39;144&#39;], &#39;5&#39;: [&#39;4&#39;, &#39;6&#39;], &#39;6&#39;: [&#39;5&#39;, &#39;7&#39;], &#39;7&#39;: [&#39;0&#39;, &#39;6&#39;, &#39;104&#39;]}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Next, create a GHZ circuit with three qubits 0, 2, 4, and run it on the Aspen-M-2 device. Notice that none of these qubits are connected on the Aspen-M-2 connectivity graph.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># create a GHZ state with non-neighboring qubits</span>
+<span class="n">circuit</span> <span class="o">=</span> <span class="n">Circuit</span><span class="p">()</span>
+<span class="n">circuit</span><span class="o">.</span><span class="n">h</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">cnot</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">cnot</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">circuit</span><span class="p">)</span>
+
+<span class="n">rigetti_rewiring</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">shots</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>T  : |0|1|2|
+            
+q0 : -H-C-C-
+        | | 
+q2 : ---X-|-
+          | 
+q4 : -----X-
+
+T  : |0|1|2|
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Status of task:&quot;</span><span class="p">,</span> <span class="n">rigetti_rewiring</span><span class="o">.</span><span class="n">state</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Status of task: CREATED
+</pre></div>
+</div>
+</div>
+</div>
+<p>To verify the final qubit allocation, retrieve the compiled program that was executed:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">rigetti_rewiring</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+<span class="n">counts</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">measurement_counts</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Measurement counts:&quot;</span><span class="p">,</span> <span class="n">counts</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The compiled circuit is:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">additional_metadata</span><span class="o">.</span><span class="n">rigettiMetadata</span><span class="o">.</span><span class="n">compiledProgram</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Measurement counts: Counter({&#39;001&#39;: 4, &#39;111&#39;: 3, &#39;000&#39;: 2, &#39;101&#39;: 1})
+The compiled circuit is:
+ DECLARE ro BIT[3]
+PRAGMA INITIAL_REWIRING &quot;PARTIAL&quot;
+RESET
+RZ(-pi/2) 12
+RX(-pi/2) 12
+RZ(pi) 13
+XY(pi) 12 13
+RZ(pi/2) 12
+RX(pi/2) 12
+RZ(-pi/2) 12
+XY(pi) 12 13
+RZ(pi/2) 25
+RX(-pi/2) 25
+CZ 25 12
+RZ(pi) 12
+RX(-pi/2) 13
+RX(pi/2) 25
+RZ(-pi/2) 25
+MEASURE 25 ro[2]
+MEASURE 13 ro[1]
+MEASURE 12 ro[0]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Notice that the PARTIAL rewiring was applied. The qubits 0, 2, 4 in the original circuit were mapped to three other qubits in the Rigetti device, and the gates were compiled into native gates.</p>
+</section>
+<section id="user-defined-qubit-allocation">
+<h2>User-defined qubit allocation<a class="headerlink" href="#user-defined-qubit-allocation" title="Permalink to this heading">#</a></h2>
+<p>In Amazon Braket, you can choose to prescribe a qubit mapping manually, and prevent further rewiring for Rigetti devices. To enable manual mapping, set <code class="docutils literal notranslate"><span class="pre">disable_qubit_rewiring=True</span></code> when submitting the task to run.</p>
+<p>If all the gates in the circuit satisfy the topological constraints of the device, Amazon Braket maps abstract qubit $i$ in the circuit to the physical qubit $i$ in the device, and maps qubit pair $(i, j)$ to the connection $(i, j)$ in the device. On the other hand, Amazon Braket raises an exception if a specified qubit or qubit pair do not exist in the device connectivity graph.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># create a random state with neighboring qubits</span>
+<span class="n">q1</span><span class="o">=</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">connectivity_graph</span><span class="p">))</span>
+<span class="n">q2</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">connectivity_graph</span><span class="p">[</span><span class="n">q1</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">q1</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">q1</span><span class="p">)</span>
+
+<span class="n">circuit</span> <span class="o">=</span> <span class="n">Circuit</span><span class="p">()</span>
+<span class="n">circuit</span><span class="o">.</span><span class="n">rz</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">cnot</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span><span class="n">q2</span><span class="p">)</span><span class="o">.</span><span class="n">x</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">circuit</span><span class="p">)</span>
+<span class="n">rigetti_task</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">shots</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">disable_qubit_rewiring</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>T  : |   0    |1|
+                 
+q0 : -Rz(1.57)-C-
+               | 
+q1 : ----------X-
+                 
+q3 : -X----------
+
+T  : |   0    |1|
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Status of task:&quot;</span><span class="p">,</span> <span class="n">rigetti_task</span><span class="o">.</span><span class="n">state</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Status of task: COMPLETED
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">rigetti_task</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+<span class="n">counts</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">measurement_counts</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Measurement counts:&quot;</span><span class="p">,</span> <span class="n">counts</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The compiled circuit is:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">additional_metadata</span><span class="o">.</span><span class="n">rigettiMetadata</span><span class="o">.</span><span class="n">compiledProgram</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Measurement counts: Counter({&#39;011&#39;: 6, &#39;001&#39;: 2, &#39;101&#39;: 1, &#39;000&#39;: 1})
+The compiled circuit is:
+ DECLARE ro BIT[3]
+PRAGMA INITIAL_REWIRING &quot;NAIVE&quot;
+RESET
+RZ(pi) 1
+RX(-pi/2) 1
+XY(pi) 0 1
+RZ(-pi/2) 0
+RX(pi/2) 0
+RZ(pi/2) 0
+XY(pi) 0 1
+RX(pi) 3
+MEASURE 3 ro[2]
+MEASURE 1 ro[1]
+MEASURE 0 ro[0]
+</pre></div>
+</div>
+</div>
+</div>
+<p>The qubits in the original circuit followed a one-to-one mapping to the physical qubits in the device. Other compilation steps, such as gate synthesis and circuit optimization, are still performed. These steps allow the circuit to run successfully and improve the overall fidelity.</p>
+<section id="using-the-qubits-with-the-highest-two-qubit-gate-fidelity">
+<h3>Using the qubits with the highest two-qubit gate fidelity<a class="headerlink" href="#using-the-qubits-with-the-highest-two-qubit-gate-fidelity" title="Permalink to this heading">#</a></h3>
+<p>Additionally, the device properties include calibration data, which you can use to find the qubits and qubit pairs with the highest fidelities for particular gates.</p>
+<p>The following function finds the qubit pair that has the highest two-qubit fidelity of an input gate, which can be any of the gates native to the Rigetti device, namely CPHASE, XY or CZ.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">find_qubit_pair</span><span class="p">(</span><span class="n">gate</span><span class="p">):</span>
+    <span class="s2">&quot;Function to find the qubit pair that has the highest gate fidelity of a particular gate&quot;</span>
+    
+    <span class="c1"># check whether the input gate is a string</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The input gate must be a string type.&#39;</span><span class="p">)</span> 
+    
+    <span class="c1"># check whether the input gate is a native gate</span>
+    <span class="n">gate_list</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;CPHASE&#39;</span><span class="p">,</span> <span class="s1">&#39;CZ&#39;</span><span class="p">,</span> <span class="s1">&#39;XY&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">gate</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">gate_list</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The input gate must be either CPHASE, CZ or XY.&#39;</span><span class="p">)</span>
+    
+    <span class="c1"># load all calibration data from device.properties</span>
+    <span class="n">calibration_2Q</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">provider</span><span class="o">.</span><span class="n">specs</span><span class="p">[</span><span class="s1">&#39;2Q&#39;</span><span class="p">]</span>
+    <span class="n">highest_fidelity</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># iterate through all calibration data to find the highest fidelity</span>
+    <span class="k">for</span> <span class="n">pair</span> <span class="ow">in</span> <span class="n">calibration_2Q</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        
+        <span class="c1"># if the particular gate type is supported by the qubit pair</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;f&#39;</span><span class="o">+</span> <span class="n">gate</span><span class="p">)</span> <span class="ow">in</span> <span class="n">calibration_2Q</span><span class="p">[</span><span class="n">pair</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span> 
+            
+            <span class="k">if</span> <span class="n">calibration_2Q</span><span class="p">[</span><span class="n">pair</span><span class="p">][</span><span class="s1">&#39;f&#39;</span><span class="o">+</span> <span class="n">gate</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">highest_fidelity</span><span class="p">:</span>
+                
+                <span class="c1"># update the highest_fidelity and the best_pair</span>
+                <span class="n">highest_fidelity</span> <span class="o">=</span> <span class="n">calibration_2Q</span><span class="p">[</span><span class="n">pair</span><span class="p">][</span><span class="s1">&#39;f&#39;</span><span class="o">+</span> <span class="n">gate</span><span class="p">]</span>
+                <span class="n">best_pair</span> <span class="o">=</span> <span class="n">pair</span>
+
+    <span class="c1"># generate the two qubits as integers       </span>
+    <span class="n">q1</span> <span class="o">=</span> <span class="n">best_pair</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">while</span> <span class="n">best_pair</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="s1">&#39;-&#39;</span><span class="p">:</span>
+        <span class="n">q1</span> <span class="o">+=</span> <span class="n">best_pair</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="n">q1</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">q1</span><span class="p">)</span>
+    <span class="n">q2</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">best_pair</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">:])</span>
+        
+    <span class="k">return</span> <span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">,</span> <span class="n">highest_fidelity</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The example in the following code applies a native two-qubit gate on the qubit pair that has the highest fidelity of that gate.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># the gate must be either &#39;CZ&#39;, &#39;CPHASE&#39; or &#39;XY&#39;</span>
+<span class="n">gate</span> <span class="o">=</span> <span class="s1">&#39;CZ&#39;</span>
+<span class="c1"># find the qubit pair with the highest gate fidelity</span>
+<span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">,</span> <span class="n">highest_fidelity</span> <span class="o">=</span> <span class="n">find_qubit_pair</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The highest fidelity for &#39;</span><span class="o">+</span><span class="n">gate</span><span class="o">+</span><span class="s1">&#39; gate is:&#39;</span><span class="p">,</span> <span class="n">highest_fidelity</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;And the corresponding qubit pair is: qubit </span><span class="si">{</span><span class="n">q1</span><span class="si">}</span><span class="s1"> and qubit </span><span class="si">{</span><span class="n">q2</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="c1"># create a circuit with the gate applied to the discovered qubit pair.</span>
+<span class="c1"># note that CPHASE in Rigetti corresponds to cphaseshift in Braket</span>
+<span class="n">circuit</span> <span class="o">=</span> <span class="n">Circuit</span><span class="p">()</span>
+<span class="n">circuit</span><span class="o">.</span><span class="n">cz</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span><span class="n">q2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">circuit</span><span class="p">)</span>
+<span class="n">rigetti_task</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">shots</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">disable_qubit_rewiring</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The highest fidelity for CZ gate is: 0.9794230141816626
+And the corresponding qubit pair is: qubit 21 and qubit 36
+T   : |0|
+         
+q21 : -C-
+       | 
+q36 : -Z-
+
+T   : |0|
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Status of task:&quot;</span><span class="p">,</span> <span class="n">rigetti_task</span><span class="o">.</span><span class="n">state</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Measurement counts: Counter({&#39;00&#39;: 910, &#39;01&#39;: 55, &#39;10&#39;: 33, &#39;11&#39;: 2})
+The compiled circuit is:
+ DECLARE ro BIT[2]
+PRAGMA INITIAL_REWIRING &quot;NAIVE&quot;
+RESET
+CZ 21 36
+MEASURE 21 ro[1]
+MEASURE 36 ro[0]
+</pre></div>
+</div>
+</div>
+</div>
+<p>The qubits in the original circuit followed a one-to-one mapping to the physical qubits in the device. Since only native gates were used, the actual gates executed are the same as the gates in the original circuit.</p>
+<div class="alert alert-block alert-info">
+<b>Note:</b> The IonQ device does not support manual allocation. For circuits submitted to the IonQ device, qubits are allocated automatically.
+</div><div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Task Summary&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">quantum_tasks_statistics</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Note: Charges shown are estimates based on your Amazon Braket simulator and quantum processing unit (QPU) task usage. Estimated charges shown may differ from your actual charges. Estimated charges do not factor in any discounts or credits, and you may experience additional charges based on your use of other services such as Amazon Elastic Compute Cloud (Amazon EC2).&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Estimated cost to run this example: </span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="n">qpu_tasks_cost</span><span class="p">()</span> <span class="o">+</span> <span class="n">t</span><span class="o">.</span><span class="n">simulator_tasks_cost</span><span class="p">()</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> USD&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Task Summary
+{&#39;arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-2&#39;: {&#39;shots&#39;: 1020, &#39;tasks&#39;: {&#39;QUEUED&#39;: 1, &#39;CREATED&#39;: 2}}}
+Note: Charges shown are estimates based on your Amazon Braket simulator and quantum processing unit (QPU) task usage. Estimated charges shown may differ from your actual charges. Estimated charges do not factor in any discounts or credits, and you may experience additional charges based on your use of other services such as Amazon Elastic Compute Cloud (Amazon EC2).
+Estimated cost to run this example: 1.26 USD
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Allocating Qubits on QPU Devices</a><ul>
+<li><a class="reference internal" href="#automatic-qubit-allocation">Automatic qubit allocation</a></li>
+<li><a class="reference internal" href="#user-defined-qubit-allocation">User-defined qubit allocation</a><ul>
+<li><a class="reference internal" href="#using-the-qubits-with-the-highest-two-qubit-gate-fidelity">Using the qubits with the highest two-qubit gate fidelity</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/scripts/furo.js"></script>
+    </body>
+</html>

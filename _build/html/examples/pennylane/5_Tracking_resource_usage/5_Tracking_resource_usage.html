@@ -1,0 +1,623 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
+
+    <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
+        <title>Tracking Resource Usage with PennyLane Device Tracker - Amazon Braket Examples documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../../index.html"><div class="brand">Amazon Braket Examples  documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
+  
+  
+  <span class="sidebar-brand-text">Amazon Braket Examples  documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="tracking-resource-usage-with-pennylane-device-tracker">
+<h1>Tracking Resource Usage with PennyLane Device Tracker<a class="headerlink" href="#tracking-resource-usage-with-pennylane-device-tracker" title="Permalink to this heading">#</a></h1>
+<p>In this notebook we will explore how to use the PennyLane device tracker feature with Amazon Braket.
+As is demonstrated in the <a class="reference external" href="https://github.com/aws/amazon-braket-examples/blob/main/examples/pennylane/1_Parallelized_optimization_of_quantum_circuits/1_Parallelized_optimization_of_quantum_circuits.ipynb">optimization of quantum circuits notebook</a>, computing gradients of quantum circuits involves multiple devices executions.
+This can lead to a large number of executions when optimizing quantum circuits.
+So to help users keep track of their usage, Amazon Braket works with PennyLane to record and make available useful information during the computation.
+The PennyLane device resource tracker keeps a record of the usage of a device, such as numbers of circuit evaluations and shots.
+Amazon Braket extends this information with task IDs and simulator duration to allow further tracking.
+The device tracker can be combined with additional logic to monitor and limit resource usage on devices.</p>
+<section id="setup">
+<h2>Setup<a class="headerlink" href="#setup" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pennylane</span> <span class="k">as</span> <span class="nn">qml</span>
+<span class="kn">from</span> <span class="nn">pennylane</span> <span class="kn">import</span> <span class="n">numpy</span> <span class="k">as</span> <span class="n">np</span>
+
+<span class="kn">import</span> <span class="nn">time</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Before we show the device resource tracker, let’s first set up a circuit for demonstration and experimenting.
+We will use a simple two qubit circuit with two parameters throughout this notebook.
+We will start by evaluating it using the local Braket simulator.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wires</span> <span class="o">=</span> <span class="mi">2</span>  <span class="c1"># Number of qubits</span>
+
+<span class="n">dev</span> <span class="o">=</span> <span class="n">qml</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;braket.local.qubit&quot;</span><span class="p">,</span> <span class="n">wires</span><span class="o">=</span><span class="n">wires</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">circuit</span><span class="p">(</span><span class="n">params</span><span class="p">):</span>
+    <span class="n">qml</span><span class="o">.</span><span class="n">RX</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">wires</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">qml</span><span class="o">.</span><span class="n">RY</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">wires</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">qml</span><span class="o">.</span><span class="n">CNOT</span><span class="p">(</span><span class="n">wires</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">qml</span><span class="o">.</span><span class="n">expval</span><span class="p">(</span><span class="n">qml</span><span class="o">.</span><span class="n">PauliZ</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+
+<span class="n">qnode_local</span> <span class="o">=</span> <span class="n">qml</span><span class="o">.</span><span class="n">QNode</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">dev</span><span class="p">)</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="the-pennylane-device-resource-tracker">
+<h2>The PennyLane Device Resource Tracker<a class="headerlink" href="#the-pennylane-device-resource-tracker" title="Permalink to this heading">#</a></h2>
+<p>The PennyLane device resource tracker is a python context manager created by <code class="docutils literal notranslate"><span class="pre">qml.Tracker</span></code>.
+To use the device tracker to track a single evaluation of our simple circuit, we put the evaluation inside a <code class="docutils literal notranslate"><span class="pre">with</span></code> statement block.
+Only evaluations inside of the <code class="docutils literal notranslate"><span class="pre">with</span></code> block will have their usage recorded and accumulated.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">qml</span><span class="o">.</span><span class="n">Tracker</span><span class="p">(</span><span class="n">dev</span><span class="p">)</span> <span class="k">as</span> <span class="n">tracker</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Expectation value of circuit:&quot;</span><span class="p">,</span> <span class="n">qnode_local</span><span class="p">(</span><span class="n">params</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Expectation value of circuit: 0.9751703272018161
+</pre></div>
+</div>
+</div>
+</div>
+<p>With this execution complete, all of the recorded information is available in <code class="docutils literal notranslate"><span class="pre">tracker</span></code>.
+There are three interfaces to access the data inside of the resource tracker.
+The full history of each update is available through <code class="docutils literal notranslate"><span class="pre">tracker.history</span></code>.
+Numerical values are accumulated, and each of their totals are in <code class="docutils literal notranslate"><span class="pre">tracker.totals</span></code>.
+And lastly, the most recent update to the tracker is kept in <code class="docutils literal notranslate"><span class="pre">tracker.latest</span></code>.</p>
+<p>Let’s first look at the history of what was recorded by evaluating our circuit.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">tracker</span><span class="o">.</span><span class="n">history</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;executions&#39;: [1], &#39;shots&#39;: [None], &#39;braket_task_id&#39;: [&#39;3e22ac39-a7e7-425d-af6a-1d4f3cc7974f&#39;], &#39;batches&#39;: [1], &#39;batch_len&#39;: [1]}
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can see that this evaluation lead to a single circuit execution.
+This single execution had no shots, and was evaluated with a single batch of length 1.
+When using the Braket local simulator, the device tracker records the unique id that the simulator assigns to new tasks.</p>
+<p>Next, let’s evaluate the gradient of this circuit and track the device usage.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">qml</span><span class="o">.</span><span class="n">Tracker</span><span class="p">(</span><span class="n">dev</span><span class="p">)</span> <span class="k">as</span> <span class="n">tracker</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Gradient of circuit:&quot;</span><span class="p">,</span> <span class="n">qml</span><span class="o">.</span><span class="n">grad</span><span class="p">(</span><span class="n">qnode_local</span><span class="p">)(</span><span class="n">params</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">tracker</span><span class="o">.</span><span class="n">history</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Gradient of circuit: [-0.0978434  -0.19767681]
+{&#39;executions&#39;: [1, 1, 1, 1, 1], &#39;shots&#39;: [None, None, None, None, None], &#39;braket_task_id&#39;: [&#39;7602e62c-dd42-40bf-a214-147fdeec9c93&#39;, &#39;9e924369-432e-4e86-bd28-c18a3bd7ea2d&#39;, &#39;fe68b242-166c-496a-b1e2-df72bc7eedc6&#39;, &#39;8e1f1427-6b2a-4261-a229-dec502fc008f&#39;, &#39;c6426b8f-6b25-4c9f-abac-ad60ae96c4c8&#39;], &#39;batches&#39;: [1, 1], &#39;batch_len&#39;: [1, 4]}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Recall that evaluating the gradient of a quantum circuit will result in multiple circuit evaluations.
+Here we see that to calculate this gradient, 5 new tasks were created and recorded in the device tracker.
+For values which are numeric, such as the <code class="docutils literal notranslate"><span class="pre">executions</span></code>, the device tracker will accumulate all of the recorded data into <code class="docutils literal notranslate"><span class="pre">tracker.totals</span></code></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">tracker</span><span class="o">.</span><span class="n">totals</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;executions&#39;: 5, &#39;batches&#39;: 2, &#39;batch_len&#39;: 5}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Note that <code class="docutils literal notranslate"><span class="pre">None</span></code> is not numeric, which is why the shots are not accumulated in <code class="docutils literal notranslate"><span class="pre">tracker.totals</span></code> in the previous example.
+If we instead compute the gradient with a finite number of shots, we will see the total shots recorded.
+Let’s try the gradient with <code class="docutils literal notranslate"><span class="pre">shots=100</span></code>.
+Since there are 5 circuit evaluations, we should expect the total shots to be <code class="docutils literal notranslate"><span class="pre">500</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">qml</span><span class="o">.</span><span class="n">Tracker</span><span class="p">(</span><span class="n">dev</span><span class="p">)</span> <span class="k">as</span> <span class="n">tracker</span><span class="p">:</span>
+    <span class="n">qml</span><span class="o">.</span><span class="n">grad</span><span class="p">(</span><span class="n">qnode_local</span><span class="p">)(</span><span class="n">params</span><span class="p">,</span> <span class="n">shots</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tracker</span><span class="o">.</span><span class="n">totals</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;executions&#39;: 5, &#39;shots&#39;: 500, &#39;batches&#39;: 2, &#39;batch_len&#39;: 5}
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can also inspect the most recently recorded data with <code class="docutils literal notranslate"><span class="pre">tracker.latest</span></code>.
+Note that not every field will be present in every update.
+The latest update in this gradient calculation only included <code class="docutils literal notranslate"><span class="pre">'batches'</span></code> and <code class="docutils literal notranslate"><span class="pre">'batch_len'</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">tracker</span><span class="o">.</span><span class="n">latest</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;batches&#39;: 1, &#39;batch_len&#39;: 4}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="using-amazon-braket-simulators">
+<h2>Using Amazon Braket Simulators<a class="headerlink" href="#using-amazon-braket-simulators" title="Permalink to this heading">#</a></h2>
+<p>The Amazon Braket on-demand simulators report additional information to the device tracker.
+Let’s set up a remote device using Amazon Braket SV1, and create a new <code class="docutils literal notranslate"><span class="pre">QNode</span></code> to run our circuit on the on-demand simulator.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">device_arn</span> <span class="o">=</span> <span class="s2">&quot;arn:aws:braket:::device/quantum-simulator/amazon/sv1&quot;</span>
+
+<span class="n">dev_remote</span> <span class="o">=</span> <span class="n">qml</span><span class="o">.</span><span class="n">device</span><span class="p">(</span>
+    <span class="s2">&quot;braket.aws.qubit&quot;</span><span class="p">,</span>
+    <span class="n">device_arn</span><span class="o">=</span><span class="n">device_arn</span><span class="p">,</span>
+    <span class="n">wires</span><span class="o">=</span><span class="n">wires</span>
+<span class="p">)</span>
+
+<span class="n">qnode_remote</span> <span class="o">=</span> <span class="n">qml</span><span class="o">.</span><span class="n">QNode</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">dev_remote</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now we can send the same simple circuit from above to the AWS on-demand simulator and track the resource usage.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">qml</span><span class="o">.</span><span class="n">Tracker</span><span class="p">(</span><span class="n">dev_remote</span><span class="p">)</span> <span class="k">as</span> <span class="n">tracker</span><span class="p">:</span>
+    <span class="n">qnode_remote</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s take a look at what new fields are available in the tracker with an on-demand simulator.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">tracker</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>executions
+shots
+braket_task_id
+braket_simulator_ms
+braket_simulator_billed_ms
+batches
+batch_len
+</pre></div>
+</div>
+</div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">braket_task_id</span></code> field will contain unique IDs for each task that was created.
+For tasks that are created on the on-demand simulators, these IDs can be recorded and used to look up the task details in the AWS console.
+The <code class="docutils literal notranslate"><span class="pre">braket_simulator_ms</span></code> gives the duration in milliseconds of the portion of the task spent simulating our circuit.
+<code class="docutils literal notranslate"><span class="pre">braket_simulator_billed_ms</span></code> adjusts the simulation duration according to the minimum duration for billing.
+See <a class="reference external" href="https://aws.amazon.com/braket/pricing/">here</a> for pricing details on Amazon Braket.</p>
+<p>These reported times are not the total time for a task to complete.
+We can compare the simulation time to the total task time for this circuit:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">qml</span><span class="o">.</span><span class="n">Tracker</span><span class="p">(</span><span class="n">dev_remote</span><span class="p">)</span> <span class="k">as</span> <span class="n">tracker</span><span class="p">:</span>
+    <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">qnode_remote</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+    <span class="n">t1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Remote device execution duration in seconds:&quot;</span><span class="p">,</span><span class="n">t1</span> <span class="o">-</span> <span class="n">t0</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Simulation duration in seconds:&quot;</span><span class="p">,</span> <span class="n">tracker</span><span class="o">.</span><span class="n">totals</span><span class="p">[</span><span class="s2">&quot;braket_simulator_ms&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Remote device execution duration in seconds: 3.1985151767730713
+Simulation duration in seconds: 0.012
+</pre></div>
+</div>
+</div>
+</div>
+<p>With such a small circuit in this example, only a very small fraction of the total time is spent running the simulation of the circuit.</p>
+</section>
+<section id="using-the-tracker-to-limit-resource-usage">
+<h2>Using the Tracker to Limit Resource Usage<a class="headerlink" href="#using-the-tracker-to-limit-resource-usage" title="Permalink to this heading">#</a></h2>
+<p>As we have seen above, it is possible to record usage of a device during execution with the resource tracker.
+With this information available during the computation, it is possible to handle the information in order to control the resource usage.
+However, this feature does not attempt to estimate how many resources may be used in the future. It is purely backward-looking.
+Thus any resource usage can only be acted on after the fact with this feature.</p>
+<p>In the <a class="reference external" href="https://github.com/aws/amazon-braket-examples/blob/main/examples/pennylane/0_Getting_started/0_Getting_started.ipynb">PennyLane getting started notebook</a>,
+we optimized a circuit by running the gradient descent optimizer for a chosen number of iterations.
+Instead of a given number of iterations, we may want to limit the optimization to something else such as the total number of shots or the simulator execution time.
+Here we will show two ways to use the PennyLane device tracker to limit an optimization on a resource which is being tracked.</p>
+<p>Let’s suppose we wish to optimize our simple circuit, but want to limit ourselves to a particular number of circuit executions.
+First let’s set up an optimizer.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">opt</span> <span class="o">=</span> <span class="n">qml</span><span class="o">.</span><span class="n">GradientDescentOptimizer</span><span class="p">(</span><span class="n">stepsize</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now we run the optimizer, but on every step of the loop we check if our limit has been crossed.
+Once the total executions exceed our target limit, we will break out of the optimization and report our results.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">max_iterations</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">execution_limit</span> <span class="o">=</span> <span class="mi">77</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">qml</span><span class="o">.</span><span class="n">Tracker</span><span class="p">(</span><span class="n">dev</span><span class="p">)</span> <span class="k">as</span> <span class="n">tracker</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_iterations</span><span class="p">):</span>
+        <span class="n">params</span><span class="p">,</span> <span class="n">cost</span> <span class="o">=</span> <span class="n">opt</span><span class="o">.</span><span class="n">step_and_cost</span><span class="p">(</span><span class="n">qnode_local</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">tracker</span><span class="o">.</span><span class="n">totals</span><span class="p">[</span><span class="s2">&quot;executions&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">execution_limit</span><span class="p">:</span>
+            <span class="k">break</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Completed&quot;</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;steps of optimization.&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Optimized cost:&quot;</span><span class="p">,</span> <span class="n">cost</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Optimized parameters:&quot;</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Completed 16 steps of optimization.
+Optimized cost: -0.27959738151720537
+Optimized parameters: [0.51754609 2.06622178]
+</pre></div>
+</div>
+</div>
+</div>
+<p>The resource usage is compared only after each iteration of the optimization.
+If each of the steps in your computation involve many circuit evaluations,
+your computation may still continue for many evaluations after your limit is hit.
+For our simple problem, every iteration leads to 5 circuit evaluations, so we do not stop right at our limit.
+We can see this by checking the tracker totals.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">tracker</span><span class="o">.</span><span class="n">totals</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;executions&#39;: 80, &#39;batches&#39;: 32, &#39;batch_len&#39;: 80}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Take this into consideration when setting a threshold if you choose to limit your computation this way.</p>
+<p>For another approach to limit resource usage, we can add a callback function to the device tracker.
+This function is called each time the information in the tracker is updated.
+This interface could also be used for monitoring large batches of executions.
+For example, let’s print out the running total number of executions every time the tracker is updated.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">log_executions</span><span class="p">(</span><span class="n">totals</span><span class="p">,</span> <span class="n">history</span><span class="p">,</span> <span class="n">latest</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Total executions:&quot;</span><span class="p">,</span><span class="n">totals</span><span class="p">[</span><span class="s2">&quot;executions&quot;</span><span class="p">])</span>
+
+<span class="k">with</span> <span class="n">qml</span><span class="o">.</span><span class="n">Tracker</span><span class="p">(</span><span class="n">dev</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">log_executions</span><span class="p">)</span> <span class="k">as</span> <span class="n">tracker</span><span class="p">:</span>
+    <span class="n">qml</span><span class="o">.</span><span class="n">grad</span><span class="p">(</span><span class="n">qnode_local</span><span class="p">)(</span><span class="n">params</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Total executions: 1
+Total executions: 1
+Total executions: 2
+Total executions: 3
+Total executions: 4
+Total executions: 5
+Total executions: 5
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can use the callback feature of the device tracker to stop a computation after a threshold is breached.
+By throwing an exception from our callback function when the new data violates our limit, we can abort the currently running optimization.
+Let’s try this approach with the same optimization problem.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">params</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">resource_threshold</span><span class="p">(</span><span class="n">totals</span><span class="p">,</span> <span class="n">history</span><span class="p">,</span> <span class="n">latest</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">totals</span><span class="p">[</span><span class="s2">&quot;executions&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">execution_limit</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ResourceWarning</span><span class="p">()</span>
+
+<span class="k">with</span> <span class="n">qml</span><span class="o">.</span><span class="n">Tracker</span><span class="p">(</span><span class="n">dev</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">resource_threshold</span><span class="p">)</span> <span class="k">as</span> <span class="n">tracker</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_iterations</span><span class="p">):</span>
+            <span class="n">params</span><span class="p">,</span><span class="n">cost</span> <span class="o">=</span> <span class="n">opt</span><span class="o">.</span><span class="n">step_and_cost</span><span class="p">(</span><span class="n">qnode_local</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ResourceWarning</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Completed&quot;</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="s2">&quot;steps of optimization.&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Optimized cost:&quot;</span><span class="p">,</span> <span class="n">cost</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Optimized parameters:&quot;</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Completed 15 steps of optimization.
+Optimized cost: -0.14125448783850006
+Optimized parameters: [0.5519834  1.90536732]
+</pre></div>
+</div>
+</div>
+</div>
+<p>This time one fewer optimization step is completed because the final step is aborted.
+We can look at the totals to see that the execution was stopped after reaching our set limit.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">tracker</span><span class="o">.</span><span class="n">totals</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;executions&#39;: 78, &#39;batches&#39;: 31, &#39;batch_len&#39;: 76}
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Note</strong> This approach will immediately terminate the optimization upon exceeding the resource limit.
+If the termination happens while in the middle of a step, that step will not finish.
+In this case, circuits will have been executed that will then have their results discarded.</p>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Permalink to this heading">#</a></h2>
+<p>In this notebook, we have seen the resource usage recorded by the PennyLane device tracker and the extended information provided by Amazon Braket.
+We showed two different ways to use the resource information in the middle of the computation, and we were able to control the optimization routine to limit usage according to a preset threshold.
+If you are looking to explore more, try modifying the <a class="reference external" href="https://github.com/aws/amazon-braket-examples/blob/main/examples/pennylane/2_Graph_optimization_with_QAOA/2_Graph_optimization_with_QAOA.ipynb">QAOA notebook</a> to track the use of the simulators in that example.</p>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Tracking Resource Usage with PennyLane Device Tracker</a><ul>
+<li><a class="reference internal" href="#setup">Setup</a></li>
+<li><a class="reference internal" href="#the-pennylane-device-resource-tracker">The PennyLane Device Resource Tracker</a></li>
+<li><a class="reference internal" href="#using-amazon-braket-simulators">Using Amazon Braket Simulators</a></li>
+<li><a class="reference internal" href="#using-the-tracker-to-limit-resource-usage">Using the Tracker to Limit Resource Usage</a></li>
+<li><a class="reference internal" href="#summary">Summary</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/scripts/furo.js"></script>
+    </body>
+</html>

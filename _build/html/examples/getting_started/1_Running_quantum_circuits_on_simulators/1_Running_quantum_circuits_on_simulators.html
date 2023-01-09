@@ -1,0 +1,596 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
+
+    <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
+        <title>Preparing a GHZ state and running the circuit on simulators - Amazon Braket Examples documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../../index.html"><div class="brand">Amazon Braket Examples  documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
+  
+  
+  <span class="sidebar-brand-text">Amazon Braket Examples  documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="preparing-a-ghz-state-and-running-the-circuit-on-simulators">
+<h1>Preparing a GHZ state and running the circuit on simulators<a class="headerlink" href="#preparing-a-ghz-state-and-running-the-circuit-on-simulators" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use Braket SDK Cost Tracking to estimate the cost to run this example</span>
+<span class="kn">from</span> <span class="nn">braket.tracking</span> <span class="kn">import</span> <span class="n">Tracker</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">Tracker</span><span class="p">()</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>This hello-world tutorial prepares a paradigmatic example for a multi-qubit entangled state, the so-called <a class="reference external" href="https://en.wikipedia.org/wiki/Greenberger%E2%80%93Horne%E2%80%93Zeilinger_state">GHZ state</a> (named after the three physicists Greenberger, Horne and Zeilinger). The GHZ state is extremely non-classical, and therefore very sensitive to decoherence. Therefore, it is often used as a performance benchmark for today’s hardware. Moreover, in many quantum information protocols it is used as a resource for quantum error correction, quantum communication and quantum metrology.</p>
+<p>Amazon Braket offers several classical simulators including a local simulator and three on-demand simulators: a full state-vector simulator SV1, a density matrix simulator DM1, and a tensor-network simulator TN1. You can seamlessly swap between different devices without any modifications to the circuit definition, as shown below, by just re-defining the device object. For additional information about simulators, see the <a class="reference external" href="https://docs.aws.amazon.com/braket/latest/developerguide/braket-devices.html#choose-a-simulator">Amazon Braket Dev Guide</a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># general imports</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="c1"># magic word for producing visualizations in notebook</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># AWS imports: Import Braket SDK modules</span>
+<span class="kn">from</span> <span class="nn">braket.circuits</span> <span class="kn">import</span> <span class="n">Circuit</span><span class="p">,</span> <span class="n">Observable</span>
+<span class="kn">from</span> <span class="nn">braket.devices</span> <span class="kn">import</span> <span class="n">LocalSimulator</span>
+<span class="kn">from</span> <span class="nn">braket.aws</span> <span class="kn">import</span> <span class="n">AwsDevice</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="problem-prepare-a-ghz-state">
+<h2>Problem: Prepare a GHZ State<a class="headerlink" href="#problem-prepare-a-ghz-state" title="Permalink to this heading">#</a></h2>
+<p>Goal: Prepare an $N$-qubit GHZ state:
+$$\left|0,0, …\right&gt; \rightarrow \left|\mathrm{GHZ}\right&gt; = \frac{1}{\sqrt{2}}\left(\left|0,0, …\right&gt; + \left|1,1, …\right&gt;\right).$$</p>
+<p>The GHZ state is a quantum superposition of all subsystems being in state 0 with all of them being in state 1 (as often discussed in the famous Gedanken experiment of a cat being dead and alive at the same time). The GHZ state is a maximally entangled quantum state.</p>
+<p>To prepare this state, build and run the following circuit using a single-qubit Hadamard gate (denoted as H) acting on the first qubit followed by a series of two-qubit CNOT gates:</p>
+<div align="center">
+<img src="circuit.png" width="300"/>
+</div></section>
+<section id="setup-circuit">
+<h2>Setup Circuit<a class="headerlink" href="#setup-circuit" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># function to build a GHZ state</span>
+<span class="k">def</span> <span class="nf">ghz_circuit</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    function to return a GHZ circuit ansatz</span>
+<span class="sd">    input: number of qubits</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># instantiate circuit object</span>
+    <span class="n">circuit</span> <span class="o">=</span> <span class="n">Circuit</span><span class="p">()</span>
+    
+    <span class="c1"># add Hadamard gate on first qubit</span>
+    <span class="n">circuit</span><span class="o">.</span><span class="n">h</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="c1"># apply series of CNOT gates</span>
+    <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_qubits</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">circuit</span><span class="o">.</span><span class="n">cnot</span><span class="p">(</span><span class="n">control</span><span class="o">=</span><span class="n">ii</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">ii</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">circuit</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># define circuit</span>
+<span class="n">n_qubits</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">ghz</span> <span class="o">=</span> <span class="n">ghz_circuit</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># print circuit</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ghz</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>T  : |0|1|2|3|4|5|6|7|8|9|
+                          
+q0 : -H-C-----------------
+        |                 
+q1 : ---X-C---------------
+          |               
+q2 : -----X-C-------------
+            |             
+q3 : -------X-C-----------
+              |           
+q4 : ---------X-C---------
+                |         
+q5 : -----------X-C-------
+                  |       
+q6 : -------------X-C-----
+                    |     
+q7 : ---------------X-C---
+                      |   
+q8 : -----------------X-C-
+                        | 
+q9 : -------------------X-
+
+T  : |0|1|2|3|4|5|6|7|8|9|
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="local-simulator">
+<h2>Local Simulator<a class="headerlink" href="#local-simulator" title="Permalink to this heading">#</a></h2>
+<p>First, the circuit is run locally using the local simulator.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># set up device: Local Simulator</span>
+<span class="n">device</span> <span class="o">=</span> <span class="n">LocalSimulator</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># run circuit</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">ghz</span><span class="p">,</span> <span class="n">shots</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+<span class="c1"># get measurement shots</span>
+<span class="n">counts</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">measurement_counts</span>
+<span class="c1"># print counts</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">counts</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Counter({&#39;1111111111&#39;: 505, &#39;0000000000&#39;: 495})
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># plot using Counter</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">counts</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">counts</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;bitstrings&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;counts&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../../_images/7b420500097295421744fb9c2a2a630d5f9064886f31a62bfa4782390544fc8e.png" src="../../../_images/7b420500097295421744fb9c2a2a630d5f9064886f31a62bfa4782390544fc8e.png" />
+</div>
+</div>
+<p>As opposed to quantum hardware where only measurement shots can be obtained, with a classical simulator you can access the full state vector, amplitudes and expectation values of certain observables by assigning the corresponding result types. To do so, append the result types to the circuit before submitting it to run. This can be very useful for debugging.</p>
+<p>The example code below outputs the state vector, the expectation value of $Z\otimes Z\otimes Z$, and the amplitude of the $|111\rangle$ state of a three-qubit GHZ state.</p>
+<p>To reiterate, the following output is expected:
+$$\left|\mathrm{GHZ}\right&gt; = \frac{1}{\sqrt{2}}\left(\left|0,0,0\right&gt; + \left|1,1,1\right&gt;\right) = \left[\frac{1}{\sqrt{2}},0,0,0,0,0,0,\frac{1}{\sqrt{2}}\right],$$</p>
+<p>for which $\left&lt;ZZZ\right&gt;=0$ and $\left&lt;111|\mathrm{GHZ}\right&gt;=\frac{1}{\sqrt{2}}$.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># define circuit</span>
+<span class="n">n_qubits</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">ghz</span> <span class="o">=</span> <span class="n">ghz_circuit</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">)</span>      
+
+<span class="c1"># add the state_vector ResultType</span>
+<span class="n">ghz</span><span class="o">.</span><span class="n">state_vector</span><span class="p">()</span>
+<span class="c1"># add the Z \otimes Z \otimes Z expectation value</span>
+<span class="n">ghz</span><span class="o">.</span><span class="n">expectation</span><span class="p">(</span><span class="n">Observable</span><span class="o">.</span><span class="n">Z</span><span class="p">()</span> <span class="o">@</span> <span class="n">Observable</span><span class="o">.</span><span class="n">Z</span><span class="p">()</span> <span class="o">@</span> <span class="n">Observable</span><span class="o">.</span><span class="n">Z</span><span class="p">(),</span> <span class="n">target</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
+<span class="c1"># add the amplitude for |111&gt;</span>
+<span class="n">ghz</span><span class="o">.</span><span class="n">amplitude</span><span class="p">(</span><span class="n">state</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;111&quot;</span><span class="p">])</span>
+<span class="c1"># print circuit including requested result types</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ghz</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>T  : |0|1|2|   Result Types   |
+                               
+q0 : -H-C---Expectation(Z@Z@Z)-
+        |   |                  
+q1 : ---X-C-Expectation(Z@Z@Z)-
+          | |                  
+q2 : -----X-Expectation(Z@Z@Z)-
+
+T  : |0|1|2|   Result Types   |
+
+Additional result types: StateVector, Amplitude(111)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># run the circuit and output the results</span>
+<span class="n">task</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">ghz</span><span class="p">,</span> <span class="n">shots</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">task</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+
+<span class="c1"># print results</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Final EXACT state vector:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Expectation value &lt;ZZZ&gt;:&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">5</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Amplitude &lt;111|Final state&gt;:&quot;</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Final EXACT state vector:
+ [0.70710678+0.j 0.        +0.j 0.        +0.j 0.        +0.j
+ 0.        +0.j 0.        +0.j 0.        +0.j 0.70710678+0.j]
+Expectation value &lt;ZZZ&gt;: 0.0
+Amplitude &lt;111|Final state&gt;: {&#39;111&#39;: (0.7071067811865475+0j)}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Clearly the expected results with perfect correlations between the three qubits making up the GHZ state are obtained.</p>
+<p>Note that you can only request state vector and amplitude when shots = 0 for a classical simulator. When shots = 0 for a simulator, you get the exact values of probability, expectation values, and variance, as derived from the full wave function. When shots &gt; 0, you cannot access the full state vector, but you can get approximate expectation values as taken from measurement samples. Note that Amazon Braket also supports probability, sample, expectation, and variance as result types for QPU devices.</p>
+</section>
+<section id="the-on-demand-simulators">
+<h2>The On-Demand Simulators<a class="headerlink" href="#the-on-demand-simulators" title="Permalink to this heading">#</a></h2>
+<p>Apart from the local simulator, you can also run your circuit on an on-demand simulator. This approach adds some latency overhead, but is beneficial for larger circuits by leveraging the optimized cloud hardware infrastructure. Moreover, all your results will be stored reliably in S3.</p>
+<p>Amazon Braket provides three on-demand simulators:</p>
+<ul>
+<li><p>SV1</p>
+<p>State vector simulator  supports simulations of circuits with up to 34 qubits, calculates and keeps track of the full state vector evolution.</p>
+</li>
+<li><p>TN1</p>
+<p>Tensor-network simulator represents each gate in a circuit as a tensor. TN1 can simulate a larger number of qubits for circuits with local gates or other special structure as compared with SV1 and DM1, but typically is slower for circuits with long-range or all-to-all gate structure.</p>
+</li>
+<li><p>DM1</p>
+<p>Density matrix simulator stores the full density matrix of the system and sequentially applies gates and noise operations of the circuit.</p>
+</li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># set up the on-demand simulator SV1</span>
+<span class="n">device</span> <span class="o">=</span> <span class="n">AwsDevice</span><span class="p">(</span><span class="s2">&quot;arn:aws:braket:::device/quantum-simulator/amazon/sv1&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># define a 15-qubit GHZ circuit</span>
+<span class="n">n_qubits</span> <span class="o">=</span> <span class="mi">15</span>
+<span class="n">ghz</span> <span class="o">=</span> <span class="n">ghz_circuit</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">)</span>
+
+<span class="c1"># run GHZ circuit on SV1</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">ghz</span><span class="p">,</span> <span class="n">shots</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+<span class="n">counts</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">measurement_counts</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">counts</span><span class="p">)</span>
+
+<span class="c1"># plot using Counter</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">counts</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">counts</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;bitstrings&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;counts&#39;</span><span class="p">)</span>
+
+<span class="c1"># print counts of all-zero-string</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Counts for all-zero bitstring:&#39;</span><span class="p">,</span> <span class="n">counts</span><span class="p">[</span><span class="s1">&#39;0&#39;</span><span class="o">*</span><span class="n">n_qubits</span><span class="p">])</span>
+<span class="c1"># print counts of all-one-string</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Counts for all-one bitstring:&#39;</span><span class="p">,</span> <span class="n">counts</span><span class="p">[</span><span class="s1">&#39;1&#39;</span><span class="o">*</span><span class="n">n_qubits</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Counter({&#39;111111111111111&#39;: 506, &#39;000000000000000&#39;: 494})
+Counts for all-zero bitstring: 494
+Counts for all-one bitstring: 506
+</pre></div>
+</div>
+<img alt="../../../_images/f395e66a46f407909d938600635c9cbb9741ebe8d513a6196a51f689e90d791d.png" src="../../../_images/f395e66a46f407909d938600635c9cbb9741ebe8d513a6196a51f689e90d791d.png" />
+</div>
+</div>
+<p>The following example demonstrates that TN1 can easily simulate GHZ circuits with up to 50 qubits due to the sparse, nearest neighbor gate structure.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># set up the on-demand simulator TN1</span>
+<span class="n">device</span> <span class="o">=</span> <span class="n">AwsDevice</span><span class="p">(</span><span class="s2">&quot;arn:aws:braket:::device/quantum-simulator/amazon/tn1&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># define a larger GHZ circuit</span>
+<span class="n">n_qubits</span> <span class="o">=</span> <span class="mi">50</span>
+<span class="n">ghz</span> <span class="o">=</span> <span class="n">ghz_circuit</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">)</span>
+
+<span class="c1"># run the same circuit on TN1</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">ghz</span><span class="p">,</span> <span class="n">shots</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+<span class="n">counts</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">measurement_counts</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">counts</span><span class="p">)</span>
+
+<span class="c1"># print counts of all-zero-string</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Counts for all-zero bitstring:&#39;</span><span class="p">,</span> <span class="n">counts</span><span class="p">[</span><span class="s1">&#39;0&#39;</span><span class="o">*</span><span class="n">n_qubits</span><span class="p">])</span>
+<span class="c1"># print counts of all-one-string</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Counts for all-one bitstring:&#39;</span><span class="p">,</span> <span class="n">counts</span><span class="p">[</span><span class="s1">&#39;1&#39;</span><span class="o">*</span><span class="n">n_qubits</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Counter({&#39;00000000000000000000000000000000000000000000000000&#39;: 510, &#39;11111111111111111111111111111111111111111111111111&#39;: 490})
+Counts for all-zero bitstring: 510
+Counts for all-one bitstring: 490
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>NOTE</strong>: Use unique task ID to look up task details in AWS console.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># print unique TASK ID (task = execution of individual circuit)</span>
+<span class="n">task_id</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">task_metadata</span><span class="o">.</span><span class="n">id</span>
+<span class="c1"># recover other metadata information such as number of qubits</span>
+<span class="n">n</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">task_metadata</span><span class="o">.</span><span class="n">deviceParameters</span><span class="o">.</span><span class="n">paradigmParameters</span><span class="o">.</span><span class="n">qubitCount</span>
+<span class="c1"># print(&#39;Task ID:&#39;, task_id)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Number of qubits:&#39;</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Number of qubits: 50
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Task Summary&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">quantum_tasks_statistics</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Note: Charges shown are estimates based on your Amazon Braket simulator and quantum processing unit (QPU) task usage. Estimated charges shown may differ from your actual charges. Estimated charges do not factor in any discounts or credits, and you may experience additional charges based on your use of other services such as Amazon Elastic Compute Cloud (Amazon EC2).&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Estimated cost to run this example: </span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="n">qpu_tasks_cost</span><span class="p">()</span> <span class="o">+</span> <span class="n">t</span><span class="o">.</span><span class="n">simulator_tasks_cost</span><span class="p">()</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> USD&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Task Summary
+{&#39;arn:aws:braket:::device/quantum-simulator/amazon/sv1&#39;: {&#39;shots&#39;: 1000, &#39;tasks&#39;: {&#39;COMPLETED&#39;: 1}, &#39;execution_duration&#39;: datetime.timedelta(microseconds=37000), &#39;billed_execution_duration&#39;: datetime.timedelta(seconds=3)}, &#39;arn:aws:braket:::device/quantum-simulator/amazon/tn1&#39;: {&#39;shots&#39;: 1000, &#39;tasks&#39;: {&#39;COMPLETED&#39;: 1}, &#39;execution_duration&#39;: datetime.timedelta(seconds=5, microseconds=317000), &#39;billed_execution_duration&#39;: datetime.timedelta(seconds=5, microseconds=317000)}}
+Note: Charges shown are estimates based on your Amazon Braket simulator and quantum processing unit (QPU) task usage. Estimated charges shown may differ from your actual charges. Estimated charges do not factor in any discounts or credits, and you may experience additional charges based on your use of other services such as Amazon Elastic Compute Cloud (Amazon EC2).
+Estimated cost to run this example: 0.03 USD
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Preparing a GHZ state and running the circuit on simulators</a><ul>
+<li><a class="reference internal" href="#problem-prepare-a-ghz-state">Problem: Prepare a GHZ State</a></li>
+<li><a class="reference internal" href="#setup-circuit">Setup Circuit</a></li>
+<li><a class="reference internal" href="#local-simulator">Local Simulator</a></li>
+<li><a class="reference internal" href="#the-on-demand-simulators">The On-Demand Simulators</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/scripts/furo.js"></script>
+    </body>
+</html>

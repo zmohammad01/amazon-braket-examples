@@ -1,0 +1,2126 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
+
+    <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
+        <title>Getting Devices and Checking Device Properties - Amazon Braket Examples documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">Amazon Braket Examples  documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  
+  
+  <span class="sidebar-brand-text">Amazon Braket Examples  documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="getting-devices-and-checking-device-properties">
+<h1>Getting Devices and Checking Device Properties<a class="headerlink" href="#getting-devices-and-checking-device-properties" title="Permalink to this heading">#</a></h1>
+<p>This tutorial demonstrates how to use the <code class="docutils literal notranslate"><span class="pre">get_devices()</span></code> method to search and instantiate devices available on Amazon Braket. It also shows how to obtain access to properties for simulator and QPU devices.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># general imports</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">braket.aws</span> <span class="kn">import</span> <span class="n">AwsDevice</span>
+<span class="kn">from</span> <span class="nn">braket.devices</span> <span class="kn">import</span> <span class="n">LocalSimulator</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="using-get-devices">
+<h2>Using get_devices<a class="headerlink" href="#using-get-devices" title="Permalink to this heading">#</a></h2>
+<p>You can get a device, including the on-demand simulators and the QPUs, by calling the <code class="docutils literal notranslate"><span class="pre">get_devices()</span></code> method. Search for devices with one or more of the following filtering criteria:</p>
+<ul class="simple">
+<li><p>device arn</p></li>
+<li><p>name</p></li>
+<li><p>type</p></li>
+<li><p>status</p></li>
+<li><p>provider_name.</p></li>
+</ul>
+<p>The following cells give examples for each of the cases.</p>
+<section id="getting-the-device-by-type">
+<h3>Getting the device by type<a class="headerlink" href="#getting-the-device-by-type" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># to get the on-demand simulators</span>
+<span class="n">AwsDevice</span><span class="o">.</span><span class="n">get_devices</span><span class="p">(</span><span class="n">types</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;SIMULATOR&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[Device(&#39;name&#39;: SV1, &#39;arn&#39;: arn:aws:braket:::device/quantum-simulator/amazon/sv1),
+ Device(&#39;name&#39;: TN1, &#39;arn&#39;: arn:aws:braket:::device/quantum-simulator/amazon/tn1),
+ Device(&#39;name&#39;: dm1, &#39;arn&#39;: arn:aws:braket:::device/quantum-simulator/amazon/dm1)]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># to get the list of QPUs</span>
+<span class="n">AwsDevice</span><span class="o">.</span><span class="n">get_devices</span><span class="p">(</span><span class="n">types</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;QPU&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[Device(&#39;name&#39;: Aspen-10, &#39;arn&#39;: arn:aws:braket:::device/qpu/rigetti/Aspen-10),
+ Device(&#39;name&#39;: Aspen-11, &#39;arn&#39;: arn:aws:braket:::device/qpu/rigetti/Aspen-11),
+ Device(&#39;name&#39;: Aspen-8, &#39;arn&#39;: arn:aws:braket:::device/qpu/rigetti/Aspen-8),
+ Device(&#39;name&#39;: Aspen-9, &#39;arn&#39;: arn:aws:braket:::device/qpu/rigetti/Aspen-9),
+ Device(&#39;name&#39;: Aspen-M-1, &#39;arn&#39;: arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-1),
+ Device(&#39;name&#39;: IonQ Device, &#39;arn&#39;: arn:aws:braket:::device/qpu/ionq/ionQdevice)]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="getting-the-device-by-arn">
+<h3>Getting the device by ARN<a class="headerlink" href="#getting-the-device-by-arn" title="Permalink to this heading">#</a></h3>
+<p>For every type of device available in Amazon Braket, you can find the associated ARN in the Amazon Braket <a class="reference external" href="https://docs.aws.amazon.com/braket/latest/developerguide/braket-devices.html">Developer Guide</a>. You also can view the device ARN on the <code class="docutils literal notranslate"><span class="pre">Devices</span></code> section in the Amazon Braket console.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># for example, the following ARN refers to the IonQ device.</span>
+<span class="n">AwsDevice</span><span class="o">.</span><span class="n">get_devices</span><span class="p">(</span><span class="n">arns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;arn:aws:braket:::device/qpu/ionq/ionQdevice&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[Device(&#39;name&#39;: IonQ Device, &#39;arn&#39;: arn:aws:braket:::device/qpu/ionq/ionQdevice)]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="getting-the-device-by-name">
+<h3>Getting the device by name<a class="headerlink" href="#getting-the-device-by-name" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># for example, the following name refers to a Rigetti Aspen system.</span>
+<span class="n">AwsDevice</span><span class="o">.</span><span class="n">get_devices</span><span class="p">(</span><span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Aspen-M-2&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[Device(&#39;name&#39;: Aspen-M-2, &#39;arn&#39;: arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-2)]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="getting-the-device-by-status">
+<h3>Getting the device by status<a class="headerlink" href="#getting-the-device-by-status" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># retrieve all devices that are currently online</span>
+<span class="n">AwsDevice</span><span class="o">.</span><span class="n">get_devices</span><span class="p">(</span><span class="n">statuses</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;ONLINE&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[Device(&#39;name&#39;: Aspen-11, &#39;arn&#39;: arn:aws:braket:::device/qpu/rigetti/Aspen-11),
+ Device(&#39;name&#39;: Aspen-8, &#39;arn&#39;: arn:aws:braket:::device/qpu/rigetti/Aspen-8),
+ Device(&#39;name&#39;: Aspen-M-2, &#39;arn&#39;: arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-2),
+ Device(&#39;name&#39;: IonQ Device, &#39;arn&#39;: arn:aws:braket:::device/qpu/ionq/ionQdevice),
+ Device(&#39;name&#39;: SV1, &#39;arn&#39;: arn:aws:braket:::device/quantum-simulator/amazon/sv1),
+ Device(&#39;name&#39;: dm1, &#39;arn&#39;: arn:aws:braket:::device/quantum-simulator/amazon/dm1)]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># retrieve all devices that are currently offline</span>
+<span class="n">AwsDevice</span><span class="o">.</span><span class="n">get_devices</span><span class="p">(</span><span class="n">statuses</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;OFFLINE&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[Device(&#39;name&#39;: Aspen-M-1, &#39;arn&#39;: arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-1)]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="getting-the-device-by-provider-name">
+<h3>Getting the device by provider_name<a class="headerlink" href="#getting-the-device-by-provider-name" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># for example, the following ARN retrieves the IonQ device.</span>
+<span class="n">AwsDevice</span><span class="o">.</span><span class="n">get_devices</span><span class="p">(</span><span class="n">provider_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;IonQ&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[Device(&#39;name&#39;: IonQ Device, &#39;arn&#39;: arn:aws:braket:::device/qpu/ionq/ionQdevice)]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="retrieve-devices-in-order">
+<h3>Retrieve devices in order<a class="headerlink" href="#retrieve-devices-in-order" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># retrieve the list of devices, ordered by provider name</span>
+<span class="n">AwsDevice</span><span class="o">.</span><span class="n">get_devices</span><span class="p">(</span><span class="n">order_by</span><span class="o">=</span><span class="s1">&#39;provider_name&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[Device(&#39;name&#39;: SV1, &#39;arn&#39;: arn:aws:braket:::device/quantum-simulator/amazon/sv1),
+ Device(&#39;name&#39;: dm1, &#39;arn&#39;: arn:aws:braket:::device/quantum-simulator/amazon/dm1),
+ Device(&#39;name&#39;: IonQ Device, &#39;arn&#39;: arn:aws:braket:::device/qpu/ionq/ionQdevice),
+ Device(&#39;name&#39;: Aspen-10, &#39;arn&#39;: arn:aws:braket:::device/qpu/rigetti/Aspen-10),
+  Device(&#39;name&#39;: Aspen-8, &#39;arn&#39;: arn:aws:braket:::device/qpu/rigetti/Aspen-8),
+ Device(&#39;name&#39;: Aspen-9, &#39;arn&#39;: arn:aws:braket:::device/qpu/rigetti/Aspen-9),
+ Device(&#39;name&#39;: Aspen-M-1, &#39;arn&#39;: arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-1),
+ Device(&#39;name&#39;: Aspen-11, &#39;arn&#39;: arn:aws:braket:::device/qpu/rigetti/Aspen-11)]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="getting-the-device-with-multiple-criteria">
+<h3>Getting the device with multiple criteria<a class="headerlink" href="#getting-the-device-with-multiple-criteria" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># multiple criteria can be applied</span>
+<span class="n">AwsDevice</span><span class="o">.</span><span class="n">get_devices</span><span class="p">(</span><span class="n">types</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;QPU&#39;</span><span class="p">],</span><span class="n">statuses</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;ONLINE&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[Device(&#39;name&#39;: Aspen-11, &#39;arn&#39;: arn:aws:braket:::device/qpu/rigetti/Aspen-11),
+ Device(&#39;name&#39;: Aspen-8, &#39;arn&#39;: arn:aws:braket:::device/qpu/rigetti/Aspen-8),
+ Device(&#39;name&#39;: Aspen-M-1, &#39;arn&#39;: arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-1),
+ Device(&#39;name&#39;: IonQ Device, &#39;arn&#39;: arn:aws:braket:::device/qpu/ionq/ionQdevice)]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="getting-a-device-directly">
+<h2>Getting a device directly<a class="headerlink" href="#getting-a-device-directly" title="Permalink to this heading">#</a></h2>
+<p>You can specify a device directly, with the device ARN.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># specify a device directly by device ARN</span>
+<span class="c1"># Rigetti</span>
+<span class="n">device</span> <span class="o">=</span> <span class="n">AwsDevice</span><span class="p">(</span><span class="s2">&quot;arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-2&quot;</span><span class="p">)</span>
+<span class="c1"># IonQ</span>
+<span class="n">device</span> <span class="o">=</span> <span class="n">AwsDevice</span><span class="p">(</span><span class="s2">&quot;arn:aws:braket:::device/qpu/ionq/ionQdevice&quot;</span><span class="p">)</span>
+<span class="c1"># the on-demand simulator SV1</span>
+<span class="n">device</span> <span class="o">=</span> <span class="n">AwsDevice</span><span class="p">(</span><span class="s2">&quot;arn:aws:braket:::device/quantum-simulator/amazon/sv1&quot;</span><span class="p">)</span>
+<span class="c1"># the on-demand simulator TN1</span>
+<span class="n">device</span> <span class="o">=</span> <span class="n">AwsDevice</span><span class="p">(</span><span class="s2">&quot;arn:aws:braket:::device/quantum-simulator/amazon/tn1&quot;</span><span class="p">)</span>
+<span class="c1"># the local simulator</span>
+<span class="n">device</span> <span class="o">=</span> <span class="n">LocalSimulator</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="properties-of-devices">
+<h2>Properties of devices<a class="headerlink" href="#properties-of-devices" title="Permalink to this heading">#</a></h2>
+<p>You can check properties of a device with the <code class="docutils literal notranslate"><span class="pre">device.properties</span></code> call. The following examples show some useful properties of each device.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># the on-demand simulator SV1</span>
+<span class="n">device</span> <span class="o">=</span> <span class="n">AwsDevice</span><span class="p">(</span><span class="s2">&quot;arn:aws:braket:::device/quantum-simulator/amazon/sv1&quot;</span><span class="p">)</span>
+
+<span class="n">support_gates</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">action</span><span class="p">[</span><span class="s1">&#39;braket.ir.jaqcd.program&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">supportedOperations</span>
+<span class="n">support_result_types</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">action</span><span class="p">[</span><span class="s1">&#39;braket.ir.jaqcd.program&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">supportedResultTypes</span>
+<span class="n">qubit_count</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">paradigm</span><span class="o">.</span><span class="n">qubitCount</span>
+<span class="n">shots_range</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">shotsRange</span>
+<span class="n">device_cost</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">deviceCost</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;The supported operations of </span><span class="si">{</span><span class="n">device</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1"> are </span><span class="si">{</span><span class="n">support_gates</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;The supported result types are </span><span class="si">{</span><span class="n">support_result_types</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The maximum number of qubits supported by this device is&#39;</span><span class="p">,</span> <span class="n">qubit_count</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The shots range of this device is&#39;</span><span class="p">,</span> <span class="n">shots_range</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The price of running tasks on this device:&#39;</span><span class="p">,</span> <span class="n">device_cost</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The supported operations of SV1 are [&#39;ccnot&#39;, &#39;cnot&#39;, &#39;cphaseshift&#39;, &#39;cphaseshift00&#39;, &#39;cphaseshift01&#39;, &#39;cphaseshift10&#39;, &#39;cswap&#39;, &#39;cy&#39;, &#39;cz&#39;, &#39;h&#39;, &#39;i&#39;, &#39;iswap&#39;, &#39;pswap&#39;, &#39;phaseshift&#39;, &#39;rx&#39;, &#39;ry&#39;, &#39;rz&#39;, &#39;s&#39;, &#39;si&#39;, &#39;swap&#39;, &#39;t&#39;, &#39;ti&#39;, &#39;unitary&#39;, &#39;v&#39;, &#39;vi&#39;, &#39;x&#39;, &#39;xx&#39;, &#39;xy&#39;, &#39;y&#39;, &#39;yy&#39;, &#39;z&#39;, &#39;zz&#39;]
+
+The supported result types are [ResultType(name=&#39;Sample&#39;, observables=[&#39;x&#39;, &#39;y&#39;, &#39;z&#39;, &#39;h&#39;, &#39;i&#39;, &#39;hermitian&#39;], minShots=1, maxShots=100000), ResultType(name=&#39;Expectation&#39;, observables=[&#39;x&#39;, &#39;y&#39;, &#39;z&#39;, &#39;h&#39;, &#39;i&#39;, &#39;hermitian&#39;], minShots=0, maxShots=100000), ResultType(name=&#39;Variance&#39;, observables=[&#39;x&#39;, &#39;y&#39;, &#39;z&#39;, &#39;h&#39;, &#39;i&#39;, &#39;hermitian&#39;], minShots=0, maxShots=100000), ResultType(name=&#39;Probability&#39;, observables=None, minShots=1, maxShots=100000), ResultType(name=&#39;Amplitude&#39;, observables=None, minShots=0, maxShots=0)]
+
+The maximum number of qubits supported by this device is 34
+The shots range of this device is (0, 100000)
+The price of running tasks on this device: price=0.075 unit=&#39;minute&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<p>For the IonQ and Rigetti devices, you can get information about the properties shown previously. You also can get information about the availability windows and the device calibration data.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># the IonQ device</span>
+<span class="n">device</span> <span class="o">=</span> <span class="n">AwsDevice</span><span class="p">(</span><span class="s2">&quot;arn:aws:braket:::device/qpu/ionq/ionQdevice&quot;</span><span class="p">)</span>
+
+<span class="c1"># the Rigetti device</span>
+<span class="n">device</span> <span class="o">=</span> <span class="n">AwsDevice</span><span class="p">(</span><span class="s2">&quot;arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-2&quot;</span><span class="p">)</span>
+
+<span class="n">execution_windows</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">executionWindows</span>
+<span class="n">connectivity_graph</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">paradigm</span><span class="o">.</span><span class="n">connectivity</span>
+<span class="n">calibration</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">provider</span><span class="o">.</span><span class="n">specs</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;The availability windows for </span><span class="si">{</span><span class="n">device</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">:</span><span class="se">\n</span><span class="si">{</span><span class="n">execution_windows</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;The connectivity graph of the qubits for this device:</span><span class="se">\n</span><span class="s1"> </span><span class="si">{</span><span class="n">connectivity_graph</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Calibration data:</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">calibration</span><span class="p">,</span><span class="n">sort_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The availability windows for Aspen-M-2:
+[DeviceExecutionWindow(executionDay=&lt;ExecutionDay.EVERYDAY: &#39;Everyday&#39;&gt;, windowStartHour=datetime.time(15, 0), windowEndHour=datetime.time(20, 0))]
+
+The connectivity graph of the qubits for this device:
+ fullyConnected=False connectivityGraph={&#39;0&#39;: [&#39;1&#39;, &#39;7&#39;], &#39;1&#39;: [&#39;0&#39;, &#39;16&#39;, &#39;2&#39;], &#39;10&#39;: [&#39;11&#39;, &#39;113&#39;, &#39;17&#39;], &#39;100&#39;: [&#39;101&#39;, &#39;107&#39;], &#39;101&#39;: [&#39;100&#39;, &#39;102&#39;, &#39;116&#39;], &#39;102&#39;: [&#39;101&#39;, &#39;103&#39;, &#39;115&#39;], &#39;103&#39;: [&#39;102&#39;, &#39;104&#39;], &#39;104&#39;: [&#39;103&#39;, &#39;105&#39;, &#39;7&#39;], &#39;105&#39;: [&#39;104&#39;, &#39;106&#39;], &#39;106&#39;: [&#39;105&#39;, &#39;107&#39;], &#39;107&#39;: [&#39;100&#39;, &#39;106&#39;], &#39;11&#39;: [&#39;10&#39;, &#39;12&#39;, &#39;26&#39;], &#39;110&#39;: [&#39;111&#39;, &#39;117&#39;], &#39;111&#39;: [&#39;110&#39;, &#39;112&#39;, &#39;126&#39;], &#39;112&#39;: [&#39;111&#39;, &#39;113&#39;], &#39;113&#39;: [&#39;10&#39;, &#39;112&#39;, &#39;114&#39;], &#39;114&#39;: [&#39;113&#39;, &#39;115&#39;, &#39;17&#39;], &#39;115&#39;: [&#39;102&#39;, &#39;114&#39;, &#39;116&#39;], &#39;116&#39;: [&#39;101&#39;, &#39;115&#39;, &#39;117&#39;], &#39;117&#39;: [&#39;110&#39;, &#39;116&#39;], &#39;12&#39;: [&#39;11&#39;, &#39;13&#39;, &#39;25&#39;], &#39;120&#39;: [&#39;121&#39;, &#39;127&#39;], &#39;121&#39;: [&#39;120&#39;, &#39;122&#39;, &#39;136&#39;], &#39;122&#39;: [&#39;121&#39;, &#39;123&#39;, &#39;135&#39;], &#39;123&#39;: [&#39;122&#39;, &#39;124&#39;, &#39;20&#39;], &#39;124&#39;: [&#39;123&#39;, &#39;125&#39;, &#39;27&#39;], &#39;125&#39;: [&#39;124&#39;, &#39;126&#39;], &#39;126&#39;: [&#39;111&#39;, &#39;125&#39;, &#39;127&#39;], &#39;127&#39;: [&#39;120&#39;, &#39;126&#39;], &#39;13&#39;: [&#39;12&#39;, &#39;14&#39;], &#39;130&#39;: [&#39;131&#39;, &#39;137&#39;], &#39;131&#39;: [&#39;130&#39;, &#39;132&#39;, &#39;146&#39;], &#39;132&#39;: [&#39;131&#39;, &#39;133&#39;, &#39;145&#39;], &#39;133&#39;: [&#39;132&#39;, &#39;134&#39;, &#39;30&#39;], &#39;134&#39;: [&#39;133&#39;, &#39;135&#39;, &#39;37&#39;], &#39;135&#39;: [&#39;122&#39;, &#39;134&#39;, &#39;136&#39;], &#39;136&#39;: [&#39;121&#39;, &#39;135&#39;, &#39;137&#39;], &#39;137&#39;: [&#39;130&#39;, &#39;136&#39;], &#39;14&#39;: [&#39;13&#39;, &#39;15&#39;], &#39;140&#39;: [&#39;141&#39;, &#39;147&#39;], &#39;141&#39;: [&#39;140&#39;, &#39;142&#39;], &#39;142&#39;: [&#39;141&#39;, &#39;143&#39;], &#39;143&#39;: [&#39;142&#39;, &#39;144&#39;, &#39;40&#39;], &#39;144&#39;: [&#39;143&#39;, &#39;145&#39;, &#39;47&#39;], &#39;145&#39;: [&#39;132&#39;, &#39;144&#39;, &#39;146&#39;], &#39;146&#39;: [&#39;131&#39;, &#39;145&#39;, &#39;147&#39;], &#39;147&#39;: [&#39;140&#39;, &#39;146&#39;], &#39;15&#39;: [&#39;14&#39;, &#39;16&#39;, &#39;2&#39;], &#39;16&#39;: [&#39;1&#39;, &#39;15&#39;, &#39;17&#39;], &#39;17&#39;: [&#39;10&#39;, &#39;16&#39;, &#39;114&#39;], &#39;2&#39;: [&#39;1&#39;, &#39;15&#39;, &#39;3&#39;], &#39;20&#39;: [&#39;123&#39;, &#39;21&#39;, &#39;27&#39;], &#39;21&#39;: [&#39;20&#39;, &#39;22&#39;, &#39;36&#39;], &#39;22&#39;: [&#39;21&#39;, &#39;23&#39;, &#39;35&#39;], &#39;23&#39;: [&#39;22&#39;, &#39;24&#39;], &#39;24&#39;: [&#39;23&#39;, &#39;25&#39;], &#39;25&#39;: [&#39;12&#39;, &#39;24&#39;, &#39;26&#39;], &#39;26&#39;: [&#39;11&#39;, &#39;25&#39;, &#39;27&#39;], &#39;27&#39;: [&#39;20&#39;, &#39;26&#39;, &#39;124&#39;], &#39;3&#39;: [&#39;2&#39;, &#39;4&#39;], &#39;30&#39;: [&#39;133&#39;, &#39;31&#39;, &#39;37&#39;], &#39;31&#39;: [&#39;30&#39;, &#39;32&#39;, &#39;46&#39;], &#39;32&#39;: [&#39;31&#39;, &#39;33&#39;, &#39;45&#39;], &#39;33&#39;: [&#39;32&#39;, &#39;34&#39;], &#39;34&#39;: [&#39;33&#39;, &#39;35&#39;], &#39;35&#39;: [&#39;22&#39;, &#39;34&#39;, &#39;36&#39;], &#39;36&#39;: [&#39;21&#39;, &#39;35&#39;, &#39;37&#39;], &#39;37&#39;: [&#39;30&#39;, &#39;36&#39;, &#39;134&#39;], &#39;4&#39;: [&#39;3&#39;, &#39;5&#39;], &#39;40&#39;: [&#39;143&#39;, &#39;41&#39;, &#39;47&#39;], &#39;41&#39;: [&#39;40&#39;, &#39;42&#39;], &#39;42&#39;: [&#39;41&#39;, &#39;43&#39;], &#39;43&#39;: [&#39;42&#39;, &#39;44&#39;], &#39;44&#39;: [&#39;43&#39;, &#39;45&#39;], &#39;45&#39;: [&#39;32&#39;, &#39;44&#39;, &#39;46&#39;], &#39;46&#39;: [&#39;31&#39;, &#39;45&#39;, &#39;47&#39;], &#39;47&#39;: [&#39;40&#39;, &#39;46&#39;, &#39;144&#39;], &#39;5&#39;: [&#39;4&#39;, &#39;6&#39;], &#39;6&#39;: [&#39;5&#39;, &#39;7&#39;], &#39;7&#39;: [&#39;0&#39;, &#39;6&#39;, &#39;104&#39;]}
+
+Calibration data:
+ {
+  &quot;1Q&quot;: {
+    &quot;0&quot;: {
+      &quot;T1&quot;: 8.777348365240911e-06,
+      &quot;T2&quot;: 1.4387746662680443e-05,
+      &quot;f1QRB&quot;: 0.998504263416883,
+      &quot;f1QRB_std_err&quot;: 0.000200939668822899,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9303976571661898,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.01832843535640074,
+      &quot;fActiveReset&quot;: 0.983,
+      &quot;fRO&quot;: 0.7455
+    },
+    &quot;1&quot;: {
+      &quot;T1&quot;: 5.6366506444582853e-05,
+      &quot;T2&quot;: 2.6242615804514876e-06,
+      &quot;f1QRB&quot;: 0.998504263416883,
+      &quot;f1QRB_std_err&quot;: 0.000200939668822899,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9460049849871673,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.015573861338627268,
+      &quot;fActiveReset&quot;: 0.985,
+      &quot;fRO&quot;: 0.8540000000000001
+    },
+    &quot;10&quot;: {
+      &quot;T1&quot;: 2.4649825183020724e-05,
+      &quot;T2&quot;: 2.112458278475246e-05,
+      &quot;f1QRB&quot;: 0.998567587494012,
+      &quot;f1QRB_std_err&quot;: 0.000207675573751291,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9979683963345315,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.00020991123805034803,
+      &quot;fActiveReset&quot;: 0.9995,
+      &quot;fRO&quot;: 0.97
+    },
+    &quot;100&quot;: {
+      &quot;T1&quot;: 1.4605161566150215e-05,
+      &quot;T2&quot;: 8.902523025740775e-06,
+      &quot;f1QRB&quot;: 0.997775892122462,
+      &quot;f1QRB_std_err&quot;: 0.000374351563384802,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9961567026311122,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.0002573088587404397,
+      &quot;fActiveReset&quot;: 0.9855000000000002,
+      &quot;fRO&quot;: 0.966
+    },
+    &quot;101&quot;: {
+      &quot;T1&quot;: 3.470265115845805e-05,
+      &quot;T2&quot;: 1.597107188692292e-05,
+      &quot;f1QRB&quot;: 0.997775892122462,
+      &quot;f1QRB_std_err&quot;: 0.000374351563384802,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9970276543696347,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.00013096176594054902,
+      &quot;fActiveReset&quot;: 0.9475,
+      &quot;fRO&quot;: 0.9835
+    },
+    &quot;102&quot;: {
+      &quot;T1&quot;: 3.108759865555477e-05,
+      &quot;T2&quot;: 9.128937181043585e-06,
+      &quot;f1QRB&quot;: 0.997775892122462,
+      &quot;f1QRB_std_err&quot;: 0.000374351563384802,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9976099333865556,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.00018672092358221307,
+      &quot;fActiveReset&quot;: 0.9975,
+      &quot;fRO&quot;: 0.97
+    },
+    &quot;103&quot;: {
+      &quot;T1&quot;: 2.4162789957538067e-05,
+      &quot;T2&quot;: 3.320981405023996e-05,
+      &quot;f1QRB&quot;: 0.997775892122462,
+      &quot;f1QRB_std_err&quot;: 0.000374351563384802,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9976510417447488,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.00019191885187922028,
+      &quot;fActiveReset&quot;: 0.9985,
+      &quot;fRO&quot;: 0.983
+    },
+    &quot;104&quot;: {
+      &quot;T1&quot;: 1.1231745568052176e-05,
+      &quot;T2&quot;: 2.41162039532837e-06,
+      &quot;f1QRB&quot;: 0.997775892122462,
+      &quot;f1QRB_std_err&quot;: 0.000374351563384802,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9214629936027059,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.02750707475639154,
+      &quot;fActiveReset&quot;: 0.7835,
+      &quot;fRO&quot;: 0.6910000000000001
+    },
+    &quot;105&quot;: {
+      &quot;T1&quot;: 2.194007430622591e-05,
+      &quot;T2&quot;: 9.166301159022885e-06,
+      &quot;f1QRB&quot;: 0.997775892122462,
+      &quot;f1QRB_std_err&quot;: 0.000374351563384802,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9963657123115162,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.00011396815287868675,
+      &quot;fActiveReset&quot;: 0.9975,
+      &quot;fRO&quot;: 0.975
+    },
+    &quot;106&quot;: {
+      &quot;T1&quot;: 9.167404134258206e-06,
+      &quot;T2&quot;: 3.5514114878112702e-06,
+      &quot;f1QRB&quot;: 0.997775892122462,
+      &quot;f1QRB_std_err&quot;: 0.000374351563384802,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9908088608494778,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.0006521411302170585,
+      &quot;fActiveReset&quot;: 0.995,
+      &quot;fRO&quot;: 0.977
+    },
+    &quot;107&quot;: {
+      &quot;T1&quot;: 2.7364319175493534e-05,
+      &quot;T2&quot;: 1.728370149460824e-05,
+      &quot;f1QRB&quot;: 0.997775892122462,
+      &quot;f1QRB_std_err&quot;: 0.000374351563384802,
+      &quot;f1Q_simultaneous_RB&quot;: 0.998360745533851,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.00013243327201981094,
+      &quot;fActiveReset&quot;: 0.9935,
+      &quot;fRO&quot;: 0.9435
+    },
+    &quot;11&quot;: {
+      &quot;T1&quot;: 4.242363601303367e-05,
+      &quot;T2&quot;: 1.897668630009837e-05,
+      &quot;f1QRB&quot;: 0.998567587494012,
+      &quot;f1QRB_std_err&quot;: 0.000207675573751291,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9979463434832029,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.0002787945305936024,
+      &quot;fActiveReset&quot;: 0.9935,
+      &quot;fRO&quot;: 0.915
+    },
+    &quot;110&quot;: {
+      &quot;T1&quot;: 2.3000070121348415e-05,
+      &quot;T2&quot;: 2.821554481340575e-05,
+      &quot;f1QRB&quot;: 0.997966130975084,
+      &quot;f1QRB_std_err&quot;: 0.000835699458163396,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9978578224230155,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.0001438820152819121,
+      &quot;fActiveReset&quot;: 0.9990000000000001,
+      &quot;fRO&quot;: 0.975
+    },
+    &quot;111&quot;: {
+      &quot;T1&quot;: 5.4014904686594534e-05,
+      &quot;T2&quot;: 2.6526235292895404e-05,
+      &quot;f1QRB&quot;: 0.997966130975084,
+      &quot;f1QRB_std_err&quot;: 0.000835699458163396,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9971325904076612,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.00041329462728499877,
+      &quot;fActiveReset&quot;: 0.9985,
+      &quot;fRO&quot;: 0.927
+    },
+    &quot;112&quot;: {
+      &quot;T1&quot;: 2.4225018294687928e-05,
+      &quot;T2&quot;: 1.7676421014048713e-06,
+      &quot;f1QRB&quot;: 0.997966130975084,
+      &quot;f1QRB_std_err&quot;: 0.000835699458163396,
+      &quot;f1Q_simultaneous_RB&quot;: 0.8743241888807464,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.06433267814368877,
+      &quot;fActiveReset&quot;: 0.9945,
+      &quot;fRO&quot;: 0.639
+    },
+    &quot;113&quot;: {
+      &quot;T1&quot;: 2.0808074664202536e-05,
+      &quot;T2&quot;: 2.50607222807605e-05,
+      &quot;f1QRB&quot;: 0.997966130975084,
+      &quot;f1QRB_std_err&quot;: 0.000835699458163396,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9803553028933467,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.0020504962516807675,
+      &quot;fActiveReset&quot;: 0.9955000000000002,
+      &quot;fRO&quot;: 0.9655
+    },
+    &quot;114&quot;: {
+      &quot;T1&quot;: 4.9385373310784075e-06,
+      &quot;T2&quot;: 5.226996638672165e-06,
+      &quot;f1QRB&quot;: 0.997966130975084,
+      &quot;f1QRB_std_err&quot;: 0.000835699458163396,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9879202125157243,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.001374557378211964,
+      &quot;fActiveReset&quot;: 0.976,
+      &quot;fRO&quot;: 0.762
+    },
+    &quot;115&quot;: {
+      &quot;T1&quot;: 6.253691961077834e-05,
+      &quot;T2&quot;: 1.3634468894645568e-05,
+      &quot;f1QRB&quot;: 0.997966130975084,
+      &quot;f1QRB_std_err&quot;: 0.000835699458163396,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9981439033243311,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.00020277335250327972,
+      &quot;fActiveReset&quot;: 0.995,
+      &quot;fRO&quot;: 0.9655
+    },
+    &quot;116&quot;: {
+      &quot;T1&quot;: 3.805070412976619e-06,
+      &quot;T2&quot;: 5.245456177822353e-06,
+      &quot;f1QRB&quot;: 0.997966130975084,
+      &quot;f1QRB_std_err&quot;: 0.000835699458163396,
+      &quot;f1Q_simultaneous_RB&quot;: 0.874101534108853,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.09887673417905422,
+      &quot;fActiveReset&quot;: 0.995,
+      &quot;fRO&quot;: 0.5465
+    },
+    &quot;117&quot;: {
+      &quot;T1&quot;: 4.358711341434507e-05,
+      &quot;T2&quot;: 2.3881588862514415e-05,
+      &quot;f1QRB&quot;: 0.997966130975084,
+      &quot;f1QRB_std_err&quot;: 0.000835699458163396,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9989105169449737,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.0006742976342786026,
+      &quot;fActiveReset&quot;: 0.9945,
+      &quot;fRO&quot;: 0.9430000000000001
+    },
+    &quot;12&quot;: {
+      &quot;T1&quot;: 2.9636548185996148e-05,
+      &quot;T2&quot;: 3.979281277322271e-05,
+      &quot;f1QRB&quot;: 0.998567587494012,
+      &quot;f1QRB_std_err&quot;: 0.000207675573751291,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9969920950979971,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.0003580181994448194,
+      &quot;fActiveReset&quot;: 0.9990000000000001,
+      &quot;fRO&quot;: 0.973
+    },
+    &quot;120&quot;: {
+      &quot;T1&quot;: 1.1354648137507084e-05,
+      &quot;T2&quot;: 1.8376892392054795e-05,
+      &quot;f1QRB&quot;: 0.997784427515552,
+      &quot;f1QRB_std_err&quot;: 0.000386463353061929,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9943453098471738,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.0009740967814970427,
+      &quot;fActiveReset&quot;: 0.9915,
+      &quot;fRO&quot;: 0.965
+    },
+    &quot;121&quot;: {
+      &quot;T1&quot;: 2.980533535867913e-05,
+      &quot;T2&quot;: 2.5390955607971303e-05,
+      &quot;f1QRB&quot;: 0.997784427515552,
+      &quot;f1QRB_std_err&quot;: 0.000386463353061929,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9989723326150323,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.0011537062821187312,
+      &quot;fActiveReset&quot;: 0.9975,
+      &quot;fRO&quot;: 0.9505
+    },
+    &quot;122&quot;: {
+      &quot;T1&quot;: 3.2366343738043923e-05,
+      &quot;T2&quot;: 2.0066223180104294e-05,
+      &quot;f1QRB&quot;: 0.997784427515552,
+      &quot;f1QRB_std_err&quot;: 0.000386463353061929,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9975424315377772,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.00021444335083721532,
+      &quot;fActiveReset&quot;: 0.9985,
+      &quot;fRO&quot;: 0.9764999999999999
+    },
+    &quot;123&quot;: {
+      &quot;T1&quot;: 5.875772367436305e-05,
+      &quot;T2&quot;: 1.1534722501295969e-05,
+      &quot;f1QRB&quot;: 0.997784427515552,
+      &quot;f1QRB_std_err&quot;: 0.000386463353061929,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9993207109918728,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.0003010778882301275,
+      &quot;fActiveReset&quot;: 0.9955000000000002,
+      &quot;fRO&quot;: 0.9450000000000001
+    },
+    &quot;124&quot;: {
+      &quot;T1&quot;: 2.7500954872916594e-05,
+      &quot;T2&quot;: 1.5347146711071054,
+      &quot;f1QRB&quot;: 0.997784427515552,
+      &quot;f1QRB_std_err&quot;: 0.000386463353061929,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9981686457276004,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.0032711135332684203,
+      &quot;fActiveReset&quot;: 0.774,
+      &quot;fRO&quot;: 0.5295
+    },
+    &quot;125&quot;: {
+      &quot;T1&quot;: 5.175873757479188e-05,
+      &quot;T2&quot;: 1.674762004618807e-05,
+      &quot;f1QRB&quot;: 0.997784427515552,
+      &quot;f1QRB_std_err&quot;: 0.000386463353061929,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9970069535717453,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.0011145510582170903,
+      &quot;fActiveReset&quot;: 0.9995,
+      &quot;fRO&quot;: 0.9245
+    },
+    &quot;126&quot;: {
+      &quot;T1&quot;: 7.899644468789546e-06,
+      &quot;T2&quot;: 7.0596060087964286e-06,
+      &quot;f1QRB&quot;: 0.997784427515552,
+      &quot;f1QRB_std_err&quot;: 0.000386463353061929,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9707783944211008,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.002942215508562394,
+      &quot;fActiveReset&quot;: 0.937,
+      &quot;fRO&quot;: 0.8935
+    },
+    &quot;127&quot;: {
+      &quot;T1&quot;: 4.507719830493251e-05,
+      &quot;T2&quot;: 2.4898747936087966e-05,
+      &quot;f1QRB&quot;: 0.997784427515552,
+      &quot;f1QRB_std_err&quot;: 0.000386463353061929,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9981658480680515,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.00023050821835492982,
+      &quot;fActiveReset&quot;: 0.9985,
+      &quot;fRO&quot;: 0.9335
+    },
+    &quot;13&quot;: {
+      &quot;T1&quot;: 5.42931824449866e-05,
+      &quot;T2&quot;: 1.1038558883496037e-05,
+      &quot;f1QRB&quot;: 0.998567587494012,
+      &quot;f1QRB_std_err&quot;: 0.000207675573751291,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9975881967115161,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.0005076824351762873,
+      &quot;fActiveReset&quot;: 0.9990000000000001,
+      &quot;fRO&quot;: 0.9510000000000001
+    },
+    &quot;130&quot;: {
+      &quot;T1&quot;: 1.1357631920283495e-05,
+      &quot;T2&quot;: 2.0866555596004635e-05,
+      &quot;f1QRB&quot;: 0.996871733301667,
+      &quot;f1QRB_std_err&quot;: 0.000410506624602736,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9928195798147847,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.0003648926697066655,
+      &quot;fActiveReset&quot;: 0.9985,
+      &quot;fRO&quot;: 0.9355
+    },
+    &quot;131&quot;: {
+      &quot;T1&quot;: 4.729135588954492e-05,
+      &quot;T2&quot;: 1.551769690407798e-05,
+      &quot;f1QRB&quot;: 0.996871733301667,
+      &quot;f1QRB_std_err&quot;: 0.000410506624602736,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9965497811699848,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.00022754634629984526,
+      &quot;fActiveReset&quot;: 0.998,
+      &quot;fRO&quot;: 0.933
+    },
+    &quot;132&quot;: {
+      &quot;T1&quot;: 4.193997107049263e-05,
+      &quot;T2&quot;: 6.42486044916962e-05,
+      &quot;f1QRB&quot;: 0.996871733301667,
+      &quot;f1QRB_std_err&quot;: 0.000410506624602736,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9965772276614168,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.000279091775560034,
+      &quot;fActiveReset&quot;: 0.9875,
+      &quot;fRO&quot;: 0.974
+    },
+    &quot;133&quot;: {
+      &quot;T1&quot;: 3.187696219031366e-05,
+      &quot;T2&quot;: 1.2649022656940182e-05,
+      &quot;f1QRB&quot;: 0.996871733301667,
+      &quot;f1QRB_std_err&quot;: 0.000410506624602736,
+      &quot;f1Q_simultaneous_RB&quot;: 0.996904952406422,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.0004919316968335453,
+      &quot;fActiveReset&quot;: 0.9990000000000001,
+      &quot;fRO&quot;: 0.972
+    },
+    &quot;134&quot;: {
+      &quot;T1&quot;: 7.63133474612765e-06,
+      &quot;T2&quot;: 1.432844736006034e-05,
+      &quot;f1QRB&quot;: 0.996871733301667,
+      &quot;f1QRB_std_err&quot;: 0.000410506624602736,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9938782609065901,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.0006242385589235869,
+      &quot;fActiveReset&quot;: 0.968,
+      &quot;fRO&quot;: 0.9505
+    },
+    &quot;135&quot;: {
+      &quot;T1&quot;: 1.274106716442347e-05,
+      &quot;T2&quot;: 1.751774527356954e-05,
+      &quot;f1QRB&quot;: 0.996871733301667,
+      &quot;f1QRB_std_err&quot;: 0.000410506624602736,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9940589321248858,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.0005354962705180874,
+      &quot;fActiveReset&quot;: 0.9865,
+      &quot;fRO&quot;: 0.976
+    },
+    &quot;136&quot;: {
+      &quot;T1&quot;: 5.7972795871163996e-05,
+      &quot;T2&quot;: 1.033217218810871e-05,
+      &quot;f1QRB&quot;: 0.996871733301667,
+      &quot;f1QRB_std_err&quot;: 0.000410506624602736,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9594326195879164,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.006371983841034407,
+      &quot;fActiveReset&quot;: 0.997,
+      &quot;fRO&quot;: 0.964
+    },
+    &quot;137&quot;: {
+      &quot;T1&quot;: 3.0265675099006017e-05,
+      &quot;T2&quot;: 8.815071077163779e-06,
+      &quot;f1QRB&quot;: 0.996871733301667,
+      &quot;f1QRB_std_err&quot;: 0.000410506624602736,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9964082621169872,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.00041204933186914474,
+      &quot;fActiveReset&quot;: 0.9985,
+      &quot;fRO&quot;: 0.9545
+    },
+    &quot;14&quot;: {
+      &quot;T1&quot;: 7.056583752884649e-06,
+      &quot;T2&quot;: 1.1091441855982039e-06,
+      &quot;f1QRB&quot;: 0.998567587494012,
+      &quot;f1QRB_std_err&quot;: 0.000207675573751291,
+      &quot;f1Q_simultaneous_RB&quot;: 0.946954481047017,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.019670082609340132,
+      &quot;fActiveReset&quot;: 0.9885,
+      &quot;fRO&quot;: 0.604
+    },
+    &quot;140&quot;: {
+      &quot;T1&quot;: 3.029071944959938e-05,
+      &quot;T2&quot;: 8.133700222213347e-06,
+      &quot;f1QRB&quot;: 0.997899659551279,
+      &quot;f1QRB_std_err&quot;: 8.77785271610802e-05,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9956614843353404,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.00016027173578603393,
+      &quot;fActiveReset&quot;: 0.9995,
+      &quot;fRO&quot;: 0.979
+    },
+    &quot;141&quot;: {
+      &quot;T1&quot;: 0.00014784866115324924,
+      &quot;T2&quot;: 3.431555827615885e-05,
+      &quot;f1QRB&quot;: 0.997899659551279,
+      &quot;f1QRB_std_err&quot;: 8.77785271610802e-05,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9978990455480573,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.00017611255006860972,
+      &quot;fActiveReset&quot;: 0.9990000000000001,
+      &quot;fRO&quot;: 0.935
+    },
+    &quot;142&quot;: {
+      &quot;T1&quot;: 3.457894751113244e-05,
+      &quot;T2&quot;: 2.4369120816570124e-05,
+      &quot;f1QRB&quot;: 0.997899659551279,
+      &quot;f1QRB_std_err&quot;: 8.77785271610802e-05,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9937073673820581,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.0005344686321301839,
+      &quot;fActiveReset&quot;: 0.9990000000000001,
+      &quot;fRO&quot;: 0.9524999999999999
+    },
+    &quot;143&quot;: {
+      &quot;T1&quot;: 1.7423889194123632e-05,
+      &quot;T2&quot;: 2.692614145951504e-05,
+      &quot;f1QRB&quot;: 0.997899659551279,
+      &quot;f1QRB_std_err&quot;: 8.77785271610802e-05,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9955980121211014,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.00011357534169782675,
+      &quot;fActiveReset&quot;: 0.9975,
+      &quot;fRO&quot;: 0.99
+    },
+    &quot;144&quot;: {
+      &quot;T1&quot;: 3.2919899821681753e-06,
+      &quot;T2&quot;: 5.073326594361066e-06,
+      &quot;f1QRB&quot;: 0.997899659551279,
+      &quot;f1QRB_std_err&quot;: 8.77785271610802e-05,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9771070222549354,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.002148445180324343,
+      &quot;fActiveReset&quot;: 0.99,
+      &quot;fRO&quot;: 0.9375
+    },
+    &quot;145&quot;: {
+      &quot;T1&quot;: 5.4886069659199066e-05,
+      &quot;T2&quot;: 2.5880922309305267e-05,
+      &quot;f1QRB&quot;: 0.997899659551279,
+      &quot;f1QRB_std_err&quot;: 8.77785271610802e-05,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9976077593178492,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.0004003839842066979,
+      &quot;fActiveReset&quot;: 0.998,
+      &quot;fRO&quot;: 0.9435
+    },
+    &quot;146&quot;: {
+      &quot;T1&quot;: 2.412475677537884e-05,
+      &quot;T2&quot;: 1.6227855566555945e-05,
+      &quot;f1QRB&quot;: 0.997899659551279,
+      &quot;f1QRB_std_err&quot;: 8.77785271610802e-05,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9969732456249751,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.00015185134122442054,
+      &quot;fActiveReset&quot;: 0.997,
+      &quot;fRO&quot;: 0.9884999999999999
+    },
+    &quot;147&quot;: {
+      &quot;T1&quot;: 6.061281442759636e-05,
+      &quot;T2&quot;: 9.43138048765405e-06,
+      &quot;f1QRB&quot;: 0.997899659551279,
+      &quot;f1QRB_std_err&quot;: 8.77785271610802e-05,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9915070809897528,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.0003382415433281668,
+      &quot;fActiveReset&quot;: 0.998,
+      &quot;fRO&quot;: 0.9435
+    },
+    &quot;15&quot;: {
+      &quot;T1&quot;: 4.1651811924170445e-05,
+      &quot;T2&quot;: 2.8229796576241462e-05,
+      &quot;f1QRB&quot;: 0.998567587494012,
+      &quot;f1QRB_std_err&quot;: 0.000207675573751291,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9994055849799613,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.0007925919011394073,
+      &quot;fActiveReset&quot;: 0.9995,
+      &quot;fRO&quot;: 0.95
+    },
+    &quot;16&quot;: {
+      &quot;T1&quot;: 1.7456030700024883e-05,
+      &quot;T2&quot;: 2.4973369425682377e-05,
+      &quot;f1QRB&quot;: 0.998567587494012,
+      &quot;f1QRB_std_err&quot;: 0.000207675573751291,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9975031893571544,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.00017684251204097307,
+      &quot;fActiveReset&quot;: 0.9985,
+      &quot;fRO&quot;: 0.8975
+    },
+    &quot;17&quot;: {
+      &quot;T1&quot;: 2.4116607707069804e-05,
+      &quot;T2&quot;: 2.2069017969999957e-05,
+      &quot;f1QRB&quot;: 0.998567587494012,
+      &quot;f1QRB_std_err&quot;: 0.000207675573751291,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9985746269607457,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.00013229071361827604,
+      &quot;fActiveReset&quot;: 0.9995,
+      &quot;fRO&quot;: 0.9359999999999999
+    },
+    &quot;2&quot;: {
+      &quot;T1&quot;: 3.0020909688843744e-05,
+      &quot;T2&quot;: 5.2951481569223804e-05,
+      &quot;f1QRB&quot;: 0.998504263416883,
+      &quot;f1QRB_std_err&quot;: 0.000200939668822899,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9972198145006405,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.0001520631166330533,
+      &quot;fActiveReset&quot;: 0.9985,
+      &quot;fRO&quot;: 0.9604999999999999
+    },
+    &quot;20&quot;: {
+      &quot;T1&quot;: 4.939782572987994e-06,
+      &quot;T2&quot;: 8.443256346294435e-07,
+      &quot;f1QRB&quot;: 0.998502179156386,
+      &quot;f1QRB_std_err&quot;: 0.000186957202634351,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9517734463380524,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.00798570485901481,
+      &quot;fActiveReset&quot;: 0.9505,
+      &quot;fRO&quot;: 0.9505
+    },
+    &quot;21&quot;: {
+      &quot;T1&quot;: 5.1860288759808526e-05,
+      &quot;T2&quot;: 1.3210590900162185e-05,
+      &quot;f1QRB&quot;: 0.998502179156386,
+      &quot;f1QRB_std_err&quot;: 0.000186957202634351,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9980027960575203,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.0002724424718786719,
+      &quot;fActiveReset&quot;: 0.9855000000000002,
+      &quot;fRO&quot;: 0.9359999999999999
+    },
+    &quot;22&quot;: {
+      &quot;T1&quot;: 3.651444125818415e-05,
+      &quot;T2&quot;: 5.7804731228542456e-05,
+      &quot;f1QRB&quot;: 0.998502179156386,
+      &quot;f1QRB_std_err&quot;: 0.000186957202634351,
+      &quot;f1Q_simultaneous_RB&quot;: 0.997760590611616,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.00020879064540874453,
+      &quot;fActiveReset&quot;: 0.9975,
+      &quot;fRO&quot;: 0.968
+    },
+    &quot;23&quot;: {
+      &quot;T1&quot;: 6.915636621074306e-05,
+      &quot;T2&quot;: 1.6278133643438973e-05,
+      &quot;f1QRB&quot;: 0.998502179156386,
+      &quot;f1QRB_std_err&quot;: 0.000186957202634351,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9980650575270487,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.000234316187838488,
+      &quot;fActiveReset&quot;: 0.9865,
+      &quot;fRO&quot;: 0.952
+    },
+    &quot;24&quot;: {
+      &quot;T1&quot;: 4.2207483514467015e-05,
+      &quot;T2&quot;: 6.246765492761293e-05,
+      &quot;f1QRB&quot;: 0.998502179156386,
+      &quot;f1QRB_std_err&quot;: 0.000186957202634351,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9984192478655622,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 7.675914699034499e-05,
+      &quot;fActiveReset&quot;: 0.9995,
+      &quot;fRO&quot;: 0.9815
+    },
+    &quot;25&quot;: {
+      &quot;T1&quot;: 7.51755283650013e-05,
+      &quot;T2&quot;: 3.6904896702137975e-05,
+      &quot;f1QRB&quot;: 0.998502179156386,
+      &quot;f1QRB_std_err&quot;: 0.000186957202634351,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9979333999833107,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.00017701687443163496,
+      &quot;fActiveReset&quot;: 0.9990000000000001,
+      &quot;fRO&quot;: 0.9704999999999999
+    },
+    &quot;26&quot;: {
+      &quot;T1&quot;: 2.5166663844222725e-05,
+      &quot;T2&quot;: 1.721461158516219e-05,
+      &quot;f1QRB&quot;: 0.998502179156386,
+      &quot;f1QRB_std_err&quot;: 0.000186957202634351,
+      &quot;f1Q_simultaneous_RB&quot;: 0.994673457615699,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.00019502235675780363,
+      &quot;fActiveReset&quot;: 0.9995,
+      &quot;fRO&quot;: 0.956
+    },
+    &quot;27&quot;: {
+      &quot;T1&quot;: 2.482542128201537e-05,
+      &quot;T2&quot;: 0.00011408192952874501,
+      &quot;f1QRB&quot;: 0.998502179156386,
+      &quot;f1QRB_std_err&quot;: 0.000186957202634351,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9987802716664477,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.00020860912102190109,
+      &quot;fActiveReset&quot;: 0.9985,
+      &quot;fRO&quot;: 0.8805
+    },
+    &quot;3&quot;: {
+      &quot;T1&quot;: 8.097383678817849e-05,
+      &quot;T2&quot;: 4.547043938105118e-05,
+      &quot;f1QRB&quot;: 0.998504263416883,
+      &quot;f1QRB_std_err&quot;: 0.000200939668822899,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9978125534567162,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.0003444151079299761,
+      &quot;fActiveReset&quot;: 0.9995,
+      &quot;fRO&quot;: 0.9385
+    },
+    &quot;30&quot;: {
+      &quot;T1&quot;: 2.5630229322448628e-05,
+      &quot;T2&quot;: 2.6505156199610027e-05,
+      &quot;f1QRB&quot;: 0.99718764497914,
+      &quot;f1QRB_std_err&quot;: 0.000180637530104713,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9975405353579325,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.0006683476178055164,
+      &quot;fActiveReset&quot;: 0.998,
+      &quot;fRO&quot;: 0.9804999999999999
+    },
+    &quot;31&quot;: {
+      &quot;T1&quot;: 4.393692718629438e-05,
+      &quot;T2&quot;: 3.2645417383990634e-05,
+      &quot;f1QRB&quot;: 0.99718764497914,
+      &quot;f1QRB_std_err&quot;: 0.000180637530104713,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9994958089309405,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.00028501695385721063,
+      &quot;fActiveReset&quot;: 0.9965,
+      &quot;fRO&quot;: 0.8645
+    },
+    &quot;32&quot;: {
+      &quot;T1&quot;: 1.2672320070183929e-05,
+      &quot;T2&quot;: 4.927919550437918e-06,
+      &quot;f1QRB&quot;: 0.99718764497914,
+      &quot;f1QRB_std_err&quot;: 0.000180637530104713,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9945135356854071,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.0001537542435108619,
+      &quot;fActiveReset&quot;: 0.998,
+      &quot;fRO&quot;: 0.9624999999999999
+    },
+    &quot;33&quot;: {
+      &quot;T1&quot;: 3.135739845827601e-05,
+      &quot;T2&quot;: 1.071969969710695e-05,
+      &quot;f1QRB&quot;: 0.99718764497914,
+      &quot;f1QRB_std_err&quot;: 0.000180637530104713,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9956194185967222,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.0003988766735571363,
+      &quot;fActiveReset&quot;: 0.9635000000000001,
+      &quot;fRO&quot;: 0.962
+    },
+    &quot;34&quot;: {
+      &quot;T1&quot;: 3.8314277972295585e-05,
+      &quot;T2&quot;: 7.954802601790621e-06,
+      &quot;f1QRB&quot;: 0.99718764497914,
+      &quot;f1QRB_std_err&quot;: 0.000180637530104713,
+      &quot;f1Q_simultaneous_RB&quot;: 0.994547293496831,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.00017719907827152312,
+      &quot;fActiveReset&quot;: 0.9985,
+      &quot;fRO&quot;: 0.9795
+    },
+    &quot;35&quot;: {
+      &quot;T1&quot;: 3.129991882744321e-05,
+      &quot;T2&quot;: 2.8218246908906864e-05,
+      &quot;f1QRB&quot;: 0.99718764497914,
+      &quot;f1QRB_std_err&quot;: 0.000180637530104713,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9976124350376736,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.0006578297177763354,
+      &quot;fActiveReset&quot;: 0.9995,
+      &quot;fRO&quot;: 0.979
+    },
+    &quot;36&quot;: {
+      &quot;T1&quot;: 1.149169113867643e-05,
+      &quot;T2&quot;: 1.606953461310735e-05,
+      &quot;f1QRB&quot;: 0.99718764497914,
+      &quot;f1QRB_std_err&quot;: 0.000180637530104713,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9950563704060984,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.00030355999489794697,
+      &quot;fActiveReset&quot;: 0.997,
+      &quot;fRO&quot;: 0.96
+    },
+    &quot;37&quot;: {
+      &quot;T1&quot;: 8.445484741637088e-05,
+      &quot;T2&quot;: 2.1506782343780867e-05,
+      &quot;f1QRB&quot;: 0.99718764497914,
+      &quot;f1QRB_std_err&quot;: 0.000180637530104713,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9983582164241553,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.0004762655460908129,
+      &quot;fActiveReset&quot;: 0.9995,
+      &quot;fRO&quot;: 0.915
+    },
+    &quot;4&quot;: {
+      &quot;T1&quot;: 2.3605303536511357e-05,
+      &quot;T2&quot;: 3.7153885914799665e-05,
+      &quot;f1QRB&quot;: 0.998504263416883,
+      &quot;f1QRB_std_err&quot;: 0.000200939668822899,
+      &quot;f1Q_simultaneous_RB&quot;: 0.997406508526091,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.00014075676938704414,
+      &quot;fActiveReset&quot;: 0.9995,
+      &quot;fRO&quot;: 0.977
+    },
+    &quot;40&quot;: {
+      &quot;T1&quot;: 2.2941083798633244e-05,
+      &quot;T2&quot;: 4.030567585397984e-05,
+      &quot;f1QRB&quot;: 0.998490711844746,
+      &quot;f1QRB_std_err&quot;: 0.000602630733595396,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9986793231141398,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.00024997896897375517,
+      &quot;fActiveReset&quot;: 0.9985,
+      &quot;fRO&quot;: 0.9855
+    },
+    &quot;41&quot;: {
+      &quot;T1&quot;: 7.645057835237168e-05,
+      &quot;T2&quot;: 1.812326154873455e-05,
+      &quot;f1QRB&quot;: 0.998490711844746,
+      &quot;f1QRB_std_err&quot;: 0.000602630733595396,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9984208231789844,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.0001626488730831036,
+      &quot;fActiveReset&quot;: 0.9985,
+      &quot;fRO&quot;: 0.9405
+    },
+    &quot;42&quot;: {
+      &quot;T1&quot;: 1.7765542281056312e-05,
+      &quot;T2&quot;: 2.4198834873814248e-05,
+      &quot;f1QRB&quot;: 0.998490711844746,
+      &quot;f1QRB_std_err&quot;: 0.000602630733595396,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9978662175732578,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.00018615142417093767,
+      &quot;fActiveReset&quot;: 0.9985,
+      &quot;fRO&quot;: 0.9535
+    },
+    &quot;43&quot;: {
+      &quot;T1&quot;: 4.526165088725165e-05,
+      &quot;T2&quot;: 4.0160474366265834e-05,
+      &quot;f1QRB&quot;: 0.998490711844746,
+      &quot;f1QRB_std_err&quot;: 0.000602630733595396,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9988299613832265,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 7.009610434945902e-05,
+      &quot;fActiveReset&quot;: 0.9995,
+      &quot;fRO&quot;: 0.966
+    },
+    &quot;44&quot;: {
+      &quot;T1&quot;: 2.6937126983872517e-05,
+      &quot;T2&quot;: 2.0058863708211373e-05,
+      &quot;f1QRB&quot;: 0.998490711844746,
+      &quot;f1QRB_std_err&quot;: 0.000602630733595396,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9962682763825296,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.0004107302229225073,
+      &quot;fActiveReset&quot;: 0.9990000000000001,
+      &quot;fRO&quot;: 0.9655
+    },
+    &quot;45&quot;: {
+      &quot;T1&quot;: 2.3553494302719358e-05,
+      &quot;T2&quot;: 2.3478809380639128e-05,
+      &quot;f1QRB&quot;: 0.998490711844746,
+      &quot;f1QRB_std_err&quot;: 0.000602630733595396,
+      &quot;f1Q_simultaneous_RB&quot;: 0.998265226734818,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.00013589547866016462,
+      &quot;fActiveReset&quot;: 0.9845,
+      &quot;fRO&quot;: 0.959
+    },
+    &quot;46&quot;: {
+      &quot;T1&quot;: 3.360270709285018e-05,
+      &quot;T2&quot;: 4.707365629485934e-05,
+      &quot;f1QRB&quot;: 0.998490711844746,
+      &quot;f1QRB_std_err&quot;: 0.000602630733595396,
+      &quot;f1Q_simultaneous_RB&quot;: 0.998290083542375,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.0001463840213334363,
+      &quot;fActiveReset&quot;: 0.9995,
+      &quot;fRO&quot;: 0.9624999999999999
+    },
+    &quot;47&quot;: {
+      &quot;T1&quot;: 2.8278175313367626e-05,
+      &quot;T2&quot;: 1.7466412887046843e-05,
+      &quot;f1QRB&quot;: 0.998490711844746,
+      &quot;f1QRB_std_err&quot;: 0.000602630733595396,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9983356451379131,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.0007003713725584009,
+      &quot;fActiveReset&quot;: 0.9795,
+      &quot;fRO&quot;: 0.862
+    },
+    &quot;5&quot;: {
+      &quot;T1&quot;: 3.40211720875061e-05,
+      &quot;T2&quot;: 2.105699681420164e-05,
+      &quot;f1QRB&quot;: 0.998504263416883,
+      &quot;f1QRB_std_err&quot;: 0.000200939668822899,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9971416754515394,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.00034525701239362835,
+      &quot;fActiveReset&quot;: 0.972,
+      &quot;fRO&quot;: 0.969
+    },
+    &quot;6&quot;: {
+      &quot;T1&quot;: 4.871283497376311e-05,
+      &quot;T2&quot;: 9.278934231473249e-06,
+      &quot;f1QRB&quot;: 0.998504263416883,
+      &quot;f1QRB_std_err&quot;: 0.000200939668822899,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9929097864624989,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.00040551667952023335,
+      &quot;fActiveReset&quot;: 0.9965,
+      &quot;fRO&quot;: 0.959
+    },
+    &quot;7&quot;: {
+      &quot;T1&quot;: 9.911977762167012e-05,
+      &quot;T2&quot;: 2.5374050749130526e-05,
+      &quot;f1QRB&quot;: 0.998504263416883,
+      &quot;f1QRB_std_err&quot;: 0.000200939668822899,
+      &quot;f1Q_simultaneous_RB&quot;: 0.9978264215783317,
+      &quot;f1Q_simultaneous_RB_std_err&quot;: 0.00033349189260763917,
+      &quot;fActiveReset&quot;: 0.9985,
+      &quot;fRO&quot;: 0.937
+    }
+  },
+  &quot;2Q&quot;: {
+    &quot;0-1&quot;: {
+      &quot;fCPHASE&quot;: 0.7763724037798118,
+      &quot;fCPHASE_std_err&quot;: 0.01379082038692462,
+      &quot;fCZ&quot;: 0.7997759468323796,
+      &quot;fCZ_std_err&quot;: 0.017176534029159585,
+      &quot;fXY&quot;: 0.763267205439229,
+      &quot;fXY_std_err&quot;: 0.023993559718540655
+    },
+    &quot;0-7&quot;: {
+      &quot;fCPHASE&quot;: 0.8270610883403271,
+      &quot;fCPHASE_std_err&quot;: 0.011211008565517551,
+      &quot;fCZ&quot;: 0.8401416306100571,
+      &quot;fCZ_std_err&quot;: 0.016962559542142933,
+      &quot;fXY&quot;: 0.7578675326804956,
+      &quot;fXY_std_err&quot;: 0.006126945357529014
+    },
+    &quot;1-16&quot;: {
+      &quot;fCPHASE&quot;: 0.7746379258633798,
+      &quot;fCPHASE_std_err&quot;: 0.01142700194686404,
+      &quot;fCZ&quot;: 0.899299787737425,
+      &quot;fCZ_std_err&quot;: 0.005781351497590761,
+      &quot;fXY&quot;: 0.8828137889343295,
+      &quot;fXY_std_err&quot;: 0.009758253387935725
+    },
+    &quot;1-2&quot;: {
+      &quot;fCPHASE&quot;: 0.8195164948970153,
+      &quot;fCPHASE_std_err&quot;: 0.010343503913744693,
+      &quot;fCZ&quot;: 0.8559500323790885,
+      &quot;fCZ_std_err&quot;: 0.009689108970533782,
+      &quot;fXY&quot;: 0.8333311691030765,
+      &quot;fXY_std_err&quot;: 0.009818945489903674
+    },
+    &quot;10-11&quot;: {
+      &quot;fCPHASE&quot;: 0.958248490528094,
+      &quot;fCPHASE_std_err&quot;: 0.006368479522265316,
+      &quot;fCZ&quot;: 0.9660116970706635,
+      &quot;fCZ_std_err&quot;: 0.004952523151035132,
+      &quot;fXY&quot;: 0.9532359030302566,
+      &quot;fXY_std_err&quot;: 0.01656970326807716
+    },
+    &quot;10-113&quot;: {
+      &quot;fCPHASE&quot;: 0.9697514348649786,
+      &quot;fCPHASE_std_err&quot;: 0.006345733734434074,
+      &quot;fCZ&quot;: 0.9810906952855609,
+      &quot;fCZ_std_err&quot;: 0.005894540319366325
+    },
+    &quot;10-17&quot;: {
+      &quot;fCPHASE&quot;: 0.9673607629625731,
+      &quot;fCPHASE_std_err&quot;: 0.007271182330613821,
+      &quot;fCZ&quot;: 0.9814000623530871,
+      &quot;fCZ_std_err&quot;: 0.003319405699737674,
+      &quot;fXY&quot;: 0.9844098134425155,
+      &quot;fXY_std_err&quot;: 0.002940224000330911
+    },
+    &quot;100-101&quot;: {
+      &quot;fCPHASE&quot;: 0.8544945418269007,
+      &quot;fCPHASE_std_err&quot;: 0.014635874950143618,
+      &quot;fCZ&quot;: 0.8624566845873372,
+      &quot;fCZ_std_err&quot;: 0.013147841145117294,
+      &quot;fXY&quot;: 0.9661667727532866,
+      &quot;fXY_std_err&quot;: 0.00643194962992653
+    },
+    &quot;100-107&quot;: {
+      &quot;fXY&quot;: 0.965652401058054,
+      &quot;fXY_std_err&quot;: 0.006700403493129104
+    },
+    &quot;101-102&quot;: {
+      &quot;fCPHASE&quot;: 0.9253392338552215,
+      &quot;fCPHASE_std_err&quot;: 0.010174571794415383,
+      &quot;fCZ&quot;: 0.9309248611771053,
+      &quot;fCZ_std_err&quot;: 0.009743687235107799,
+      &quot;fXY&quot;: 0.9546266092405655,
+      &quot;fXY_std_err&quot;: 0.007116731033231077
+    },
+    &quot;101-116&quot;: {
+      &quot;fCPHASE&quot;: 0.850083371337259,
+      &quot;fCPHASE_std_err&quot;: 0.010226121062972186,
+      &quot;fCZ&quot;: 0.8426432690682515,
+      &quot;fCZ_std_err&quot;: 0.015080620616848107,
+      &quot;fXY&quot;: 0.855209800470653,
+      &quot;fXY_std_err&quot;: 0.012052821403240252
+    },
+    &quot;102-103&quot;: {
+      &quot;fCPHASE&quot;: 0.9381005383228259,
+      &quot;fCPHASE_std_err&quot;: 0.009362934491253846,
+      &quot;fCZ&quot;: 0.9454447462393043,
+      &quot;fCZ_std_err&quot;: 0.011596002842565152,
+      &quot;fXY&quot;: 0.896818767655995,
+      &quot;fXY_std_err&quot;: 0.005337928724449812
+    },
+    &quot;102-115&quot;: {
+      &quot;fCPHASE&quot;: 0.9617890973330837,
+      &quot;fCPHASE_std_err&quot;: 0.006479030097577062,
+      &quot;fCZ&quot;: 0.9819975101120063,
+      &quot;fCZ_std_err&quot;: 0.005956479169053484,
+      &quot;fXY&quot;: 0.9552490304456913,
+      &quot;fXY_std_err&quot;: 0.009770939135667463
+    },
+    &quot;103-104&quot;: {
+      &quot;fCPHASE&quot;: 0.7922806945408476,
+      &quot;fCPHASE_std_err&quot;: 0.008445124691607082,
+      &quot;fCZ&quot;: 0.8247029607810051,
+      &quot;fCZ_std_err&quot;: 0.0072750414810744376
+    },
+    &quot;104-105&quot;: {
+      &quot;fCPHASE&quot;: 0.8198667556359116,
+      &quot;fCPHASE_std_err&quot;: 0.014265382305603922,
+      &quot;fCZ&quot;: 0.8310429774956914,
+      &quot;fCZ_std_err&quot;: 0.010345064558244495,
+      &quot;fXY&quot;: 0.7139201611117955,
+      &quot;fXY_std_err&quot;: 0.012502342058483077
+    },
+    &quot;105-106&quot;: {
+      &quot;fXY&quot;: 0.808903653746803,
+      &quot;fXY_std_err&quot;: 0.011472511021314842
+    },
+    &quot;106-107&quot;: {
+      &quot;fXY&quot;: 0.8604769619387905,
+      &quot;fXY_std_err&quot;: 0.0052811008094954814
+    },
+    &quot;11-12&quot;: {
+      &quot;fCPHASE&quot;: 0.8284362581833649,
+      &quot;fCPHASE_std_err&quot;: 0.014963256917417263,
+      &quot;fCZ&quot;: 0.874031662208736,
+      &quot;fCZ_std_err&quot;: 0.012708685491227967,
+      &quot;fXY&quot;: 0.857077540132403,
+      &quot;fXY_std_err&quot;: 0.009653884089069475
+    },
+    &quot;11-26&quot;: {
+      &quot;fCPHASE&quot;: 0.7945781058413346,
+      &quot;fCPHASE_std_err&quot;: 0.01738335199265962,
+      &quot;fCZ&quot;: 0.9114101103304919,
+      &quot;fCZ_std_err&quot;: 0.008401037905799496,
+      &quot;fXY&quot;: 0.9064106558493861,
+      &quot;fXY_std_err&quot;: 0.0044790185504478995
+    },
+    &quot;110-111&quot;: {
+      &quot;fCPHASE&quot;: 0.8571270912261933,
+      &quot;fCPHASE_std_err&quot;: 0.02328595632138461,
+      &quot;fCZ&quot;: 0.9156048014676357,
+      &quot;fCZ_std_err&quot;: 0.018779479820499594,
+      &quot;fXY&quot;: 0.9845950941682098,
+      &quot;fXY_std_err&quot;: 0.002393737345119687
+    },
+    &quot;110-117&quot;: {
+      &quot;fCPHASE&quot;: 0.9349811954878483,
+      &quot;fCPHASE_std_err&quot;: 0.012333411731912604,
+      &quot;fCZ&quot;: 0.9120708501248699,
+      &quot;fCZ_std_err&quot;: 0.006036036174429833
+    },
+    &quot;111-112&quot;: {
+      &quot;fCPHASE&quot;: 0.7897674844727159,
+      &quot;fCPHASE_std_err&quot;: 0.021593223728520614,
+      &quot;fCZ&quot;: 0.786001957800004,
+      &quot;fCZ_std_err&quot;: 0.018987804399868947
+    },
+    &quot;111-126&quot;: {
+      &quot;fCPHASE&quot;: 0.8975375601603361,
+      &quot;fCPHASE_std_err&quot;: 0.005310822274286927,
+      &quot;fCZ&quot;: 0.8865729341626316,
+      &quot;fCZ_std_err&quot;: 0.004710071024107654,
+      &quot;fXY&quot;: 0.895486722516142,
+      &quot;fXY_std_err&quot;: 0.004558161341105508
+    },
+    &quot;112-113&quot;: {
+      &quot;fCPHASE&quot;: 0.8366427228708132,
+      &quot;fCPHASE_std_err&quot;: 0.009207714482851657,
+      &quot;fCZ&quot;: 0.8285944335119297,
+      &quot;fCZ_std_err&quot;: 0.010605098095459828
+    },
+    &quot;113-114&quot;: {
+      &quot;fCPHASE&quot;: 0.9013396634652495,
+      &quot;fCPHASE_std_err&quot;: 0.004723841032926851,
+      &quot;fCZ&quot;: 0.9058829809512586,
+      &quot;fCZ_std_err&quot;: 0.0049348030008950754,
+      &quot;fXY&quot;: 0.8892818227246524,
+      &quot;fXY_std_err&quot;: 0.00593436616144358
+    },
+    &quot;114-115&quot;: {
+      &quot;fCPHASE&quot;: 0.9518215204308558,
+      &quot;fCPHASE_std_err&quot;: 0.009367816061441792,
+      &quot;fCZ&quot;: 0.8640708046448279,
+      &quot;fCZ_std_err&quot;: 0.006506034899975081,
+      &quot;fXY&quot;: 0.9742348543832899,
+      &quot;fXY_std_err&quot;: 0.0064269976917201484
+    },
+    &quot;115-116&quot;: {
+      &quot;fCPHASE&quot;: 0.523010822425996,
+      &quot;fCPHASE_std_err&quot;: 0.011305142767665567,
+      &quot;fCZ&quot;: 0.6433453494014704,
+      &quot;fCZ_std_err&quot;: 0.007729457830927353,
+      &quot;fXY&quot;: 0.8303670462501238,
+      &quot;fXY_std_err&quot;: 0.0072951374839695
+    },
+    &quot;116-117&quot;: {
+      &quot;fXY&quot;: 0.8081282834291598,
+      &quot;fXY_std_err&quot;: 0.009248179917826713
+    },
+    &quot;12-13&quot;: {
+      &quot;fCPHASE&quot;: 0.9098187512103828,
+      &quot;fCPHASE_std_err&quot;: 0.004460194373547715,
+      &quot;fCZ&quot;: 0.9184960369268488,
+      &quot;fCZ_std_err&quot;: 0.0099054655547212,
+      &quot;fXY&quot;: 0.9459054914322903,
+      &quot;fXY_std_err&quot;: 0.006506716589968954
+    },
+    &quot;12-25&quot;: {
+      &quot;fCPHASE&quot;: 0.9236445497724098,
+      &quot;fCPHASE_std_err&quot;: 0.010422534823876868,
+      &quot;fCZ&quot;: 0.956876314583782,
+      &quot;fCZ_std_err&quot;: 0.005147205414384091,
+      &quot;fXY&quot;: 0.9595276421594074,
+      &quot;fXY_std_err&quot;: 0.004697169442879545
+    },
+    &quot;120-121&quot;: {
+      &quot;fCPHASE&quot;: 0.9724510810789062,
+      &quot;fCPHASE_std_err&quot;: 0.006359563929590788,
+      &quot;fCZ&quot;: 0.8631796989815732,
+      &quot;fCZ_std_err&quot;: 0.011498181419440312,
+      &quot;fXY&quot;: 0.807314332558257,
+      &quot;fXY_std_err&quot;: 0.009212582549657618
+    },
+    &quot;120-127&quot;: {
+      &quot;fCPHASE&quot;: 0.8281706975866637,
+      &quot;fCPHASE_std_err&quot;: 0.010762336565404238,
+      &quot;fCZ&quot;: 0.84485548709443,
+      &quot;fCZ_std_err&quot;: 0.009564166643094554,
+      &quot;fXY&quot;: 0.9534548657462306,
+      &quot;fXY_std_err&quot;: 0.007502441274313336
+    },
+    &quot;121-122&quot;: {
+      &quot;fCPHASE&quot;: 0.9779449245611389,
+      &quot;fCPHASE_std_err&quot;: 0.00321555006971085,
+      &quot;fCZ&quot;: 0.9805622512602565,
+      &quot;fCZ_std_err&quot;: 0.0036830116857406534,
+      &quot;fXY&quot;: 0.9863439905718718,
+      &quot;fXY_std_err&quot;: 0.0021929549677415735
+    },
+    &quot;121-136&quot;: {
+      &quot;fCPHASE&quot;: 0.8098707174001626,
+      &quot;fCPHASE_std_err&quot;: 0.012853579209191472,
+      &quot;fCZ&quot;: 0.7699802312432049,
+      &quot;fCZ_std_err&quot;: 0.017267497524222932,
+      &quot;fXY&quot;: 0.8384422804366891,
+      &quot;fXY_std_err&quot;: 0.010147751935342834
+    },
+    &quot;122-123&quot;: {
+      &quot;fCPHASE&quot;: 0.937357617686919,
+      &quot;fCPHASE_std_err&quot;: 0.00939912831199345,
+      &quot;fCZ&quot;: 0.8815524561989441,
+      &quot;fCZ_std_err&quot;: 0.008480397986493988,
+      &quot;fXY&quot;: 0.9741196796192496,
+      &quot;fXY_std_err&quot;: 0.006193099065228869
+    },
+    &quot;122-135&quot;: {
+      &quot;fCPHASE&quot;: 0.9182574716275873,
+      &quot;fCPHASE_std_err&quot;: 0.01286706498568653,
+      &quot;fCZ&quot;: 0.9725646101843854,
+      &quot;fCZ_std_err&quot;: 0.004492391909803522,
+      &quot;fXY&quot;: 0.9934253815026672,
+      &quot;fXY_std_err&quot;: 0.0028792157099703903
+    },
+    &quot;123-124&quot;: {
+      &quot;fCPHASE&quot;: 0.8492931442511754,
+      &quot;fCPHASE_std_err&quot;: 0.031004090293481966,
+      &quot;fCZ&quot;: 0.8664474564223329,
+      &quot;fCZ_std_err&quot;: 0.023255647164247936,
+      &quot;fXY&quot;: 0.9401736453909559,
+      &quot;fXY_std_err&quot;: 0.04070115958035782
+    },
+    &quot;124-125&quot;: {
+      &quot;fCPHASE&quot;: 0.8641742689070019,
+      &quot;fCPHASE_std_err&quot;: 0.02402116379629908,
+      &quot;fCZ&quot;: 0.9068567966666606,
+      &quot;fCZ_std_err&quot;: 0.018202299777250797,
+      &quot;fXY&quot;: 0.9825352266625644,
+      &quot;fXY_std_err&quot;: 0.014897986475736964
+    },
+    &quot;125-126&quot;: {
+      &quot;fXY&quot;: 0.9813003917048223,
+      &quot;fXY_std_err&quot;: 0.005559145592461952
+    },
+    &quot;126-127&quot;: {
+      &quot;fCPHASE&quot;: 0.9745331151895578,
+      &quot;fCPHASE_std_err&quot;: 0.009359252573522455,
+      &quot;fCZ&quot;: 0.8793618775433184,
+      &quot;fCZ_std_err&quot;: 0.006695940122690195,
+      &quot;fXY&quot;: 0.9668765736966178,
+      &quot;fXY_std_err&quot;: 0.005853541285615184
+    },
+    &quot;13-14&quot;: {
+      &quot;fCPHASE&quot;: 0.7837615985673496,
+      &quot;fCPHASE_std_err&quot;: 0.00908752641394308,
+      &quot;fCZ&quot;: 0.8315238558646783,
+      &quot;fCZ_std_err&quot;: 0.012010271578784785,
+      &quot;fXY&quot;: 0.800259464244921,
+      &quot;fXY_std_err&quot;: 0.011110703319397196
+    },
+    &quot;130-131&quot;: {
+      &quot;fCPHASE&quot;: 0.9413132909026445,
+      &quot;fCPHASE_std_err&quot;: 0.01050444955915992,
+      &quot;fCZ&quot;: 0.8862554889222829,
+      &quot;fCZ_std_err&quot;: 0.0051953836198194644,
+      &quot;fXY&quot;: 0.9395038571114049,
+      &quot;fXY_std_err&quot;: 0.016999792672854355
+    },
+    &quot;130-137&quot;: {
+      &quot;fCPHASE&quot;: 0.8418467568637378,
+      &quot;fCPHASE_std_err&quot;: 0.011088492558938921,
+      &quot;fCZ&quot;: 0.8757446914456515,
+      &quot;fCZ_std_err&quot;: 0.006339604508984277,
+      &quot;fXY&quot;: 0.7944576754693613,
+      &quot;fXY_std_err&quot;: 0.012704236992361957
+    },
+    &quot;131-132&quot;: {
+      &quot;fCPHASE&quot;: 0.8913027282304402,
+      &quot;fCPHASE_std_err&quot;: 0.005481261683822204,
+      &quot;fCZ&quot;: 0.9565301378063831,
+      &quot;fCZ_std_err&quot;: 0.007864985557707309
+    },
+    &quot;131-146&quot;: {
+      &quot;fCPHASE&quot;: 0.8733060321478731,
+      &quot;fCPHASE_std_err&quot;: 0.005949741659402286,
+      &quot;fCZ&quot;: 0.9011285801602571,
+      &quot;fCZ_std_err&quot;: 0.005194802020184583,
+      &quot;fXY&quot;: 0.8564730019976278,
+      &quot;fXY_std_err&quot;: 0.006164869768927831
+    },
+    &quot;132-133&quot;: {
+      &quot;fCPHASE&quot;: 0.9812340862372804,
+      &quot;fCPHASE_std_err&quot;: 0.006221735981265064,
+      &quot;fCZ&quot;: 0.961489096421248,
+      &quot;fCZ_std_err&quot;: 0.005595017974007847,
+      &quot;fXY&quot;: 0.8963849546365421,
+      &quot;fXY_std_err&quot;: 0.004935487928777466
+    },
+    &quot;132-145&quot;: {
+      &quot;fCPHASE&quot;: 0.9644419975773634,
+      &quot;fCPHASE_std_err&quot;: 0.010644384024561587,
+      &quot;fCZ&quot;: 0.8104456962207611,
+      &quot;fCZ_std_err&quot;: 0.033870877151205014,
+      &quot;fXY&quot;: 0.9713715904204685,
+      &quot;fXY_std_err&quot;: 0.006464308653195267
+    },
+    &quot;133-134&quot;: {
+      &quot;fCPHASE&quot;: 0.927056258887286,
+      &quot;fCPHASE_std_err&quot;: 0.011065076067329795,
+      &quot;fCZ&quot;: 0.9718460039041158,
+      &quot;fCZ_std_err&quot;: 0.005199061355339969,
+      &quot;fXY&quot;: 0.9700129621217839,
+      &quot;fXY_std_err&quot;: 0.007373351483482338
+    },
+    &quot;134-135&quot;: {
+      &quot;fCPHASE&quot;: 0.8744313951307033,
+      &quot;fCPHASE_std_err&quot;: 0.008194397597764571,
+      &quot;fCZ&quot;: 0.9676929508718168,
+      &quot;fCZ_std_err&quot;: 0.005648190952410153,
+      &quot;fXY&quot;: 0.961740734720578,
+      &quot;fXY_std_err&quot;: 0.007447518372240999
+    },
+    &quot;135-136&quot;: {
+      &quot;fCPHASE&quot;: 0.7971073508124374,
+      &quot;fCPHASE_std_err&quot;: 0.011735508876552973,
+      &quot;fCZ&quot;: 0.8408275305884331,
+      &quot;fCZ_std_err&quot;: 0.007212224456289056,
+      &quot;fXY&quot;: 0.8677123316203673,
+      &quot;fXY_std_err&quot;: 0.006244440129244054
+    },
+    &quot;136-137&quot;: {
+      &quot;fCPHASE&quot;: 0.8753046561279557,
+      &quot;fCPHASE_std_err&quot;: 0.0067721728899041355,
+      &quot;fCZ&quot;: 0.9017382193254191,
+      &quot;fCZ_std_err&quot;: 0.0051398528656538935,
+      &quot;fXY&quot;: 0.8286533687844194,
+      &quot;fXY_std_err&quot;: 0.00920180462421984
+    },
+    &quot;14-15&quot;: {
+      &quot;fCPHASE&quot;: 0.7347089036988828,
+      &quot;fCPHASE_std_err&quot;: 0.023687657983137406,
+      &quot;fCZ&quot;: 0.8418633824262307,
+      &quot;fCZ_std_err&quot;: 0.014331996820317223,
+      &quot;fXY&quot;: 0.8136652246747742,
+      &quot;fXY_std_err&quot;: 0.020637007100079662
+    },
+    &quot;140-141&quot;: {
+      &quot;fCPHASE&quot;: 0.9628397465967972,
+      &quot;fCPHASE_std_err&quot;: 0.007075298725525275,
+      &quot;fCZ&quot;: 0.9114260784276592,
+      &quot;fCZ_std_err&quot;: 0.01189091970009422,
+      &quot;fXY&quot;: 0.9839770710884982,
+      &quot;fXY_std_err&quot;: 0.006119446836053626
+    },
+    &quot;140-147&quot;: {
+      &quot;fCPHASE&quot;: 0.8806720573955389,
+      &quot;fCPHASE_std_err&quot;: 0.0078108726281292005,
+      &quot;fCZ&quot;: 0.877365684977122,
+      &quot;fCZ_std_err&quot;: 0.008189813681220515,
+      &quot;fXY&quot;: 0.9505083892856538,
+      &quot;fXY_std_err&quot;: 0.0075048361769578355
+    },
+    &quot;141-142&quot;: {
+      &quot;fCPHASE&quot;: 0.9758554188494014,
+      &quot;fCPHASE_std_err&quot;: 0.00354957160059855,
+      &quot;fCZ&quot;: 0.9861329308272369,
+      &quot;fCZ_std_err&quot;: 0.0031677280969711822,
+      &quot;fXY&quot;: 0.8011115752049046,
+      &quot;fXY_std_err&quot;: 0.00906455301175025
+    },
+    &quot;142-143&quot;: {
+      &quot;fCPHASE&quot;: 0.9156898344550045,
+      &quot;fCPHASE_std_err&quot;: 0.00452021977061543,
+      &quot;fCZ&quot;: 0.8668728269448149,
+      &quot;fCZ_std_err&quot;: 0.010376280237484404,
+      &quot;fXY&quot;: 0.9083287740968627,
+      &quot;fXY_std_err&quot;: 0.014456691615067399
+    },
+    &quot;143-144&quot;: {
+      &quot;fCPHASE&quot;: 0.8804572346295748,
+      &quot;fCPHASE_std_err&quot;: 0.0214993421388247,
+      &quot;fCZ&quot;: 0.9168389872501961,
+      &quot;fCZ_std_err&quot;: 0.012153685231816464,
+      &quot;fXY&quot;: 0.928899043563923,
+      &quot;fXY_std_err&quot;: 0.013782460855314657
+    },
+    &quot;144-145&quot;: {
+      &quot;fCPHASE&quot;: 0.9395760087297282,
+      &quot;fCPHASE_std_err&quot;: 0.009408591391284958,
+      &quot;fCZ&quot;: 0.8797440089127171,
+      &quot;fCZ_std_err&quot;: 0.009596281960738503,
+      &quot;fXY&quot;: 0.8929118950612976,
+      &quot;fXY_std_err&quot;: 0.006623673522961696
+    },
+    &quot;145-146&quot;: {
+      &quot;fCPHASE&quot;: 0.9248967242677248,
+      &quot;fCPHASE_std_err&quot;: 0.012372216008812402,
+      &quot;fCZ&quot;: 0.9250826853297689,
+      &quot;fCZ_std_err&quot;: 0.01184069809947199,
+      &quot;fXY&quot;: 0.8247601945398406,
+      &quot;fXY_std_err&quot;: 0.00957548802252057
+    },
+    &quot;146-147&quot;: {
+      &quot;fCPHASE&quot;: 0.8274787219159552,
+      &quot;fCPHASE_std_err&quot;: 0.012916145303183676,
+      &quot;fCZ&quot;: 0.8069355268652384,
+      &quot;fCZ_std_err&quot;: 0.011974372157029201,
+      &quot;fXY&quot;: 0.8526092049762855,
+      &quot;fXY_std_err&quot;: 0.006987348271687152
+    },
+    &quot;15-16&quot;: {
+      &quot;fXY&quot;: 0.8342063795719767,
+      &quot;fXY_std_err&quot;: 0.015643734481094754
+    },
+    &quot;16-17&quot;: {
+      &quot;fCPHASE&quot;: 0.8302206036484925,
+      &quot;fCPHASE_std_err&quot;: 0.012869544844258486,
+      &quot;fCZ&quot;: 0.9354482252356635,
+      &quot;fCZ_std_err&quot;: 0.010176135830908704,
+      &quot;fXY&quot;: 0.9821198689331644,
+      &quot;fXY_std_err&quot;: 0.0035208616911067054
+    },
+    &quot;17-114&quot;: {
+      &quot;fCPHASE&quot;: 0.9143187311641693,
+      &quot;fCPHASE_std_err&quot;: 0.003664382124684018,
+      &quot;fCZ&quot;: 0.8955019395295634,
+      &quot;fCZ_std_err&quot;: 0.007905097371167706,
+      &quot;fXY&quot;: 0.9021621509273128,
+      &quot;fXY_std_err&quot;: 0.003882192037505257
+    },
+    &quot;2-15&quot;: {
+      &quot;fCPHASE&quot;: 0.853592786441325,
+      &quot;fCPHASE_std_err&quot;: 0.0173218640579643,
+      &quot;fCZ&quot;: 0.8424210536372618,
+      &quot;fCZ_std_err&quot;: 0.01942728529736507,
+      &quot;fXY&quot;: 0.8433415527455612,
+      &quot;fXY_std_err&quot;: 0.01568790471734529
+    },
+    &quot;2-3&quot;: {
+      &quot;fCPHASE&quot;: 0.8779216546510856,
+      &quot;fCPHASE_std_err&quot;: 0.008984824164987791,
+      &quot;fCZ&quot;: 0.9480866054086365,
+      &quot;fCZ_std_err&quot;: 0.010319346614322746,
+      &quot;fXY&quot;: 0.9795288135184532,
+      &quot;fXY_std_err&quot;: 0.003958747950871068
+    },
+    &quot;20-123&quot;: {
+      &quot;fCPHASE&quot;: 0.8431036186470358,
+      &quot;fCPHASE_std_err&quot;: 0.006169724764577705,
+      &quot;fCZ&quot;: 0.8933816092239404,
+      &quot;fCZ_std_err&quot;: 0.0046623328964517175,
+      &quot;fXY&quot;: 0.8252419892398489,
+      &quot;fXY_std_err&quot;: 0.009394429704878264
+    },
+    &quot;20-21&quot;: {
+      &quot;fCPHASE&quot;: 0.7899019718604859,
+      &quot;fCPHASE_std_err&quot;: 0.009411264368555643,
+      &quot;fCZ&quot;: 0.8703538536793619,
+      &quot;fCZ_std_err&quot;: 0.007022811723452874,
+      &quot;fXY&quot;: 0.8158581549695172,
+      &quot;fXY_std_err&quot;: 0.006946473176179534
+    },
+    &quot;20-27&quot;: {
+      &quot;fCPHASE&quot;: 0.8763753230954336,
+      &quot;fCPHASE_std_err&quot;: 0.00625207371316308,
+      &quot;fCZ&quot;: 0.799166480232074,
+      &quot;fCZ_std_err&quot;: 0.011411993102178204,
+      &quot;fXY&quot;: 0.7669325786102402,
+      &quot;fXY_std_err&quot;: 0.008614043444124643
+    },
+    &quot;21-22&quot;: {
+      &quot;fCPHASE&quot;: 0.8835474050687498,
+      &quot;fCPHASE_std_err&quot;: 0.0060384365641641055,
+      &quot;fCZ&quot;: 0.9675174474620992,
+      &quot;fCZ_std_err&quot;: 0.006112861032233331,
+      &quot;fXY&quot;: 0.9593856978684502,
+      &quot;fXY_std_err&quot;: 0.004675001579611297
+    },
+    &quot;21-36&quot;: {
+      &quot;fCPHASE&quot;: 0.9616282669985771,
+      &quot;fCPHASE_std_err&quot;: 0.009142346642293296,
+      &quot;fCZ&quot;: 0.9871653545386891,
+      &quot;fCZ_std_err&quot;: 0.003026822786756953,
+      &quot;fXY&quot;: 0.9618414413527681,
+      &quot;fXY_std_err&quot;: 0.007531528854368184
+    },
+    &quot;22-23&quot;: {
+      &quot;fCPHASE&quot;: 0.8797682013391236,
+      &quot;fCPHASE_std_err&quot;: 0.006863178602224026,
+      &quot;fCZ&quot;: 0.9433671108935797,
+      &quot;fCZ_std_err&quot;: 0.008139329201793282,
+      &quot;fXY&quot;: 0.9652840558375136,
+      &quot;fXY_std_err&quot;: 0.006241995575404114
+    },
+    &quot;22-35&quot;: {
+      &quot;fCPHASE&quot;: 0.9080011737139104,
+      &quot;fCPHASE_std_err&quot;: 0.004355936765447585,
+      &quot;fCZ&quot;: 0.9112749783878215,
+      &quot;fCZ_std_err&quot;: 0.006986762028397102,
+      &quot;fXY&quot;: 0.9806907358502073,
+      &quot;fXY_std_err&quot;: 0.004704057188026671
+    },
+    &quot;23-24&quot;: {
+      &quot;fCPHASE&quot;: 0.9569750181774397,
+      &quot;fCPHASE_std_err&quot;: 0.007574992417364864,
+      &quot;fCZ&quot;: 0.9681453299247146,
+      &quot;fCZ_std_err&quot;: 0.00508749895754165,
+      &quot;fXY&quot;: 0.8416917105635126,
+      &quot;fXY_std_err&quot;: 0.006732002502778592
+    },
+    &quot;24-25&quot;: {
+      &quot;fCPHASE&quot;: 0.8658350938592758,
+      &quot;fCPHASE_std_err&quot;: 0.021909272442443176,
+      &quot;fCZ&quot;: 0.984128639829115,
+      &quot;fCZ_std_err&quot;: 0.0026998808555934325,
+      &quot;fXY&quot;: 0.9827905160840157,
+      &quot;fXY_std_err&quot;: 0.0034710695867806503
+    },
+    &quot;25-26&quot;: {
+      &quot;fCPHASE&quot;: 0.8374713018133112,
+      &quot;fCPHASE_std_err&quot;: 0.010468040876200317,
+      &quot;fCZ&quot;: 0.8018425294114914,
+      &quot;fCZ_std_err&quot;: 0.014235856445919192,
+      &quot;fXY&quot;: 0.9052719848120904,
+      &quot;fXY_std_err&quot;: 0.005569411999606964
+    },
+    &quot;26-27&quot;: {
+      &quot;fCPHASE&quot;: 0.9484835812485717,
+      &quot;fCPHASE_std_err&quot;: 0.007829961706098426,
+      &quot;fCZ&quot;: 0.9012630325528697,
+      &quot;fCZ_std_err&quot;: 0.004691716240046407,
+      &quot;fXY&quot;: 0.953585694103604,
+      &quot;fXY_std_err&quot;: 0.010932206430380766
+    },
+    &quot;27-124&quot;: {
+      &quot;fCPHASE&quot;: 0.8638133235975534,
+      &quot;fCPHASE_std_err&quot;: 0.021794684669212708,
+      &quot;fCZ&quot;: 0.8787593624565879,
+      &quot;fCZ_std_err&quot;: 0.023267015943500925,
+      &quot;fXY&quot;: 0.8732572235376224,
+      &quot;fXY_std_err&quot;: 0.04702368958531526
+    },
+    &quot;3-4&quot;: {
+      &quot;fCPHASE&quot;: 0.8236032034332953,
+      &quot;fCPHASE_std_err&quot;: 0.009637889740194503,
+      &quot;fCZ&quot;: 0.9631654556896767,
+      &quot;fCZ_std_err&quot;: 0.006883806965521097,
+      &quot;fXY&quot;: 0.8160515267766147,
+      &quot;fXY_std_err&quot;: 0.012395715402937168
+    },
+    &quot;30-133&quot;: {
+      &quot;fCPHASE&quot;: 0.850145462488844,
+      &quot;fCPHASE_std_err&quot;: 0.01168941595728125,
+      &quot;fCZ&quot;: 0.835269201359459,
+      &quot;fCZ_std_err&quot;: 0.011802776547716056,
+      &quot;fXY&quot;: 0.8451511697574544,
+      &quot;fXY_std_err&quot;: 0.007428569073776654
+    },
+    &quot;30-31&quot;: {
+      &quot;fCPHASE&quot;: 0.7959482238289587,
+      &quot;fCPHASE_std_err&quot;: 0.009599101830901808,
+      &quot;fCZ&quot;: 0.8347314059950581,
+      &quot;fCZ_std_err&quot;: 0.007943197234786764,
+      &quot;fXY&quot;: 0.8741391749172258,
+      &quot;fXY_std_err&quot;: 0.005827549306131333
+    },
+    &quot;30-37&quot;: {
+      &quot;fCPHASE&quot;: 0.8145099941776652,
+      &quot;fCPHASE_std_err&quot;: 0.009368198118349361,
+      &quot;fCZ&quot;: 0.8635580585784683,
+      &quot;fCZ_std_err&quot;: 0.00810366449996026,
+      &quot;fXY&quot;: 0.90240849694021,
+      &quot;fXY_std_err&quot;: 0.005049518848030976
+    },
+    &quot;31-32&quot;: {
+      &quot;fCPHASE&quot;: 0.8122877362351132,
+      &quot;fCPHASE_std_err&quot;: 0.012044800753909436,
+      &quot;fCZ&quot;: 0.8399060477451475,
+      &quot;fCZ_std_err&quot;: 0.014714830688181652,
+      &quot;fXY&quot;: 0.8302699874100965,
+      &quot;fXY_std_err&quot;: 0.013009830172898642
+    },
+    &quot;31-46&quot;: {
+      &quot;fCPHASE&quot;: 0.9639175020002607,
+      &quot;fCPHASE_std_err&quot;: 0.00556452031578792,
+      &quot;fCZ&quot;: 0.9899490016021413,
+      &quot;fCZ_std_err&quot;: 0.002117361396498773,
+      &quot;fXY&quot;: 0.9893403896755063,
+      &quot;fXY_std_err&quot;: 0.0022178340508080896
+    },
+    &quot;32-33&quot;: {
+      &quot;fCPHASE&quot;: 0.8902505914708183,
+      &quot;fCPHASE_std_err&quot;: 0.006294531513856973,
+      &quot;fCZ&quot;: 0.9358403617020014,
+      &quot;fCZ_std_err&quot;: 0.009388054807090016,
+      &quot;fXY&quot;: 0.9546362970029817,
+      &quot;fXY_std_err&quot;: 0.007553442226022641
+    },
+    &quot;32-45&quot;: {
+      &quot;fCPHASE&quot;: 0.872231361471259,
+      &quot;fCPHASE_std_err&quot;: 0.01121985823707833,
+      &quot;fCZ&quot;: 0.9738444794692535,
+      &quot;fCZ_std_err&quot;: 0.0043942654522665485
+    },
+    &quot;33-34&quot;: {
+      &quot;fCPHASE&quot;: 0.7958929831240406,
+      &quot;fCPHASE_std_err&quot;: 0.015425462116718731,
+      &quot;fCZ&quot;: 0.8651742677416149,
+      &quot;fCZ_std_err&quot;: 0.007592588486357907,
+      &quot;fXY&quot;: 0.8835390987642395,
+      &quot;fXY_std_err&quot;: 0.0043867947035354325
+    },
+    &quot;34-35&quot;: {
+      &quot;fCPHASE&quot;: 0.859602533039039,
+      &quot;fCPHASE_std_err&quot;: 0.009138076035450015,
+      &quot;fCZ&quot;: 0.9715705945287438,
+      &quot;fCZ_std_err&quot;: 0.006301031003720571
+    },
+    &quot;35-36&quot;: {
+      &quot;fXY&quot;: 0.9774969885122631,
+      &quot;fXY_std_err&quot;: 0.0033829465454611072
+    },
+    &quot;36-37&quot;: {
+      &quot;fCPHASE&quot;: 0.9092561183890484,
+      &quot;fCPHASE_std_err&quot;: 0.0058376807088631735,
+      &quot;fCZ&quot;: 0.9784518885903303,
+      &quot;fCZ_std_err&quot;: 0.003029130589787604,
+      &quot;fXY&quot;: 0.9875603191593725,
+      &quot;fXY_std_err&quot;: 0.002358423302265576
+    },
+    &quot;37-134&quot;: {
+      &quot;fCPHASE&quot;: 0.9146399454060954,
+      &quot;fCPHASE_std_err&quot;: 0.004337076992693843,
+      &quot;fCZ&quot;: 0.934092256502296,
+      &quot;fCZ_std_err&quot;: 0.008770591000249005,
+      &quot;fXY&quot;: 0.8682740375243889,
+      &quot;fXY_std_err&quot;: 0.006471746052616916
+    },
+    &quot;4-5&quot;: {
+      &quot;fCPHASE&quot;: 0.8552743505131355,
+      &quot;fCPHASE_std_err&quot;: 0.007608179558157967,
+      &quot;fCZ&quot;: 0.9706519855005057,
+      &quot;fCZ_std_err&quot;: 0.005554291023953174,
+      &quot;fXY&quot;: 0.8624177383174734,
+      &quot;fXY_std_err&quot;: 0.006925013192967286
+    },
+    &quot;40-143&quot;: {
+      &quot;fCPHASE&quot;: 0.7600839684763812,
+      &quot;fCPHASE_std_err&quot;: 0.01455730512726115,
+      &quot;fCZ&quot;: 0.8104453814594197,
+      &quot;fCZ_std_err&quot;: 0.00992447081179879,
+      &quot;fXY&quot;: 0.905776157678926,
+      &quot;fXY_std_err&quot;: 0.005978628164178389
+    },
+    &quot;40-41&quot;: {
+      &quot;fCPHASE&quot;: 0.7616214479970531,
+      &quot;fCPHASE_std_err&quot;: 0.0153397409764428,
+      &quot;fCZ&quot;: 0.7990943294436262,
+      &quot;fCZ_std_err&quot;: 0.010747152786691874,
+      &quot;fXY&quot;: 0.8988201697808387,
+      &quot;fXY_std_err&quot;: 0.0052605650112824524
+    },
+    &quot;40-47&quot;: {
+      &quot;fCPHASE&quot;: 0.7168934897637623,
+      &quot;fCPHASE_std_err&quot;: 0.02194610037601451,
+      &quot;fCZ&quot;: 0.9032407469051222,
+      &quot;fCZ_std_err&quot;: 0.02019307343891585,
+      &quot;fXY&quot;: 0.9786320871734574,
+      &quot;fXY_std_err&quot;: 0.005267238871515598
+    },
+    &quot;41-42&quot;: {
+      &quot;fCPHASE&quot;: 0.8604180987325472,
+      &quot;fCPHASE_std_err&quot;: 0.00925843597058478,
+      &quot;fCZ&quot;: 0.9533150920640057,
+      &quot;fCZ_std_err&quot;: 0.01097766567033766,
+      &quot;fXY&quot;: 0.9586422965574871,
+      &quot;fXY_std_err&quot;: 0.007132225169109244
+    },
+    &quot;42-43&quot;: {
+      &quot;fCPHASE&quot;: 0.8423849056255256,
+      &quot;fCPHASE_std_err&quot;: 0.010008919179737015,
+      &quot;fCZ&quot;: 0.917858001758817,
+      &quot;fCZ_std_err&quot;: 0.012413160703071257,
+      &quot;fXY&quot;: 0.8141502882786736,
+      &quot;fXY_std_err&quot;: 0.01184872526534798
+    },
+    &quot;43-44&quot;: {
+      &quot;fCPHASE&quot;: 0.7537923626609487,
+      &quot;fCPHASE_std_err&quot;: 0.015080828085127,
+      &quot;fCZ&quot;: 0.8611710085628796,
+      &quot;fCZ_std_err&quot;: 0.008865627688122714,
+      &quot;fXY&quot;: 0.942283542329304,
+      &quot;fXY_std_err&quot;: 0.009503765439193682
+    },
+    &quot;44-45&quot;: {
+      &quot;fCPHASE&quot;: 0.8299030141719563,
+      &quot;fCPHASE_std_err&quot;: 0.009857478899323988,
+      &quot;fCZ&quot;: 0.9557288578270758,
+      &quot;fCZ_std_err&quot;: 0.006702511019316729,
+      &quot;fXY&quot;: 0.8996048966729704,
+      &quot;fXY_std_err&quot;: 0.004152212435951456
+    },
+    &quot;45-46&quot;: {
+      &quot;fCPHASE&quot;: 0.9675162959658308,
+      &quot;fCPHASE_std_err&quot;: 0.008914968542324951,
+      &quot;fCZ&quot;: 0.965380988480898,
+      &quot;fCZ_std_err&quot;: 0.00600956773698424,
+      &quot;fXY&quot;: 0.9811754888501525,
+      &quot;fXY_std_err&quot;: 0.002809467046863083
+    },
+    &quot;46-47&quot;: {
+      &quot;fCPHASE&quot;: 0.9550132096198518,
+      &quot;fCPHASE_std_err&quot;: 0.011101139047072738,
+      &quot;fCZ&quot;: 0.9334902005702788,
+      &quot;fCZ_std_err&quot;: 0.013121527876568584,
+      &quot;fXY&quot;: 0.9598039171384231,
+      &quot;fXY_std_err&quot;: 0.008923248606730105
+    },
+    &quot;47-144&quot;: {
+      &quot;fCPHASE&quot;: 0.8982407044055271,
+      &quot;fCPHASE_std_err&quot;: 0.00621785488733503,
+      &quot;fCZ&quot;: 0.9394007045007381,
+      &quot;fCZ_std_err&quot;: 0.010877234167113965,
+      &quot;fXY&quot;: 0.7767641365585107,
+      &quot;fXY_std_err&quot;: 0.0173400113341025
+    },
+    &quot;5-6&quot;: {
+      &quot;fCPHASE&quot;: 0.8856589225078974,
+      &quot;fCPHASE_std_err&quot;: 0.007252911389298091,
+      &quot;fCZ&quot;: 0.9548890325016192,
+      &quot;fCZ_std_err&quot;: 0.0053040819246874624,
+      &quot;fXY&quot;: 0.9708587201438419,
+      &quot;fXY_std_err&quot;: 0.004633224705448535
+    },
+    &quot;6-7&quot;: {
+      &quot;fCPHASE&quot;: 0.8390933924372902,
+      &quot;fCPHASE_std_err&quot;: 0.009445019626481147,
+      &quot;fCZ&quot;: 0.9418483009558972,
+      &quot;fCZ_std_err&quot;: 0.01218466822075986,
+      &quot;fXY&quot;: 0.9661361224326979,
+      &quot;fXY_std_err&quot;: 0.009003517168496214
+    },
+    &quot;7-104&quot;: {
+      &quot;fXY&quot;: 0.6631486133799958,
+      &quot;fXY_std_err&quot;: 0.010365519549584151
+    }
+  }
+}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Each device has more properties to explore. To learn more, view the <a class="reference external" href="https://amazon-braket-schemas-python.readthedocs.io/en/latest/_apidoc/braket.device_schema.html">Amazon Braket schemas documentation</a>.</p>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Getting Devices and Checking Device Properties</a><ul>
+<li><a class="reference internal" href="#using-get-devices">Using get_devices</a><ul>
+<li><a class="reference internal" href="#getting-the-device-by-type">Getting the device by type</a></li>
+<li><a class="reference internal" href="#getting-the-device-by-arn">Getting the device by ARN</a></li>
+<li><a class="reference internal" href="#getting-the-device-by-name">Getting the device by name</a></li>
+<li><a class="reference internal" href="#getting-the-device-by-status">Getting the device by status</a></li>
+<li><a class="reference internal" href="#getting-the-device-by-provider-name">Getting the device by provider_name</a></li>
+<li><a class="reference internal" href="#retrieve-devices-in-order">Retrieve devices in order</a></li>
+<li><a class="reference internal" href="#getting-the-device-with-multiple-criteria">Getting the device with multiple criteria</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#getting-a-device-directly">Getting a device directly</a></li>
+<li><a class="reference internal" href="#properties-of-devices">Properties of devices</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/scripts/furo.js"></script>
+    </body>
+</html>

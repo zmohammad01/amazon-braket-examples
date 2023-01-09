@@ -1,0 +1,529 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
+
+    <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
+        <title>Ordered phases in Rydberg systems - Amazon Braket Examples documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">Amazon Braket Examples  documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  
+  
+  <span class="sidebar-brand-text">Amazon Braket Examples  documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="ordered-phases-in-rydberg-systems">
+<h1>Ordered phases in Rydberg systems<a class="headerlink" href="#ordered-phases-in-rydberg-systems" title="Permalink to this heading">#</a></h1>
+<p>In this example notebook, we show how one can prepare ordered phases in Rydberg systems, focusing on the 1D $Z_2$ phase and the 2D checkerboard phase. We will use an adiabatic time-evolution to prepare these many-body ground states.</p>
+<section id="adiabatic-evolution">
+<h2>Adiabatic evolution<a class="headerlink" href="#adiabatic-evolution" title="Permalink to this heading">#</a></h2>
+<p>The adiabatic theorem of quantum mechanics states that</p>
+<blockquote>
+<div><p>A physical system remains in its <em>instantaneous</em> eigenstate if a given perturbation is acting on it slowly enough and if there is a gap between the eigenvalue and the rest of the Hamiltonian’s spectrum. (Born &amp; Fock, 1928)</p>
+</div></blockquote>
+<p>In other words, a slow-enough change in the parameters of the Hamiltonian will not induce transitions between its ground state and excited states: If the system starts in the ground state of the Hamiltonian at the beginning, it will smoothly transition into the ground state of the Hamiltonian at the end.</p>
+<p>The adiabatic theorem plays a key role in preparing the desired many-body ground states in the Rydberg system, the Hamiltonian of which can be expressed as</p>
+<p>\begin{align}
+H(t) = \sum_{k=1}^N \frac{\Omega(t)}{2}\left(|g_k\rangle\langle r_k| + |r_k\rangle\langle g_k|\right) - \Delta_\text{global}(t){n}<em>k + \sum</em>{j=1}^{N-1}\sum_{k=j+1}^N V_{jk}{n}_j{n}_k,
+\end{align}</p>
+<p>where, for simplicity, we set the phase and the shifting field (See notebook 00 for detailed description of this Hamiltonian) to be zero throughout this notebook. We schedule the driving amplitude $\Omega(t)$ to start from zero ($\Omega(t=0)=0$). Hence, with negative detuning ($\Delta_\text{global}(t=0)&lt;0$), the initial state where all atoms are in the ground state ($\langle n_k\rangle =0$) is the lowest energy eigenstate of the Hamiltonian, the many-body ground state.</p>
+<p>To arrive at a target Hamiltonian where the excited states of the atoms are favored, we ramp up the detuning $\Delta_\text{global}$ from large negative to large positive. During the ramp, we apply a large driving amplitude $\Omega$ to open an energy gap between the first excited state and the ground state. According to the adiabatic theorem, if the ramping is slow enough, the system remains in the many-body ground state throughout the evolution. At the end of the AHS program, the Rabi frequency will be turned off and since $\Delta_\text{global}&gt;0$, all the atoms tend to stay in the Rydberg state to lower the energy of the system. However, due to the strong Rydberg interaction, only one atom can be excited to the Rydberg state within its blockade radius.</p>
+<p>For a 1D chain of atoms, if we adjust the separation between the atoms such that only neighboring atoms are within the blockade radius, then we will arrive at a state where every second atom is excited, this is called the “$Z_2$ phase”. For a 2D square array of atoms, a similar “checkerboard phase” emerges. The common feature of these phases is that the atoms are excited to the Rydberg states in an alternative pattern, complying with the blockade constraint, as shown in the figure below. In the figure, the shaded circles show <em>half</em> of the blockade radius such that sites with overlapped circles blockade each other. We show configurations, with black and white sites represent Rydberg and ground state atoms respectively, that comply with the blockade constraint.</p>
+<p><img alt="Blockade_examples.png" src="../../_images/Blockade_examples.png" /></p>
+<p>We will realize these phases in this notebook. To begin, we import the necessary packages.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use Braket SDK Cost Tracking to estimate the cost to run this example</span>
+<span class="kn">from</span> <span class="nn">braket.tracking</span> <span class="kn">import</span> <span class="n">Tracker</span>
+<span class="n">tracker</span> <span class="o">=</span> <span class="n">Tracker</span><span class="p">()</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>In this notebook, we will use <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> package and <code class="docutils literal notranslate"><span class="pre">ahs_utils.py</span></code> module in the current working directory for visualization purposes and other functionalities.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="kn">from</span> <span class="nn">braket.ahs.atom_arrangement</span> <span class="kn">import</span> <span class="n">AtomArrangement</span>
+
+<span class="kn">from</span> <span class="nn">braket.ahs.analog_hamiltonian_simulation</span> <span class="kn">import</span> <span class="n">AnalogHamiltonianSimulation</span>
+
+<span class="kn">from</span> <span class="nn">ahs_utils</span> <span class="kn">import</span> <span class="n">show_register</span><span class="p">,</span> <span class="n">show_global_drive</span><span class="p">,</span> <span class="n">show_final_avg_density</span><span class="p">,</span> <span class="n">get_drive</span> 
+
+<span class="kn">from</span> <span class="nn">braket.devices</span> <span class="kn">import</span> <span class="n">LocalSimulator</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="d-z-2-phase">
+<h2>1D $Z_2$ phase<a class="headerlink" href="#d-z-2-phase" title="Permalink to this heading">#</a></h2>
+<p>Here we consider a 1D chain of 9 atoms with neighboring atoms separated by $5.5\mu m$. The setup of the system can be generated as follows</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">register</span> <span class="o">=</span> <span class="n">AtomArrangement</span><span class="p">()</span>
+<span class="n">separation</span> <span class="o">=</span> <span class="mf">6.1e-6</span>  <span class="c1"># in meters </span>
+<span class="n">num_atoms</span> <span class="o">=</span> <span class="mi">9</span>
+
+<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_atoms</span><span class="p">):</span>
+    <span class="n">register</span><span class="o">.</span><span class="n">add</span><span class="p">([</span><span class="n">k</span> <span class="o">*</span> <span class="n">separation</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+    
+<span class="n">show_register</span><span class="p">(</span><span class="n">register</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/4c90d0df0725cdd89dc0ad9a8afeeca888ac5b1c8a675bcb7126bf5d9db153af.png" src="../../_images/4c90d0df0725cdd89dc0ad9a8afeeca888ac5b1c8a675bcb7126bf5d9db153af.png" />
+</div>
+</div>
+<p>In order to prepare the $Z_2$ ordered state for the atomic chain, we shall design an AHS program that drives the system adiabatically. As described above, we start from $\Omega(t=0)=0$ with $\Delta(t=0)&lt;0$, followed by turning on $\Omega(t)$ and ramping up $\Delta(t)$. We will turn off the driving amplitude at the end of the program. This program can be specified as follows.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">time_points</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">2.5e-7</span><span class="p">,</span> <span class="mf">2.75e-6</span><span class="p">,</span> <span class="mf">3e-6</span><span class="p">]</span>
+<span class="n">amplitude_min</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">amplitude_max</span> <span class="o">=</span> <span class="mf">1.57e7</span>  <span class="c1"># rad / s</span>
+
+<span class="n">detuning_min</span> <span class="o">=</span> <span class="o">-</span><span class="mf">5.5e7</span>  <span class="c1"># rad / s</span>
+<span class="n">detuning_max</span> <span class="o">=</span> <span class="mf">5.5e7</span>  <span class="c1"># rad / s</span>
+
+<span class="n">amplitude_values</span> <span class="o">=</span> <span class="p">[</span><span class="n">amplitude_min</span><span class="p">,</span> <span class="n">amplitude_max</span><span class="p">,</span> <span class="n">amplitude_max</span><span class="p">,</span> <span class="n">amplitude_min</span><span class="p">]</span>  <span class="c1"># piecewise linear</span>
+<span class="n">detuning_values</span> <span class="o">=</span> <span class="p">[</span><span class="n">detuning_min</span><span class="p">,</span> <span class="n">detuning_min</span><span class="p">,</span> <span class="n">detuning_max</span><span class="p">,</span> <span class="n">detuning_max</span><span class="p">]</span>  <span class="c1"># piecewise linear</span>
+<span class="n">phase_values</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>  <span class="c1"># piecewise constant</span>
+
+
+<span class="n">drive</span> <span class="o">=</span> <span class="n">get_drive</span><span class="p">(</span><span class="n">time_points</span><span class="p">,</span> <span class="n">amplitude_values</span><span class="p">,</span> <span class="n">detuning_values</span><span class="p">,</span> <span class="n">phase_values</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can plot the waveforms of these driving fields to make sure that they are correctly specified.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">show_global_drive</span><span class="p">(</span><span class="n">drive</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/e560debded3d28450b1b6786b413d692dcf803d5f24459e53903c9dd4380b31b.png" src="../../_images/e560debded3d28450b1b6786b413d692dcf803d5f24459e53903c9dd4380b31b.png" />
+</div>
+</div>
+<p>Finally, we construct out AHS program from the atomic registers, and the Hamiltonian defined above.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ahs_program</span> <span class="o">=</span> <span class="n">AnalogHamiltonianSimulation</span><span class="p">(</span>
+    <span class="n">register</span><span class="o">=</span><span class="n">register</span><span class="p">,</span> 
+    <span class="n">hamiltonian</span><span class="o">=</span><span class="n">drive</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Before running the program on Quera’s Aquila device (See notebook 01), we can first run it on the local simulator to make sure the outcome is the expected $Z_2$ state.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">device</span> <span class="o">=</span> <span class="n">LocalSimulator</span><span class="p">(</span><span class="s2">&quot;braket_ahs&quot;</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">ahs_program</span><span class="p">,</span> <span class="n">shots</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+<span class="n">show_final_avg_density</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/01375089c1ca80361282a47b59aba68a2955dfcaea0aee3f8e204c2cc3bca4db.png" src="../../_images/01375089c1ca80361282a47b59aba68a2955dfcaea0aee3f8e204c2cc3bca4db.png" />
+</div>
+</div>
+<p>We see that the average Rydberg density approximately forms the $Z_2$ pattern. The discrepancy can be attributed to finite size of the system and nonadiabaticity throughout the evolution. We expect that as one increase the system size and the duration of the AHS program, the final Rydberg density will approach the ideal $Z_2$ pattern.</p>
+<p>The $Z_2$ phase can be characterized by the density correlation $g_{ij}$ of the $i$-th and the $j$-th atom, which is defined as</p>
+<p>\begin{align}
+g_{ij} = \langle n_i n_j\rangle - \langle n_i\rangle\langle n_j\rangle,
+\end{align}</p>
+<p>where $\langle\cdot\rangle$ is the average over the shots.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_density_correlation_Z2</span><span class="p">(</span><span class="n">result</span><span class="p">):</span>
+    <span class="n">post_sequences</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">list</span><span class="p">(</span><span class="n">measurement</span><span class="o">.</span><span class="n">post_sequence</span><span class="p">)</span> <span class="k">for</span> <span class="n">measurement</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">measurements</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">cov</span><span class="p">(</span><span class="n">post_sequences</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+
+<span class="n">gij</span> <span class="o">=</span> <span class="n">get_density_correlation_Z2</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The Rydberg density correlation function can be visualized as follows.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">gij</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;bwr&#39;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=+</span><span class="mf">0.25</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">num_atoms</span><span class="p">),</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_atoms</span><span class="p">)])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;atom index&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">num_atoms</span><span class="p">),</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">j</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_atoms</span><span class="p">)])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;atom index&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Rydberg density correlation&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/c0f755bd4e4c533bff2b4ea07284a494f1d49e4dd092c2dbf737f37580bb79be.png" src="../../_images/c0f755bd4e4c533bff2b4ea07284a494f1d49e4dd092c2dbf737f37580bb79be.png" />
+</div>
+</div>
+<p>For more explanation and interpretation of the Rydberg density correlation functions, see “Probing many-body dynamics on a 51-atom quantum simulator” by <a class="reference external" href="https://arxiv.org/abs/1707.04344">Bernien et al. (2017)</a>.</p>
+</section>
+<section id="d-checkerboard-phase">
+<h2>2D checkerboard phase<a class="headerlink" href="#d-checkerboard-phase" title="Permalink to this heading">#</a></h2>
+<p>In two dimension, Rydberg system can exhibit the checkerboard phase, which is analogous to the $Z_2$ phase in 1D. For simplicity, here we create a $3\times 3$ square lattice.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">register_2D</span> <span class="o">=</span> <span class="n">AtomArrangement</span><span class="p">()</span>
+<span class="n">separation</span> <span class="o">=</span> <span class="mf">6.7e-6</span>  <span class="c1"># in meters </span>
+
+<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+        <span class="n">register_2D</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">k</span> <span class="o">*</span> <span class="n">separation</span><span class="p">,</span> <span class="n">l</span> <span class="o">*</span> <span class="n">separation</span><span class="p">))</span>
+
+<span class="n">show_register</span><span class="p">(</span><span class="n">register_2D</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/c12b6e913a9d9e8416e3ae190bdc67dc3f61d145c954dbd4beb3cff73f38a2b7.png" src="../../_images/c12b6e913a9d9e8416e3ae190bdc67dc3f61d145c954dbd4beb3cff73f38a2b7.png" />
+</div>
+</div>
+<p>We will use the same driving field as the one for generating the $Z_2$ phase. We then assemble the 2D array with the driving field, and run the AHS program on the local simulator.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ahs_program_2D</span> <span class="o">=</span> <span class="n">AnalogHamiltonianSimulation</span><span class="p">(</span>
+    <span class="n">register</span><span class="o">=</span><span class="n">register_2D</span><span class="p">,</span> 
+    <span class="n">hamiltonian</span><span class="o">=</span><span class="n">drive</span>
+<span class="p">)</span>
+
+<span class="n">result_2D</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">ahs_program_2D</span><span class="p">,</span> <span class="n">shots</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+<span class="n">show_final_avg_density</span><span class="p">(</span><span class="n">result_2D</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/86b3f628576b6deccb498b0c0bbbca8b0263a3cd53da920074f7cd694a532111.png" src="../../_images/86b3f628576b6deccb498b0c0bbbca8b0263a3cd53da920074f7cd694a532111.png" />
+</div>
+</div>
+<p>We see that the overall pattern mimics the checkerboard pattern, but the central site suffers strong discrepancy. This is due to the finite size of the system and the finite duration of the AHS program, which cause non-adiabatic errors.</p>
+<p>For more explanation and interpretation of the 2-d results, see “Quantum Phases of Matter on a 256-Atom Programmable Quantum Simulator” by <a class="reference external" href="http://arxiv.org/abs/2012.12281">Ebadi et al. (2020)</a>.</p>
+</section>
+<section id="realizing-z-2-and-checkerboard-phase-on-a-qpu">
+<h2>Realizing $Z_2$ and checkerboard phase on a QPU<a class="headerlink" href="#realizing-z-2-and-checkerboard-phase-on-a-qpu" title="Permalink to this heading">#</a></h2>
+<p>In previous sections, we have demonstrated two AHS programs for realizing many-body ground states. The results from the local simulator show that the results of the programs meet our expectations. Here we will run the same AHS program on the Aquila device.</p>
+<div class="alert alert-block alert-info">
+<b>Note: </b> Some atoms may be missing even if the shot was successful. We recommend comparing <code>pre_sequence</code> of each shot with the requested atom filling in the AHS program specification.  
+</div><div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">braket.aws</span> <span class="kn">import</span> <span class="n">AwsDevice</span> 
+<span class="n">device</span> <span class="o">=</span> <span class="n">AwsDevice</span><span class="p">(</span><span class="s2">&quot;arn:aws:braket:us-east-1::device/qpu/quera/Aquila&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result_1D_aquila</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">ahs_program</span><span class="p">,</span> <span class="n">shots</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+<span class="n">show_final_avg_density</span><span class="p">(</span><span class="n">result_1D_aquila</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/8ad25688779fb304a884fec41a441feea63a5a47e09b549aed9a937d0a10b095.png" src="../../_images/8ad25688779fb304a884fec41a441feea63a5a47e09b549aed9a937d0a10b095.png" />
+</div>
+</div>
+<p>We can calculate the density correlation function for the result obtained from Aquila</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gij_aquila</span> <span class="o">=</span> <span class="n">get_density_correlation_Z2</span><span class="p">(</span><span class="n">result_1D_aquila</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">gij_aquila</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;bwr&#39;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=+</span><span class="mf">0.25</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">num_atoms</span><span class="p">),</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_atoms</span><span class="p">)])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;atom index&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">num_atoms</span><span class="p">),</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">j</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_atoms</span><span class="p">)])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;atom index&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Rydberg density correlation&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/51d7bbd88a0d988b75e6ff798d082398a28333491cac0ace1e992f3ea97ad853.png" src="../../_images/51d7bbd88a0d988b75e6ff798d082398a28333491cac0ace1e992f3ea97ad853.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result_2D_aquila</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">ahs_program_2D</span><span class="p">,</span> <span class="n">shots</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+<span class="n">show_final_avg_density</span><span class="p">(</span><span class="n">result_2D_aquila</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/71ba1d8e298e3737dc37a9c58a98aada1fd289689e3d2920aa94be564fedeee0.png" src="../../_images/71ba1d8e298e3737dc37a9c58a98aada1fd289689e3d2920aa94be564fedeee0.png" />
+</div>
+</div>
+<p>In summary, in this notebook we have demonstrated how to realize the 1D $Z_2$ phase and 2D checkerboard phase via adiabatic transition on the Rydberg systems. These are interesting many body phases in their own right, and serve as the starting points for the more involved use cases.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Task Summary&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tracker</span><span class="o">.</span><span class="n">quantum_tasks_statistics</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Note: Charges shown are estimates based on your Amazon Braket simulator and quantum processing unit (QPU) task usage. Estimated charges shown may differ from your actual charges. Estimated charges do not factor in any discounts or credits, and you may experience additional charges based on your use of other services such as Amazon Elastic Compute Cloud (Amazon EC2).&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Estimated cost to run this example: </span><span class="si">{</span><span class="n">tracker</span><span class="o">.</span><span class="n">qpu_tasks_cost</span><span class="p">()</span> <span class="o">+</span> <span class="n">tracker</span><span class="o">.</span><span class="n">simulator_tasks_cost</span><span class="p">()</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> USD&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Task Summary
+{&#39;arn:aws:braket:us-east-1::device/qpu/quera/Aquila&#39;: {&#39;shots&#39;: 200, &#39;tasks&#39;: {&#39;COMPLETED&#39;: 2}}}
+Note: Charges shown are estimates based on your Amazon Braket simulator and quantum processing unit (QPU) task usage. Estimated charges shown may differ from your actual charges. Estimated charges do not factor in any discounts or credits, and you may experience additional charges based on your use of other services such as Amazon Elastic Compute Cloud (Amazon EC2).
+Estimated cost to run this example: 2.60 USD
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Ordered phases in Rydberg systems</a><ul>
+<li><a class="reference internal" href="#adiabatic-evolution">Adiabatic evolution</a></li>
+<li><a class="reference internal" href="#d-z-2-phase">1D $Z_2$ phase</a></li>
+<li><a class="reference internal" href="#d-checkerboard-phase">2D checkerboard phase</a></li>
+<li><a class="reference internal" href="#realizing-z-2-and-checkerboard-phase-on-a-qpu">Realizing $Z_2$ and checkerboard phase on a QPU</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/scripts/furo.js"></script>
+    </body>
+</html>

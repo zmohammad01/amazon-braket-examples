@@ -1,0 +1,803 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
+
+    <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
+        <title>Adjoint gradient computation with PennyLane and Amazon Braket - Amazon Braket Examples documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../../index.html"><div class="brand">Amazon Braket Examples  documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
+  
+  
+  <span class="sidebar-brand-text">Amazon Braket Examples  documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="adjoint-gradient-computation-with-pennylane-and-amazon-braket">
+<h1>Adjoint gradient computation with PennyLane and Amazon Braket<a class="headerlink" href="#adjoint-gradient-computation-with-pennylane-and-amazon-braket" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use Braket SDK Cost Tracking to estimate the cost to run this example</span>
+<span class="kn">from</span> <span class="nn">braket.tracking</span> <span class="kn">import</span> <span class="n">Tracker</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">Tracker</span><span class="p">()</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>This tutorial will show you how to compute gradients of free parameters in a quantum circuit using PennyLane and Amazon Braket. Check out the <a class="reference internal" href="../../braket_features/Using_The_Adjoint_Gradient_Result_Type.html"><span class="doc std std-doc">example notebook</span></a> about the adjoint gradient method and <a class="reference external" href="https://pennylane.ai/qml/demos/tutorial_adjoint_diff.html">PennyLane’s tutorial</a> to learn the basics of the adjoint method. This tutorial builds on the <span class="xref myst">Quantum Chemistry with VQE example notebook</span> and the <a class="reference external" href="https://pennylane.ai/qml/demos/tutorial_adaptive_circuits.html">PennyLane demo on adaptive circuits</a>.</p>
+<section id="brief-introduction-to-the-adjoint-differentiation-method">
+<h2>Brief introduction to the adjoint differentiation method<a class="headerlink" href="#brief-introduction-to-the-adjoint-differentiation-method" title="Permalink to this heading">#</a></h2>
+<p>Adjoint differentiation is a technique used to compute gradients of parametrized quantum circuits. It can be used when <code class="docutils literal notranslate"><span class="pre">shots=0</span></code> and is available on Amazon Braket’s on-demand state vector simulator, SV1. The adjoint differentiation method allows you to compute the gradient of a circuit with <code class="docutils literal notranslate"><span class="pre">P</span></code> parameters in only 1+1 circuit executions (one forward and one backward pass, similar to backpropagation), as opposed to the parameter-shift or finite-difference methods, both of which require <code class="docutils literal notranslate"><span class="pre">2P</span></code> circuit executions for every gradient calculation. The adjoint method can lower the cost of running variational quantum workflows, especially for circuits with a large number of parameters.</p>
+<div class="alert alert-block alert-info">
+<b>Note:</b> This notebook requires pennylane>=0.23.0, amazon-braket-sdk-python>=1.35.0, and amazon-braket-pennylane-plugin>=1.10.0
+</div></section>
+</section>
+<section id="defining-the-problem">
+<h1>Defining the problem<a class="headerlink" href="#defining-the-problem" title="Permalink to this heading">#</a></h1>
+<p>Just as in the <a class="reference external" href="https://pennylane.ai/qml/demos/tutorial_adaptive_circuits.html">PennyLane adaptive circuits demo</a>, we will use PennyLane to construct a circuit which represents a VQE run on a molecular structure in order to calculate its groundstate energy. In the previous tutorial we looked at $\mathrm{H}_2$, a relatively small and simple molecule of just two atoms and two electrons. In this tutorial, we will extend the methods of the previous tutorial to study a larger, more difficult to simulate molecule: $\mathrm{CO}_2$, carbon dioxide. First, we import the necessary Python libraries:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pennylane</span> <span class="k">as</span> <span class="nn">qml</span>
+<span class="kn">from</span> <span class="nn">pennylane</span> <span class="kn">import</span> <span class="n">qchem</span>
+<span class="kn">from</span> <span class="nn">pennylane</span> <span class="kn">import</span> <span class="n">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="kn">import</span> <span class="nn">time</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Again, we will represent the molecule we want to simulate using the <code class="docutils literal notranslate"><span class="pre">xyz</span></code> format. An <code class="docutils literal notranslate"><span class="pre">xyz</span></code> file with the structure of $\mathrm{CO}_2$ is provided in this folder as <code class="docutils literal notranslate"><span class="pre">co2.xyz</span></code>. We’ll also set the number of active electrons to simulate. Active electrons are those which can transition between energy levels through an excitation: single, double, or more. Including more active electrons will increase the number of qubits we need to simulate this molecule. In this tutorial, we will set the number of active electrons to <code class="docutils literal notranslate"><span class="pre">8</span></code> - less than the 22 total electrons present in $\mathrm{CO}_2$. In practice, it’s usually possible to get accurate results using far fewer active electrons than total electrons in the molecule, as most electrons do not participate in bonding.</p>
+<p>We’ll use the <code class="docutils literal notranslate"><span class="pre">pyscf</span></code> method to build the Hamiltonian, which uses the OpenFermion-PySCF plugin to build a <em>non-differentiable</em> molecular Hamiltonian. Since we are interested in optimizing the <em>excitations</em>, and not the Hamiltonian itself, this is a reasonable choice that will lower the total number of derivatives we will need to compute, because the Hamiltonian itself will not be parametrized. For more information about this plugin, see <a class="reference external" href="https://docs.pennylane.ai/en/stable/code/qml_qchem.html?highlight=pyscf#openfermion-pyscf-backend">the PennyLane documentation</a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n_electrons</span> <span class="o">=</span> <span class="mi">8</span>
+<span class="n">symbols</span><span class="p">,</span> <span class="n">coordinates</span> <span class="o">=</span> <span class="n">qchem</span><span class="o">.</span><span class="n">read_structure</span><span class="p">(</span><span class="s1">&#39;qchem/co2.xyz&#39;</span><span class="p">)</span>
+<span class="c1"># suppress a HDF5 warning</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+    <span class="n">H</span><span class="p">,</span> <span class="n">qubits</span> <span class="o">=</span> <span class="n">qchem</span><span class="o">.</span><span class="n">molecular_hamiltonian</span><span class="p">(</span><span class="n">symbols</span><span class="p">,</span>
+                                            <span class="n">coordinates</span><span class="p">,</span>
+                                            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;pyscf&quot;</span><span class="p">,</span>
+                                            <span class="n">active_electrons</span><span class="o">=</span><span class="n">n_electrons</span><span class="p">,</span>
+                                            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;co2&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of qubits: </span><span class="si">{</span><span class="n">qubits</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Number of qubits: 16
+</pre></div>
+</div>
+</div>
+</div>
+<p>We now define our initial ansatz, a Hartree-Fock state with all the single and double excitations.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Hartree-Fock state</span>
+<span class="n">hf_state</span> <span class="o">=</span> <span class="n">qchem</span><span class="o">.</span><span class="n">hf_state</span><span class="p">(</span><span class="n">n_electrons</span><span class="p">,</span> <span class="n">qubits</span><span class="p">)</span>
+<span class="c1"># generate single- and double-excitations</span>
+<span class="n">singles</span><span class="p">,</span> <span class="n">doubles</span> <span class="o">=</span> <span class="n">qchem</span><span class="o">.</span><span class="n">excitations</span><span class="p">(</span><span class="n">n_electrons</span><span class="p">,</span> <span class="n">qubits</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of single excitations: &quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">singles</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of double excitations: &quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">doubles</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Number of single excitations:  32
+Number of double excitations:  328
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can immediately see that the number of excitations, especially doubles, is very large. However, many of these excitations will contribute little to the final energy we compute. We thus seek a way to “filter” the large number of unimportant excitations. This will not reduce the accuracy of our approach very much, but will allow us to arrive at a final energy must faster and with much less cost in compute time.</p>
+</section>
+<section id="adaptive-vqe">
+<h1>Adaptive VQE<a class="headerlink" href="#adaptive-vqe" title="Permalink to this heading">#</a></h1>
+<p>In general, we do not know which excitations are important (contribute a lot to the final energy) and which are not (contribute little). <a class="reference external" href="https://www.nature.com/articles/s41467-019-10988-2">Grimsley et al.</a> developed the ADAPT-VQE algorithm, which allows us to perform this desired filtering. The steps to be followed are:</p>
+<ol class="arabic simple">
+<li><p>Compute derivatives with respect to all <code class="docutils literal notranslate"><span class="pre">doubles</span></code> excitations</p></li>
+<li><p>Filter out all <code class="docutils literal notranslate"><span class="pre">doubles</span></code> with derivatives below some cutoff</p></li>
+<li><p>Optimize the remaining <code class="docutils literal notranslate"><span class="pre">doubles</span></code> excitations</p></li>
+<li><p>Compute derivatives with respect to all <code class="docutils literal notranslate"><span class="pre">singles</span></code> excitatations, keeping the filtered-and-optimized <code class="docutils literal notranslate"><span class="pre">doubles</span></code> fixed</p></li>
+<li><p>Filter out all <code class="docutils literal notranslate"><span class="pre">singles</span></code> with derivatives below some cutoff</p></li>
+<li><p>Optimize all remaining <code class="docutils literal notranslate"><span class="pre">singles</span></code> and <code class="docutils literal notranslate"><span class="pre">doubles</span></code> excitations</p></li>
+<li><p>Compute the final energy</p></li>
+</ol>
+</section>
+<section id="running-adaptive-vqe-with-adjoint-differentiation">
+<h1>Running adaptive VQE with adjoint differentiation<a class="headerlink" href="#running-adaptive-vqe-with-adjoint-differentiation" title="Permalink to this heading">#</a></h1>
+<p>We’ll need to set up the device to use with PennyLane. Because the qubit count is 16, this workflow is a good candidate for SV1, the Amazon Braket on-demand state vector simulator. SV1 now supports two gradient computation methods in <code class="docutils literal notranslate"><span class="pre">shots=0</span></code> (exact) mode: adjoint differentiation, available by setting <code class="docutils literal notranslate"><span class="pre">diff_method='device'</span></code>, and parameter shift, available by setting <code class="docutils literal notranslate"><span class="pre">diff_method='parameter-shift'</span></code>. As shown in <a class="reference internal" href="../../braket_features/Using_The_Adjoint_Gradient_Result_Type.html"><span class="doc std std-doc">the adjoint gradient example notebook</span></a>, the adjoint differentiation method is an execution-frugal way to compute gradients. When using <code class="docutils literal notranslate"><span class="pre">parameter-shift</span></code>, each partial derivative in the gradient requires <em>two</em> circuit executions to compute, but with the adjoint method we can compute <em>all</em> partial derivatives (and thus the entire gradient) with one circuit execution and the “back-stepping” procedure, which is similar in runtime. The adjoint method can deliver a quadratic speedup in the number of parameters, making it a great choice when the number of parameterized gates is large, as it is for our problem.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># set the device and differentiation method</span>
+<span class="n">device_arn</span> <span class="o">=</span> <span class="s2">&quot;arn:aws:braket:::device/quantum-simulator/amazon/sv1&quot;</span>
+<span class="n">dev</span> <span class="o">=</span> <span class="n">qml</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;braket.aws.qubit&quot;</span><span class="p">,</span> <span class="n">device_arn</span><span class="o">=</span><span class="n">device_arn</span><span class="p">,</span> <span class="n">wires</span><span class="o">=</span><span class="n">qubits</span><span class="p">,</span> <span class="n">shots</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">diff_method</span> <span class="o">=</span> <span class="s1">&#39;device&#39;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="step-1-compute-derivatives-of-all-doubles-excitations">
+<h2>Step 1: Compute derivatives of all <code class="docutils literal notranslate"><span class="pre">doubles</span></code> excitations<a class="headerlink" href="#step-1-compute-derivatives-of-all-doubles-excitations" title="Permalink to this heading">#</a></h2>
+<p>Now we define the circuit to implement step 1 of our algorithm above: computing derivatives of all <code class="docutils literal notranslate"><span class="pre">doubles</span></code> excitations.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@qml</span><span class="o">.</span><span class="n">qnode</span><span class="p">(</span><span class="n">dev</span><span class="p">,</span> <span class="n">diff_method</span><span class="o">=</span><span class="n">diff_method</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">circuit_1</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">excitations</span><span class="p">):</span>
+    <span class="n">qml</span><span class="o">.</span><span class="n">BasisState</span><span class="p">(</span><span class="n">hf_state</span><span class="p">,</span> <span class="n">wires</span><span class="o">=</span><span class="n">H</span><span class="o">.</span><span class="n">wires</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">excitation</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">excitations</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">excitation</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="n">qml</span><span class="o">.</span><span class="n">DoubleExcitation</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">wires</span><span class="o">=</span><span class="n">excitation</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">qml</span><span class="o">.</span><span class="n">SingleExcitation</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">wires</span><span class="o">=</span><span class="n">excitation</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">qml</span><span class="o">.</span><span class="n">expval</span><span class="p">(</span><span class="n">H</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We initialize all the parameters as <code class="docutils literal notranslate"><span class="pre">0.0</span></code> to start and compute the derivatives of all double excitations:</p>
+<div class="alert alert-block alert-warning">
+<b>Caution</b> This cell may take about 30s to run on SV1.
+</div><div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">circuit_gradient</span> <span class="o">=</span> <span class="n">qml</span><span class="o">.</span><span class="n">grad</span><span class="p">(</span><span class="n">circuit_1</span><span class="p">,</span> <span class="n">argnum</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">doubles_select</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">params</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">doubles</span><span class="p">)</span>
+
+<span class="n">adjoint_doubles_start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+<span class="n">doubles_grads</span> <span class="o">=</span> <span class="n">circuit_gradient</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">excitations</span><span class="o">=</span><span class="n">doubles</span><span class="p">)</span>
+
+<span class="n">adjoint_doubles_stop</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">adjoint_doubles_time</span> <span class="o">=</span> <span class="n">adjoint_doubles_stop</span> <span class="o">-</span> <span class="n">adjoint_doubles_start</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Time to compute all double excitation derivatives with adjoint differentiation: </span><span class="si">{</span><span class="n">adjoint_doubles_time</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Time to compute all double excitation derivatives with adjoint differentiation: 36.21157622337341
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="step-2-filter-out-all-doubles-with-derivatives-below-some-cutoff">
+<h2>Step 2: Filter out all doubles with derivatives below some cutoff<a class="headerlink" href="#step-2-filter-out-all-doubles-with-derivatives-below-some-cutoff" title="Permalink to this heading">#</a></h2>
+<p>Now we can filter out all double excitations which contribute little as measured by their derivative. The choice of cutoff is arbitrary and higher cutoffs will improve performance, by removing more parameters that would have to be optimized, at the possible cost of accuracy. In this case we’ll pick <code class="docutils literal notranslate"><span class="pre">1e-5</span></code> as a cutoff.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">doubles_select</span> <span class="o">=</span> <span class="p">[</span><span class="n">doubles</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">doubles</span><span class="p">))</span> <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">doubles_grads</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mf">1.0e-5</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total number of doubles </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">doubles</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total number of selected doubles </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">doubles_select</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Total number of doubles 328
+Total number of selected doubles 84
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can see that the filtering procedure has dramatically lessened the number of double excitations, and thus the number of parameters we will need to optimize in later steps of the algorithm.</p>
+</section>
+<section id="step-3-optimize-the-remaining-doubles-excitations">
+<h2>Step 3: Optimize the remaining <code class="docutils literal notranslate"><span class="pre">doubles</span></code> excitations<a class="headerlink" href="#step-3-optimize-the-remaining-doubles-excitations" title="Permalink to this heading">#</a></h2>
+<p>Now we can optimize the parameters associated with the double excitations which do contribute significantly. We’ll define fresh parameter values for this optimization procedure and run for 10 iterations with a step size of 0.4.</p>
+<div class="alert alert-block alert-warning">
+<b>Caution</b> This cell may take about 5 minutes to run on SV1.
+</div><div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stepsize</span><span class="o">=</span><span class="mf">0.4</span>
+
+<span class="n">opt</span> <span class="o">=</span> <span class="n">qml</span><span class="o">.</span><span class="n">GradientDescentOptimizer</span><span class="p">(</span><span class="n">stepsize</span><span class="o">=</span><span class="n">stepsize</span><span class="p">)</span>
+<span class="n">iterations</span> <span class="o">=</span> <span class="mi">10</span>
+
+<span class="n">params_doubles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">doubles_select</span><span class="p">),</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">iterations</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Iteration </span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2"> of doubles optimization.&quot;</span><span class="p">)</span>
+    <span class="n">params_doubles</span> <span class="o">=</span> <span class="n">opt</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">circuit_1</span><span class="p">,</span> <span class="n">params_doubles</span><span class="p">,</span> <span class="n">excitations</span><span class="o">=</span><span class="n">doubles_select</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Iteration 0 of doubles optimization.
+Iteration 1 of doubles optimization.
+Iteration 2 of doubles optimization.
+Iteration 3 of doubles optimization.
+Iteration 4 of doubles optimization.
+Iteration 5 of doubles optimization.
+Iteration 6 of doubles optimization.
+Iteration 7 of doubles optimization.
+Iteration 8 of doubles optimization.
+Iteration 9 of doubles optimization.
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="step-4-compute-derivatives-with-respect-to-all-singles-excitations-keeping-the-filtered-and-optimized-doubles-fixed">
+<h2>Step 4: Compute derivatives with respect to all <code class="docutils literal notranslate"><span class="pre">singles</span></code> excitations, keeping the filtered-and-optimized <code class="docutils literal notranslate"><span class="pre">doubles</span></code> fixed<a class="headerlink" href="#step-4-compute-derivatives-with-respect-to-all-singles-excitations-keeping-the-filtered-and-optimized-doubles-fixed" title="Permalink to this heading">#</a></h2>
+<p>With the filtered doubles optimized, we are ready to compute the derivatives with respect to the single excitations given that the <code class="docutils literal notranslate"><span class="pre">doubles</span></code> are held fixed. We define a new circuit to use in the gradient computation:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@qml</span><span class="o">.</span><span class="n">qnode</span><span class="p">(</span><span class="n">dev</span><span class="p">,</span> <span class="n">diff_method</span><span class="o">=</span><span class="n">diff_method</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">circuit_2</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">excitations</span><span class="p">,</span> <span class="n">gates_select</span><span class="p">,</span> <span class="n">params_select</span><span class="p">):</span>
+    <span class="n">qml</span><span class="o">.</span><span class="n">BasisState</span><span class="p">(</span><span class="n">hf_state</span><span class="p">,</span> <span class="n">wires</span><span class="o">=</span><span class="n">H</span><span class="o">.</span><span class="n">wires</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">gate</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">gates_select</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="n">qml</span><span class="o">.</span><span class="n">DoubleExcitation</span><span class="p">(</span><span class="n">params_select</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">wires</span><span class="o">=</span><span class="n">gate</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">qml</span><span class="o">.</span><span class="n">SingleExcitation</span><span class="p">(</span><span class="n">params_select</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">wires</span><span class="o">=</span><span class="n">gate</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">gate</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">excitations</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="n">qml</span><span class="o">.</span><span class="n">DoubleExcitation</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">wires</span><span class="o">=</span><span class="n">gate</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">qml</span><span class="o">.</span><span class="n">SingleExcitation</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">wires</span><span class="o">=</span><span class="n">gate</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">qml</span><span class="o">.</span><span class="n">expval</span><span class="p">(</span><span class="n">H</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Here, <code class="docutils literal notranslate"><span class="pre">gates_select</span></code> and <code class="docutils literal notranslate"><span class="pre">params_select</span></code> refer to the <code class="docutils literal notranslate"><span class="pre">doubles</span></code> excitations we selected in previous steps. Again, we compute the derivatives of the cost function with respect to all single excitations using the adjoint differentiation method:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">circuit_gradient</span> <span class="o">=</span> <span class="n">qml</span><span class="o">.</span><span class="n">grad</span><span class="p">(</span><span class="n">circuit_2</span><span class="p">,</span> <span class="n">argnum</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">params</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">singles</span><span class="p">)</span>
+
+<span class="n">adjoint_singles_start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+<span class="n">singles_grads</span> <span class="o">=</span> <span class="n">circuit_gradient</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">excitations</span><span class="o">=</span><span class="n">singles</span><span class="p">,</span> <span class="n">gates_select</span><span class="o">=</span><span class="n">doubles_select</span><span class="p">,</span> <span class="n">params_select</span><span class="o">=</span><span class="n">params_doubles</span><span class="p">)</span>
+
+<span class="n">adjoint_singles_stop</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">adjoint_singles_time</span> <span class="o">=</span> <span class="n">adjoint_singles_stop</span> <span class="o">-</span> <span class="n">adjoint_singles_start</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Time to compute all singles derivatives with adjoint differentiation: </span><span class="si">{</span><span class="n">adjoint_singles_time</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Time to compute all singles derivatives with adjoint differentiation: 25.915367364883423
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="step-5-filter-out-all-singles-with-derivatives-below-some-cutoff">
+<h2>Step 5: Filter out all <code class="docutils literal notranslate"><span class="pre">singles</span></code> with derivatives below some cutoff<a class="headerlink" href="#step-5-filter-out-all-singles-with-derivatives-below-some-cutoff" title="Permalink to this heading">#</a></h2>
+<p>With these <code class="docutils literal notranslate"><span class="pre">grads</span></code>, we can filter out all single excitations with derivatives lower than some cutoff. We’ll use <code class="docutils literal notranslate"><span class="pre">1e-5</span></code> as the cutoff again, keeping in mind that it is arbitrary.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">singles_select</span> <span class="o">=</span> <span class="p">[</span><span class="n">singles</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">singles</span><span class="p">))</span> <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">singles_grads</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mf">1.0e-5</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total number of singles </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">singles</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total number of selected singles </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">singles_select</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Total number of singles 32
+Total number of selected singles 4
+</pre></div>
+</div>
+</div>
+</div>
+<p>Because the total number of single excitations is lower, the difference is not as dramatic as with the <code class="docutils literal notranslate"><span class="pre">doubles</span></code>.</p>
+</section>
+<section id="step-6-optimize-all-remaining-singles-and-doubles-excitations">
+<h2>Step 6: Optimize all remaining <code class="docutils literal notranslate"><span class="pre">singles</span></code> and <code class="docutils literal notranslate"><span class="pre">doubles</span></code> excitations<a class="headerlink" href="#step-6-optimize-all-remaining-singles-and-doubles-excitations" title="Permalink to this heading">#</a></h2>
+<p>Now that we have the full set of filtered excitations, we can optimize them all together.</p>
+<div class="alert alert-block alert-info">
+<b>Note</b> Because we are now optimizing <b>both</b> the single and double excitation parameters, we will use <code>circuit_1</code> to compute the cost.
+</div><div class="alert alert-block alert-warning">
+<b>Caution</b> This cell may take about 5 minutes to run on SV1.
+</div><div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">params</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">doubles_select</span> <span class="o">+</span> <span class="n">singles_select</span><span class="p">),</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">gates_select</span> <span class="o">=</span> <span class="n">doubles_select</span> <span class="o">+</span> <span class="n">singles_select</span>
+
+<span class="n">best_energy</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">iterations</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Iteration </span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2"> of full optimization.&quot;</span><span class="p">)</span>
+    <span class="n">params</span><span class="p">,</span> <span class="n">energy</span> <span class="o">=</span> <span class="n">opt</span><span class="o">.</span><span class="n">step_and_cost</span><span class="p">(</span><span class="n">circuit_1</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">excitations</span><span class="o">=</span><span class="n">gates_select</span><span class="p">)</span>
+    <span class="n">best_energy</span><span class="o">=</span><span class="n">energy</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Iteration 0 of full optimization.
+Iteration 1 of full optimization.
+Iteration 2 of full optimization.
+Iteration 3 of full optimization.
+Iteration 4 of full optimization.
+Iteration 5 of full optimization.
+Iteration 6 of full optimization.
+Iteration 7 of full optimization.
+Iteration 8 of full optimization.
+Iteration 9 of full optimization.
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="step-7-determine-the-final-energy">
+<h2>Step 7: Determine the final energy<a class="headerlink" href="#step-7-determine-the-final-energy" title="Permalink to this heading">#</a></h2>
+<p>Having completed the final round of optimization, we can print the final energy that the Adapt-VQE algorithm computed.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Best energy: </span><span class="si">{</span><span class="n">best_energy</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Best energy: -184.90548216687063
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="performance-comparison">
+<h1>Performance comparison<a class="headerlink" href="#performance-comparison" title="Permalink to this heading">#</a></h1>
+<p>Above, we mentioned that the adjoint differentiation method (accessible through the <code class="docutils literal notranslate"><span class="pre">diff_method='device'</span></code> argument to a PennyLane <code class="docutils literal notranslate"><span class="pre">qnode</span></code>) should be used in <code class="docutils literal notranslate"><span class="pre">shots=0</span></code> mode because it offers quadratic speedup over the <code class="docutils literal notranslate"><span class="pre">parameter-shift</span></code> method. However, <code class="docutils literal notranslate"><span class="pre">parameter-shift</span></code> is easily parallelizable using batch execution, which is supported by the Amazon Braket PennyLane plugin (see <a class="reference external" href="https://amazon-braket-pennylane-plugin-python.readthedocs.io/en/latest/devices/braket_remote.html#enabling-the-parallel-execution-of-multiple-circuits">the docs</a> for more), while the adjoint method must run in a single task. So, is adjoint still worthwhile to use if we are willing to run <code class="docutils literal notranslate"><span class="pre">parameter-shift</span></code> in batch mode?</p>
+<div class="alert alert-block alert-warning">
+<b>Caution</b> This section may take over an hour to run and incur significant charges if you are running on an Amazon on-demand simulator. The code which submits tasks has been commented out to prevent you from incurring unintended bills. To run the code in this section, you must first uncomment it. Otherwise, you can follow along and view the results at the end.
+</div><p>For this comparison we will <em>not</em> compare the time to compute the full gradient for the circuit if there are more than 100 double excitations, as this can take a very significant amount of time. We in fact already know how long it took using the adjoint method, as we measured that above. Since each component of the gradient can be computed independently when using <code class="docutils literal notranslate"><span class="pre">parameter-shift</span></code> (this can also be done when using the adjoint method, but doing so would sacrifice the performance benefit), we can measure how long it takes to compute a fraction of the gradient and extrapolate.</p>
+<div class="alert alert-block alert-info">
+<b>Note</b> The choice to compute at most 100 derivatives for the parameter shift comparison was made in the interests of minimizing runtime and billing. If you want a true like-to-like comparison, you can compute <b>all</b> derivatives of double excitations using <code>parameter-shift</code> rather than extrapolating.
+</div><div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">diff_method</span> <span class="o">=</span> <span class="s1">&#39;parameter-shift&#39;</span>
+<span class="n">doubles_count</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mi">35</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">doubles</span><span class="p">))</span>
+<span class="n">doubles_ps</span> <span class="o">=</span> <span class="n">doubles</span><span class="p">[:</span><span class="n">doubles_count</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>First, we redefine <code class="docutils literal notranslate"><span class="pre">circuit_1</span></code> so that it uses the <code class="docutils literal notranslate"><span class="pre">parameter-shift</span></code> differentiation method:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@qml</span><span class="o">.</span><span class="n">qnode</span><span class="p">(</span><span class="n">dev</span><span class="p">,</span> <span class="n">diff_method</span><span class="o">=</span><span class="n">diff_method</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">circuit_1_ps_serial</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">excitations</span><span class="p">):</span>
+    <span class="n">qml</span><span class="o">.</span><span class="n">BasisState</span><span class="p">(</span><span class="n">hf_state</span><span class="p">,</span> <span class="n">wires</span><span class="o">=</span><span class="n">H</span><span class="o">.</span><span class="n">wires</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">excitation</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">excitations</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">excitation</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="n">qml</span><span class="o">.</span><span class="n">DoubleExcitation</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">wires</span><span class="o">=</span><span class="n">excitation</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">qml</span><span class="o">.</span><span class="n">SingleExcitation</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">wires</span><span class="o">=</span><span class="n">excitation</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">qml</span><span class="o">.</span><span class="n">expval</span><span class="p">(</span><span class="n">H</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now we compute the first <code class="docutils literal notranslate"><span class="pre">doubles_count</span></code> derivatives in <code class="docutils literal notranslate"><span class="pre">doubles</span></code> using <code class="docutils literal notranslate"><span class="pre">parameter-shift</span></code>, but <em>without</em> using batched execution on Amazon Braket:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">circuit_gradient</span> <span class="o">=</span> <span class="n">qml</span><span class="o">.</span><span class="n">grad</span><span class="p">(</span><span class="n">circuit_1_ps_serial</span><span class="p">,</span> <span class="n">argnum</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">params</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">]</span> <span class="o">*</span> <span class="n">doubles_count</span>
+
+<span class="n">doubles_ps_unbatched_start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+<span class="n">unbatched_grads</span> <span class="o">=</span> <span class="n">circuit_gradient</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">excitations</span><span class="o">=</span><span class="n">doubles_ps</span><span class="p">)</span>
+
+<span class="n">doubles_ps_unbatched_stop</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">doubles_ps_unbatched_time</span> <span class="o">=</span> <span class="n">doubles_ps_unbatched_stop</span> <span class="o">-</span> <span class="n">doubles_ps_unbatched_start</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Time to compute </span><span class="si">{</span><span class="n">doubles_count</span><span class="si">}</span><span class="s2"> double excitation derivatives using unbatched parameter shift: </span><span class="si">{</span><span class="n">doubles_ps_unbatched_time</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Time to compute 35 double excitation derivatives using unbatched parameter shift: 3186.5143387317657
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can rerun the computation, now with batching turned on in the <code class="docutils literal notranslate"><span class="pre">qml.device</span></code>. Keep in mind that you must obey the per-region <a class="reference external" href="https://docs.aws.amazon.com/braket/latest/developerguide/braket-quotas.html">concurrency limits</a> for Amazon on-demand simulators if you choose to set the <a class="reference external" href="https://amazon-braket-pennylane-plugin-python.readthedocs.io/en/latest/devices/braket_remote.html#enabling-the-parallel-execution-of-multiple-circuits">optional <code class="docutils literal notranslate"><span class="pre">max_parallel</span></code> argument</a>.</p>
+<div class="alert alert-block alert-info">
+<b>Note</b> As discussed in the <a href="https://docs.aws.amazon.com/braket/latest/developerguide/braket-batching-tasks.html">Amazon Braket documentation</a>, running a batch of tasks concurrently does <b>not</b> lower the total cost of the batch, only the wallclock time. Tasks will be executed concurrently on the on-demand simulator as opposed to one after another, as when running outside of batch mode, which lowers the time you must wait for the entire batch of tasks to complete.
+</div><div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dev_parallel</span> <span class="o">=</span> <span class="n">qml</span><span class="o">.</span><span class="n">device</span><span class="p">(</span>
+    <span class="s2">&quot;braket.aws.qubit&quot;</span><span class="p">,</span>
+    <span class="n">device_arn</span><span class="o">=</span><span class="s2">&quot;arn:aws:braket:::device/quantum-simulator/amazon/sv1&quot;</span><span class="p">,</span>
+    <span class="n">wires</span><span class="o">=</span><span class="n">qubits</span><span class="p">,</span>
+    <span class="n">shots</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">parallel</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="nd">@qml</span><span class="o">.</span><span class="n">qnode</span><span class="p">(</span><span class="n">dev_parallel</span><span class="p">,</span> <span class="n">diff_method</span><span class="o">=</span><span class="n">diff_method</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">circuit_1_ps_parallel</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">excitations</span><span class="p">):</span> <span class="c1"># must redefine due to new device</span>
+    <span class="n">qml</span><span class="o">.</span><span class="n">BasisState</span><span class="p">(</span><span class="n">hf_state</span><span class="p">,</span> <span class="n">wires</span><span class="o">=</span><span class="n">H</span><span class="o">.</span><span class="n">wires</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">excitation</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">excitations</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">excitation</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="n">qml</span><span class="o">.</span><span class="n">DoubleExcitation</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">wires</span><span class="o">=</span><span class="n">excitation</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">qml</span><span class="o">.</span><span class="n">SingleExcitation</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">wires</span><span class="o">=</span><span class="n">excitation</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">qml</span><span class="o">.</span><span class="n">expval</span><span class="p">(</span><span class="n">H</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can rerun and time the computation, now with batching enabled:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">params</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">]</span> <span class="o">*</span> <span class="n">doubles_count</span>
+<span class="n">circuit_gradient</span> <span class="o">=</span> <span class="n">qml</span><span class="o">.</span><span class="n">grad</span><span class="p">(</span><span class="n">circuit_1_ps_parallel</span><span class="p">,</span> <span class="n">argnum</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">doubles_ps_batched_start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+<span class="n">batched_grads</span> <span class="o">=</span> <span class="n">circuit_gradient</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">excitations</span><span class="o">=</span><span class="n">doubles_ps</span><span class="p">)</span>
+
+<span class="n">doubles_ps_batched_stop</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">doubles_ps_batched_time</span> <span class="o">=</span> <span class="n">doubles_ps_batched_stop</span> <span class="o">-</span> <span class="n">doubles_ps_batched_start</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Time to compute </span><span class="si">{</span><span class="n">doubles_count</span><span class="si">}</span><span class="s2"> double excitation derivatives using batched parameter shift: </span><span class="si">{</span><span class="n">doubles_ps_batched_time</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Time to compute 35 double excitation derivatives using batched parameter shift: 1802.3958163261414
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">extrapolated_unbatched_ps_time</span> <span class="o">=</span> <span class="n">doubles_ps_unbatched_time</span> <span class="o">*</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">doubles</span><span class="p">)</span><span class="o">/</span><span class="n">doubles_count</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Extrapolated time to compute all doubles derivatives with unbatched parameter shift: </span><span class="si">{</span><span class="n">extrapolated_unbatched_ps_time</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Extrapolated time to compute all doubles derivatives with unbatched parameter shift: 29862.191517257692
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">extrapolated_batched_ps_time</span> <span class="o">=</span> <span class="n">doubles_ps_batched_time</span> <span class="o">*</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">doubles</span><span class="p">)</span><span class="o">/</span><span class="n">doubles_count</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Extrapolated time to compute all doubles derivatives with batched parameter shift: </span><span class="si">{</span><span class="n">extrapolated_batched_ps_time</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Extrapolated time to compute all doubles derivatives with batched parameter shift: 16891.023650142124
+</pre></div>
+</div>
+</div>
+</div>
+<p>As expected, the batched execution is substantially faster. How would it compare with the walltime for computing the derivatives with the adjoint method? We can do a rough calculation and comparison:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">adjoint_vs_unbatched_ps</span> <span class="o">=</span> <span class="n">extrapolated_unbatched_ps_time</span> <span class="o">/</span> <span class="n">adjoint_doubles_time</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Time to compute all doubles derivatives:</span><span class="se">\n</span><span class="s2">Ratio of (extrapolated) unbatched parameter shift time to adjoint time: </span><span class="si">{</span><span class="n">adjoint_vs_unbatched_ps</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Time to compute all doubles derivatives:
+Ratio of (extrapolated) unbatched parameter shift time to adjoint time: 824.6587039749627
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">adjoint_vs_batched_ps</span> <span class="o">=</span> <span class="n">extrapolated_batched_ps_time</span> <span class="o">/</span> <span class="n">adjoint_doubles_time</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Time to compute all doubles derivatives:</span><span class="se">\n</span><span class="s2">Ratio of (extrapolated) batched parameter shift time to adjoint time: </span><span class="si">{</span><span class="n">adjoint_vs_batched_ps</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Time to compute all doubles derivatives:
+Ratio of (extrapolated) batched parameter shift time to adjoint time: 466.453698285564
+</pre></div>
+</div>
+</div>
+</div>
+<p>The adjoint differentiation method provides a substantial wallclock improvement over both batched and unbatched <code class="docutils literal notranslate"><span class="pre">parameter-shift</span></code>, even for the relatively small qubit count of this problem. Because of the quadratic scaling, we can expect the adjoint differentiation method’s performance to be even more favorable for larger systems. For VQE problems like this one, this is particularly true, as the number of double excitations scales to the fourth power in the number of electrons, which is itself related to the number of qubits.</p>
+</section>
+<section id="correctness-check">
+<h1>Correctness check<a class="headerlink" href="#correctness-check" title="Permalink to this heading">#</a></h1>
+<p>Finally, just to reassure ourselves, we can check that the adjoint method and <code class="docutils literal notranslate"><span class="pre">parameter-shift</span></code> return identical results for the derivatives in <code class="docutils literal notranslate"><span class="pre">shots=0</span></code> mode.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">adjoint_derivs</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">doubles_grads</span><span class="p">[:</span><span class="n">doubles_count</span><span class="p">]]</span>
+<span class="n">unbatched_derivs</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">unbatched_grads</span><span class="p">[:</span><span class="n">doubles_count</span><span class="p">]]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">adjoint_derivs</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">unbatched_derivs</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">adjoint_derivs</span><span class="p">,</span> <span class="n">unbatched_derivs</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[-0.044793067882551406, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -0.04479306788255156, 0.0, 0.0, 0.0, 0.0, -0.03548100882402628, 0.0, 0.0, -0.023288073123347845, 0.0, 0.0, 0.0, 0.0, 0.0, -0.012217382659441306, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+[-0.044793067882545376, -6.1928479400457334e-15, 2.6531566187835427e-15, -8.942675704972513e-16, 1.7746123057175047e-15, 5.901095647171372e-15, 1.1868639193156705e-15, -0.044793067882549185, 4.7342881085964644e-15, 8.820892689029992e-16, 1.4863490802086347e-15, 5.90638513669108e-15, -0.03548100882403037, -6.2279833078444984e-15, -2.6752696290439975e-15, -0.023288073123352977, 1.6921423417461336e-15, 2.670274324449899e-15, -2.815484849928097e-15, -2.0406466188365425e-17, -5.810940290979032e-15, -0.01221738265940523, 6.8565100157100086e-15, 5.280719959261674e-15, 6.1969905855345365e-15, -2.171061239200851e-15, 5.089076788104875e-16, -2.6180781927668725e-15, 5.3732805495666735e-15, 6.131155462712434e-16, 3.811084445308944e-15, -6.333324218826695e-15, -3.5324021440048863e-15, -4.675311186009487e-15, 5.167609105081913e-15]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">batched_derivs</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">batched_grads</span><span class="p">[:</span><span class="n">doubles_count</span><span class="p">]]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">batched_derivs</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">adjoint_derivs</span><span class="p">,</span> <span class="n">batched_derivs</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[-0.044793067882545376, -6.1928479400457334e-15, 2.6531566187835427e-15, -8.942675704972513e-16, 1.7746123057175047e-15, 5.901095647171372e-15, 1.1868639193156705e-15, -0.044793067882549185, 4.7342881085964644e-15, 8.820892689029992e-16, 1.4863490802086347e-15, 5.90638513669108e-15, -0.03548100882403037, -6.2279833078444984e-15, -2.6752696290439975e-15, -0.023288073123352977, 1.6921423417461336e-15, 2.670274324449899e-15, -2.815484849928097e-15, -2.0406466188365425e-17, -5.810940290979032e-15, -0.01221738265940523, 6.8565100157100086e-15, 5.280719959261674e-15, 6.1969905855345365e-15, -2.171061239200851e-15, 5.089076788104875e-16, -2.6180781927668725e-15, 5.3732805495666735e-15, 6.131155462712434e-16, 3.811084445308944e-15, -6.333324218826695e-15, -3.5324021440048863e-15, -4.675311186009487e-15, 5.167609105081913e-15]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="alert alert-block alert-info">
+<b>What's next?</b> Try running this workflow on different molecules, for example ammonia or carbon monoxide. Try splitting the adjoint gradient computations over multiple batches (you can compute slices of the <code>doubles</code> independently and submit the computations to run concurrently) and see if that can improve wallclock performance.
+</div><div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Task Summary&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">quantum_tasks_statistics</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Note: Charges shown are estimates based on your Amazon Braket simulator and quantum processing unit (QPU) task usage. Estimated charges shown may differ from your actual charges. Estimated charges do not factor in any discounts or credits, and you may experience additional charges based on your use of other services such as Amazon Elastic Compute Cloud (Amazon EC2).&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Estimated cost to run this example: </span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="n">qpu_tasks_cost</span><span class="p">()</span> <span class="o">+</span> <span class="n">t</span><span class="o">.</span><span class="n">simulator_tasks_cost</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> USD&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Task Summary
+{&#39;arn:aws:braket:::device/quantum-simulator/amazon/sv1&#39;: {&#39;shots&#39;: 0, &#39;tasks&#39;: {&#39;COMPLETED&#39;: 304}, &#39;execution_duration&#39;: datetime.timedelta(seconds=483, microseconds=156000), &#39;billed_execution_duration&#39;: datetime.timedelta(seconds=983, microseconds=345000)}}
+Note: Charges shown are estimates based on your Amazon Braket simulator and quantum processing unit (QPU) task usage. Estimated charges shown may differ from your actual charges. Estimated charges do not factor in any discounts or credits, and you may experience additional charges based on your use of other services such as Amazon Elastic Compute Cloud (Amazon EC2).
+Estimated cost to run this example: 1.229 USD
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Adjoint gradient computation with PennyLane and Amazon Braket</a><ul>
+<li><a class="reference internal" href="#brief-introduction-to-the-adjoint-differentiation-method">Brief introduction to the adjoint differentiation method</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#defining-the-problem">Defining the problem</a></li>
+<li><a class="reference internal" href="#adaptive-vqe">Adaptive VQE</a></li>
+<li><a class="reference internal" href="#running-adaptive-vqe-with-adjoint-differentiation">Running adaptive VQE with adjoint differentiation</a><ul>
+<li><a class="reference internal" href="#step-1-compute-derivatives-of-all-doubles-excitations">Step 1: Compute derivatives of all <code class="docutils literal notranslate"><span class="pre">doubles</span></code> excitations</a></li>
+<li><a class="reference internal" href="#step-2-filter-out-all-doubles-with-derivatives-below-some-cutoff">Step 2: Filter out all doubles with derivatives below some cutoff</a></li>
+<li><a class="reference internal" href="#step-3-optimize-the-remaining-doubles-excitations">Step 3: Optimize the remaining <code class="docutils literal notranslate"><span class="pre">doubles</span></code> excitations</a></li>
+<li><a class="reference internal" href="#step-4-compute-derivatives-with-respect-to-all-singles-excitations-keeping-the-filtered-and-optimized-doubles-fixed">Step 4: Compute derivatives with respect to all <code class="docutils literal notranslate"><span class="pre">singles</span></code> excitations, keeping the filtered-and-optimized <code class="docutils literal notranslate"><span class="pre">doubles</span></code> fixed</a></li>
+<li><a class="reference internal" href="#step-5-filter-out-all-singles-with-derivatives-below-some-cutoff">Step 5: Filter out all <code class="docutils literal notranslate"><span class="pre">singles</span></code> with derivatives below some cutoff</a></li>
+<li><a class="reference internal" href="#step-6-optimize-all-remaining-singles-and-doubles-excitations">Step 6: Optimize all remaining <code class="docutils literal notranslate"><span class="pre">singles</span></code> and <code class="docutils literal notranslate"><span class="pre">doubles</span></code> excitations</a></li>
+<li><a class="reference internal" href="#step-7-determine-the-final-energy">Step 7: Determine the final energy</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#performance-comparison">Performance comparison</a></li>
+<li><a class="reference internal" href="#correctness-check">Correctness check</a></li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/scripts/furo.js"></script>
+    </body>
+</html>

@@ -1,0 +1,817 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
+
+    <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
+        <title>Simon’s Algorithm - Amazon Braket Examples documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../../index.html"><div class="brand">Amazon Braket Examples  documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
+  
+  
+  <span class="sidebar-brand-text">Amazon Braket Examples  documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="simon-s-algorithm">
+<h1>Simon’s Algorithm<a class="headerlink" href="#simon-s-algorithm" title="Permalink to this heading">#</a></h1>
+<p><strong>Abstract:</strong> We study a quantum algorithm known as Simon’s algorithm, which provided the first example of an exponential speedup over the best known classical algorithm by using a quantum computer to solve a particular problem. Originally published in 1994, Simon’s algorithm was a precursor to Shor’s well-known factoring algorithm, and it served as inspiration for many of the seminal works in quantum computation that followed.</p>
+<p>This notebook is aimed at users with some basic knowledge of quantum computing and quantum circuits.</p>
+<section id="table-of-contents">
+<h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p><span class="xref myst">Simon’s Problem Statement</span></p></li>
+<li><p><span class="xref myst">Example for n=3</span></p></li>
+<li><p><span class="xref myst">Classical Complexity</span></p></li>
+<li><p><span class="xref myst">Quantum Algorithm for Simon’s Problem</span></p></li>
+<li><p><span class="xref myst">Quantum Circuit</span></p></li>
+<li><p><span class="xref myst">Running Simon’s Algorithm</span></p></li>
+<li><p><span class="xref myst">Classical Post-Processing</span></p></li>
+<li><p><span class="xref myst">Quantum Complexity</span></p></li>
+<li><p><span class="xref myst">Implementing Simon’s Algorithm in Amazon Braket</span></p></li>
+<li><p><span class="xref myst">References</span></p></li>
+<li><p><span class="xref myst">Appendix</span></p></li>
+<li><p><span class="xref myst">Implementing an Oracle Function</span></p></li>
+<li><p><span class="xref myst">Implementing the Classical Post-Processing</span></p></li>
+</ul>
+</section>
+<section id="simon-s-problem-statement-a-name-statement-a">
+<h2>Simon’s Problem Statement: <a name="statement"></a><a class="headerlink" href="#simon-s-problem-statement-a-name-statement-a" title="Permalink to this heading">#</a></h2>
+<p>Suppose we’re given a function $f:{0,1}^n \rightarrow {0,1}^n$ that maps bit strings to bit strings along with the promise that
+$$\forall x,y \in {0,1}^n, \quad f(x) = f(y) \iff x=y\oplus s,$$
+for some unknown $n$-bit string $s \in {0,1}^n$, and where $\oplus$ means bitwise addition modulo 2.</p>
+<p>Said another way, there exists an unknown string $s$ such that, $\forall x, ; f(x)=f(x\oplus s)$. When $s$ is non-zero, the function is two-to-one as it maps <em>exactly</em> two inputs to every unique output.</p>
+<p>The goal of Simon’s problem is to determine if $f$ is one-to-one, or two-to-one, or equivalently to find the secret string $s$.</p>
+<p>Since we’re given the promise that $f(x)=f(y)\implies x=y\oplus s$, this means that $s=x\oplus y$ whenever $f(x)=f(y)$. Thus, one way to solve this problem is to find two inputs to the function $f$ that produce the <em>same</em> output; $s$ is then the XOR of those two input strings. See <span class="xref myst">[1]</span> for more details.</p>
+<div class="alert alert-block alert-info"><a name="example"></a>
+<h3>Example for n=3:</h3>
+<p>Consider the function $f:{0,1}^3\to{0,1}^3$ defined by the truth table below.</p>
+<table>
+    <thead>
+        <tr>
+            <th><center>$$x$$</center></th>
+            <th><center>$$f(x)$$</center></th>
+        </tr>
+    </thead>
+    <tr>
+        <td><center>$$000$$</center></td>
+        <td><center>$$000$$</center></td>
+    </tr>
+    <tr>
+        <td><center>$$001$$</center></td>
+        <td><center>$$001$$</center></td>
+    </tr>
+    <tr>
+        <td><center>$$010$$</center></td>
+        <td><center>$$001$$</center></td>
+    </tr>
+    <tr>
+        <td><center>$$011$$</center></td>
+        <td><center>$$000$$</center></td>
+    </tr>
+    <tr>
+        <td><center>$$100$$</center></td>
+        <td><center>$$100$$</center></td>
+    </tr>
+    <tr>
+        <td><center>$$101$$</center></td>
+        <td><center>$$101$$</center></td>
+    </tr>
+    <tr>
+        <td><center>$$110$$</center></td>
+        <td><center>$$101$$</center></td>
+    </tr>
+    <tr>
+        <td><center>$$111$$</center></td>
+        <td><center>$$100$$</center></td>
+    </tr>
+</table>
+<p>By inspection, we can see that $f$ satisfies the properties described in the statement of Simon’s problem. In particular, note that each output $f(x)$ appears twice for two distinct inputs. We are given the promise that, for each of these two inputs $x$ and $y$ with the same output $f(x)=f(y)$, we have $x \oplus s = y$ for a yet to be determined $s$, and therefore $x\oplus y = s$.</p>
+<p>For concreteness, notice that the input strings $001$ and $010$ are both mapped by $f$ to the same output string $001$. Taking the bitwise XOR of $001$ and $010$ we obtain the secret string $s$:</p>
+<p>$$s=001 \oplus 010 = 011$$</p>
+<p>Therefore, in this example, the secret string is $s = 011$.</p>
+<p>In this specific example, we also see that the string $000$ is mapped to itself. Since $x\oplus y=s$ for two inputs $x$ and $y$ with the same output, we must have that $s$ is also mapped to $000$, since $s=000\oplus s$. Indeed, we see that $011$ maps to $000$, as expected.</p>
+</div></section>
+<section id="classical-complexity-a-name-classicalcomplexity-a">
+<h2>Classical Complexity<a name="classicalcomplexity"></a><a class="headerlink" href="#classical-complexity-a-name-classicalcomplexity-a" title="Permalink to this heading">#</a></h2>
+<p>To solve Simon’s problem classically, one needs to find two different inputs $x$ and $y$ for which $f(x)=f(y)$. As we saw above, one can then determine $s=x\oplus y$. How hard is it to find two distinct inputs that map to the same output, given the function $f$ as a black box?  For $n$-bit strings, there are $2^n$ possible inputs. Thus, in the worst case, one would need to check at most $2^n$ different inputs to find a pair that maps to the same output; this provides an upper bound on the required query complexity.</p>
+<p>It turns out that a <em>lower</em> bound on the classical query complexity of Simon’s algorithm can also be found: $\Omega ({\sqrt {2^{n}}})$. Proving this lower bound requires a little more work and is outside the scope of this notebook, so instead we will just provide some intuition.</p>
+<p>As mentioned above, the goal is to find a pair of input strings $x$ and $y$ that map to the <em>same</em> output string $f(x)=f(y)$ – a collision. Finding a collision in a set is an instance of the well-known (generalized) birthday problem <span class="xref myst">[2]</span>: within a group of people, what is the probability that two of them share the same birthday? One can turn this problem around and ask “how many people do we need in a room to ensure that the probability that at least two of them share a birthday is greater than some fixed number?” This latter question gets to the heart of solving Simon’s problem classically: how many queries to the function $f$ do we need to make to guarantee that we find a collision, with high probability? In the case of the birthday problem, we would need enough people in the room so that when we generate all possible pairings of people, we would have about 365 possible pairs. That way, we’d have a good chance that at least one of those pairs of people share a birthday. Using this intuition, we need to query $f$ enough times to generate a set of <em>pairs</em> with roughly the same size as the number of possible inputs ($2^n$). If we make $k$ queries to the function $f$, we can generate ${k \choose 2}=\frac{k(k-1)}{2}\sim k^2$ pairs. Thus, we need to make $k$ queries such that ${k\choose 2}\gtrsim 2^n$ to have a high probability of generating a collision, and therefore, $k&gt;\Omega(\sqrt{2^n})$.</p>
+</section>
+<section id="quantum-algorithm-for-simon-s-problem-a-name-quantumalgorithm-a">
+<h2>Quantum Algorithm for Simon’s Problem<a name="quantumalgorithm"></a><a class="headerlink" href="#quantum-algorithm-for-simon-s-problem-a-name-quantumalgorithm-a" title="Permalink to this heading">#</a></h2>
+<p>Simon’s algorithm is a scheme for solving the problem above using exponentially fewer queries to the function $f$. In order for Simon’s algorithm to work, one needs to be able to implement the unknown function $f$ using quantum logic. That is, given an input <em>quantum state</em> $|x\rangle$, one needs a <em>unitary</em> $U_f$ satisfying
+$$U_f|x\rangle |0\rangle = |x\rangle |f(x)\rangle.$$
+This unitary is an <em>oracle</em> for $f$, and the goal is to query it as few times as possible to learn the secret string $s$.</p>
+<section id="quantum-circuit-a-name-circuit-a">
+<h3>Quantum Circuit<a name="circuit"></a><a class="headerlink" href="#quantum-circuit-a-name-circuit-a" title="Permalink to this heading">#</a></h3>
+<p>Simon’s algorithm involves both quantum and classical components. The quantum part of Simon’s algorithm is used to query the oracle efficiently, while the classical component is used to process measurement results and determine the hidden string $s$. A circuit for the quantum component of Simon’s algorithm is shown below.</p>
+<div align="center">
+<img src="quantum_circuit.png", width=500>
+</div>
+<p>For a function $f$ acting on $n$-bit strings, the circuit above acts on $2n$ qubits, as needed for the definition of $U_f$. Only the first $n$ qubits are measured; the remaining qubits are unused after the application of $U_f$.</p>
+</section>
+<section id="running-simon-s-algorithm-a-name-runningintro-a">
+<h3>Running Simon’s Algorithm<a name="runningintro"></a><a class="headerlink" href="#running-simon-s-algorithm-a-name-runningintro-a" title="Permalink to this heading">#</a></h3>
+<p>To solve Simon’s problem, one needs to run the quantum circuit above several times. After each run of the circuit, the measurements of the first $n$ qubits produce an output bit string, which we denote by $z$.</p>
+<p>An analysis of the circuit above shows that each output bit string $z$ satisfies the following condition:
+$$ z\cdot s = 0 ; \mod{2}.$$</p>
+<p>Let us now analyze the above circuit step-by-step:</p>
+<ol class="arabic">
+<li><p>Initialize all qubits in the $|0\rangle$ state. That is, we start in the state $|0\rangle^{\otimes n} \otimes |0\rangle^{\otimes n}$. We will use the shorthand $|0\rangle^{\otimes n}\equiv |0^n\rangle$</p></li>
+<li><p>Apply Hadamard gates to each of the first $n$ qubits, placing them in the equal superposition state: $$\frac{1}{\sqrt{2^n}}\sum_{x \in {0, 1}^n} |x\rangle |0^n\rangle$$.</p></li>
+<li><p>Apply the oracle $U_f$, which computes the function $f$ into the last $n$ qubits, giving the state $$\frac{1}{\sqrt{2^n}}\sum_{x \in {0, 1}^n} |x\rangle |f(x)\rangle$$</p></li>
+<li><p>Measure the last $n$ qubits, giving a random result $f(x)$. If $f$ is one-to-one, this output of $f$ corresponds to an input of $x$. If $f$ is two-to-one, the output of $f$ corresponds to an input of either either $x$ or $y = x \oplus s$, where $x$ and $y$ are the two different inputs to $f$ that gave the <em>same</em> output $f(x)=f(y)$. Hence we are left with the first $n$ qubits in the state;</p>
+ <center>A. $|x\rangle$, &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&ensp; if $f$ is one-to-one;</center>
+ <center>B. $\frac{1}{\sqrt{2}} (|x\rangle + |y\rangle)$, where $x \oplus y = s$,&emsp; if $f$ is two-to-one.</center> 
+ Note that this step is not strictly necessary, since we do not need the measurement result, but we include it as it makes the analysis easier.
+</li>
+<li><p>Apply Hadamard gates to each of the first $n$ qubits. If $f$ is one-to-one, the state $|x\rangle$ is mapped to $$H^{\otimes n} |x\rangle = \frac{1}{\sqrt{2^n}} \sum_{z \in {0, 1}^n} (-1)^{x \cdot z}|z\rangle,$$
+where $x\cdot z$ is the dot product between the two strings represented as vectors (modulo 2).</p>
+<p>Similarly, if $f$ is two-to-one, the state $\frac{1}{\sqrt{2}}(|x\rangle + |y\rangle)$ is mapped to $$\frac{1}{\sqrt{2^{n+1}}} \sum_{z \in {0, 1}^n} [(-1)^{x \cdot z} + (-1)^{y \cdot z}]|z\rangle$$.</p>
+</li>
+<li><p>Measure the first $n$ qubits.</p>
+<ol class="arabic simple">
+<li><p>If $f$ is one-to-one, measurements return a random bit string $z$ uniformly chosen from ${0,1}^n$.</p></li>
+<li><p>If $f$ is two-to-one, measurements return a random bit string $z$ such that $x \cdot z = y \cdot z ,\mathrm{mod}, 2$, since otherwise the amplitude $(-1)^{x \cdot z} + (-1)^{y \cdot z}$ cancels out. Using the criterion for Simons problem (i.e,. $f(x)=f(y) \implies x=y\oplus s$), we find that
+\begin{align*}
+x\cdot z &amp;= y\cdot z &amp; \mod{2}\
+x\cdot z &amp;= (x\oplus s)\cdot z &amp;  \mod{2}\
+x\cdot z &amp;= x\cdot z\oplus s\cdot z &amp; \mod{2}\
+0 &amp;= s\cdot z &amp;  \mod{2}
+\end{align*}</p></li>
+</ol>
+<p>Thus, in both cases we obtain a random bit string $z$ such that $s \cdot z = 0$.</p>
+</li>
+</ol>
+<p>Therefore, each time we run the quantum circuit above, we find a bit string $z$ that is orthogonal to the secret string $s$.</p>
+</section>
+<section id="classical-post-processing-a-name-postprocessintro-a">
+<h3>Classical Post-Processing<a name="postprocessintro"></a><a class="headerlink" href="#classical-post-processing-a-name-postprocessintro-a" title="Permalink to this heading">#</a></h3>
+<p>From the measurement results ${z_1, \dots, z_k}$, we can form a system of equations:
+$$ \begin{aligned}z_{1}\cdot s&amp;=0\mod{2}\z_{2}\cdot s&amp;=0\mod{2}\&amp;,,\vdots \z_{k}\cdot s&amp;=0\mod{2}\end{aligned}$$</p>
+<p>There are $k$ equations and $n$ unknowns (the elements of $s$). If we run the quantum part enough times so that we find $n$ <strong>independent</strong> equations, then we can solve these equations (using, e.g., Gaussian elimination) to recover the secret string $s$. This is precisely the classical post-processing required: solve the system of equations found above to recover the string $s$. We refer the interested reader to the <span class="xref myst">Appendix</span> for details.</p>
+</section>
+</section>
+<section id="quantum-complexity-a-name-quantumcomplexity-a">
+<h2>Quantum Complexity<a name="quantumcomplexity"></a><a class="headerlink" href="#quantum-complexity-a-name-quantumcomplexity-a" title="Permalink to this heading">#</a></h2>
+<p>How many queries do we need to make to $U_f$ in the quantum case? Above we saw that we need to run the quantum part of the algorithm $k$ times to generate a system of equations. We need to find $n$ linearly independent equations for the system to be determined. Thus, we need at least $n$ queries to $U_f$ to find such a system. It is possible, however, that we will get the same measurement outcome on different runs of the quantum algorithm, so we would need to re-do those runs that do not produce distinct measurement outcomes. Fortunately, these repeated outcomes are unlikely, so we only need $O(n)$ queries to the oracle $U_f$.</p>
+<p>Comparing the quantum and classical algorithms, we saw that the classical algorithm requires at least $\Omega(2^{0.5 n})$ queries to $f$, whereas the quantum algorithm requires only $O(n)$. Thus, we have established an <em>exponential</em> speedup by using the quantum algorithm above.</p>
+</section>
+</section>
+<section id="implementing-simon-s-algorithm-in-amazon-braket-a-name-implementation-a">
+<h1>Implementing Simon’s Algorithm in Amazon Braket<a name="implementation"></a><a class="headerlink" href="#implementing-simon-s-algorithm-in-amazon-braket-a-name-implementation-a" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Imports and Setup</span>
+<span class="kn">from</span> <span class="nn">braket.circuits</span> <span class="kn">import</span> <span class="n">Circuit</span><span class="p">,</span> <span class="n">circuit</span>
+<span class="kn">from</span> <span class="nn">braket.devices</span> <span class="kn">import</span> <span class="n">LocalSimulator</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+
+<span class="c1"># Sets the device to run the circuit on</span>
+<span class="n">device</span> <span class="o">=</span> <span class="n">LocalSimulator</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We also import a method called <code class="docutils literal notranslate"><span class="pre">simons_oracle</span></code>, which generates a circuit implementing an example oracle function. The code for <code class="docutils literal notranslate"><span class="pre">simons_oracle</span></code> is defined in the <code class="docutils literal notranslate"><span class="pre">simons_utils.py</span></code> module, and it is shown in the <span class="xref myst">Appendix</span> for completeness.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Import local utils</span>
+<span class="kn">from</span> <span class="nn">simons_utils</span> <span class="kn">import</span> <span class="n">simons_oracle</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We now define the secret string, $s$:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;101011&#39;</span>
+
+<span class="c1"># Other examples to try:</span>
+<span class="c1"># s = &#39;011&#39;</span>
+<span class="c1"># s = &#39;00000&#39;</span>
+<span class="c1"># s = &#39;1&#39;</span>
+<span class="c1"># Generate a random string of random length from 1 to 10:</span>
+<span class="c1"># s=&quot;&quot;.join(str(np.random.randint(2)) for _ in range(np.random.randint(1,10)))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The secret string is: &quot;</span><span class="o">+</span> <span class="n">s</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The secret string is: 101011
+</pre></div>
+</div>
+</div>
+</div>
+<section id="circuit-definition">
+<h2>Circuit Definition<a class="headerlink" href="#circuit-definition" title="Permalink to this heading">#</a></h2>
+<p>We now define the quantum circuit for Simon’s algorithm:</p>
+<ol class="arabic simple">
+<li><p>Apply Hadamard gates to the first $n$-qubits.</p></li>
+<li><p>Query the oracle (i.e., the $U_f$ gate). In this example, the oracle is defined dynamically, based on our chosen value of $s$. You can try experimenting with different values of $s$ (with differing lengths).</p></li>
+<li><p>Apply Hadamard gates to the first $n$-qubits.</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+
+<span class="n">circ</span> <span class="o">=</span> <span class="n">Circuit</span><span class="p">()</span>
+
+<span class="c1"># Apply Hadamard gates to first n qubits</span>
+<span class="n">circ</span><span class="o">.</span><span class="n">h</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">))</span> 
+
+<span class="c1"># Now apply the Oracle for f</span>
+<span class="n">circ</span><span class="o">.</span><span class="n">simons_oracle</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+
+<span class="c1"># Apply Hadamard gates to the first n qubits</span>
+<span class="n">circ</span><span class="o">.</span><span class="n">h</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">))</span> 
+
+
+<span class="nb">print</span><span class="p">(</span><span class="n">circ</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>T   : |0|     1     | 2 |3|4|5|6|
+                                 
+q0  : -H-C-----------C---C-C-C-H-
+         |           |   | | |   
+q1  : -H-|-C---------|-H-|-|-|---
+         | |         |   | | |   
+q2  : -H-|-|-C-------|-H-|-|-|---
+         | | |       |   | | |   
+q3  : -H-|-|-|-C-----|-H-|-|-|---
+         | | | |     |   | | |   
+q4  : -H-|-|-|-|-C---|-H-|-|-|---
+         | | | | |   |   | | |   
+q5  : -H-|-|-|-|-|-C-|-H-|-|-|---
+         | | | | | | |   | | |   
+q6  : ---X-|-|-|-|-|-X---|-|-|---
+           | | | | |     | | |   
+q7  : -----X-|-|-|-|-----|-|-|---
+             | | | |     | | |   
+q8  : -------X-|-|-|-----X-|-|---
+               | | |       | |   
+q9  : ---------X-|-|-------|-|---
+                 | |       | |   
+q10 : -----------X-|-------X-|---
+                   |         |   
+q11 : -------------X---------X---
+
+T   : |0|     1     | 2 |3|4|5|6|
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="now-run-the-circuit">
+<h2>Now run the circuit<a class="headerlink" href="#now-run-the-circuit" title="Permalink to this heading">#</a></h2>
+<p>We need enough shots to obtain $n$ linearly independent bit strings in the output measurements. We have chosen <code class="docutils literal notranslate"><span class="pre">4n</span></code> shots in the example below, just to be on the safe side.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">task</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">circ</span><span class="p">,</span> <span class="n">shots</span><span class="o">=</span><span class="mi">4</span><span class="o">*</span><span class="n">n</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="analyze-the-results">
+<h2>Analyze the results<a class="headerlink" href="#analyze-the-results" title="Permalink to this heading">#</a></h2>
+<p>We can retrieve the measurement results on all $2n$ qubits as follows:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">task</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+
+<span class="n">counts</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">measurement_counts</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">counts</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">counts</span><span class="o">.</span><span class="n">values</span><span class="p">());</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;bit strings&#39;</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;counts&#39;</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../../_images/e75e91272cb5b8c30c73c9f47d9aa2463e85cbaadc9c7ee08c6666282b813ee1.png" src="../../../_images/e75e91272cb5b8c30c73c9f47d9aa2463e85cbaadc9c7ee08c6666282b813ee1.png" />
+</div>
+</div>
+<section id="aggregate-the-results">
+<h3>Aggregate the results<a class="headerlink" href="#aggregate-the-results" title="Permalink to this heading">#</a></h3>
+<p>The measurements are performed on all $2n$ qubits, but we are only interested in the first $n$ qubits. Thus, we need to aggregate the results by ignoring the measurement outcomes on the last $n$ qubits:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">new_results</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">bitstring</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">measurement_counts</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="c1"># Only keep the outcomes on first n qubits</span>
+    <span class="n">trunc_bitstring</span> <span class="o">=</span> <span class="n">bitstring</span><span class="p">[:</span><span class="n">n</span><span class="p">]</span>
+    <span class="c1"># Add the count to that of the of truncated bit string</span>
+    <span class="n">new_results</span><span class="p">[</span><span class="n">trunc_bitstring</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_results</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">trunc_bitstring</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">count</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">new_results</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">new_results</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;bit strings&#39;</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;counts&#39;</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">rotation</span><span class="o">=</span><span class="mi">70</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../../_images/5cbe40876f619e95f29c6e92707f50e1452fcf8df6121e6daa912230878ff794.png" src="../../../_images/5cbe40876f619e95f29c6e92707f50e1452fcf8df6121e6daa912230878ff794.png" />
+</div>
+</div>
+<p>In practice, we only need the measurement results (i.e., the bit strings, not the counts) from the first $n$ qubits. These measurement outcomes correspond to bit strings that satisfy the equations:
+$$ \begin{aligned}z_{1}\cdot s&amp;=0\mod{2}\z_{2}\cdot s&amp;=0\mod{2}\&amp;,,\vdots \z_n\cdot s&amp;=0\mod{2}\end{aligned}$$</p>
+<p>With these $n$ linear equations in hand, we can use classical post-processing to solve for the unknown string $s$.</p>
+<p>Note that we may have too many bit strings in the above, since we ran the task with $2n$ shots just to be safe. In this case, not all of the bit strings will be linearly independent. Moreover, the all-zeros string $0\dots0$ may also be an outcome, but this bit string satisfies the equations above trivially, so we exclude it if needed.</p>
+<p>At this stage, the quantum portion of Simon’s algorithm is complete. Any remaining steps are just classical postprocessing, which we cover in the Appendix.</p>
+</section>
+</section>
+<section id="references-a-name-references-a">
+<h2>References<a name="references"></a><a class="headerlink" href="#references-a-name-references-a" title="Permalink to this heading">#</a></h2>
+<p>[1] Wikipedia: <a class="reference external" href="https://en.wikipedia.org/wiki/Simon%27s_problem">Simon’s Problem</a></p>
+<p>[2] Wikipedia: <a class="reference external" href="https://en.wikipedia.org/wiki/Birthday_problem">Birthday Problem</a></p>
+<p>[3] Wikipedia: <a class="reference external" href="https://en.wikipedia.org/wiki/Kernel_(linear_algebra)#Computation_by_Gaussian_elimination">Computing a kernel by Gaussian elimination</a></p>
+<p>[4] StackExchange: <a class="reference external" href="https://stackoverflow.com/questions/31190182/sympy-solving-matrices-in-a-finite-field">Sympy: Solving Matrices in a finite field</a></p>
+</section>
+<hr class="docutils" />
+<section id="appendix-a-name-appendix-a">
+<h2>Appendix<a name="appendix"></a><a class="headerlink" href="#appendix-a-name-appendix-a" title="Permalink to this heading">#</a></h2>
+<section id="implementing-an-oracle-function-a-name-oracleimplementation-a">
+<h3>Implementing an Oracle Function<a name="oracleimplementation"></a><a class="headerlink" href="#implementing-an-oracle-function-a-name-oracleimplementation-a" title="Permalink to this heading">#</a></h3>
+<p>In order to run the algorithm, we will need a unitary function that we can use as an oracle to query the function $f$.</p>
+<p>There are many possible ways of implementing a function with the desired property that $f(x)=f(y) \implies x=y\oplus s$. We will pick one implementation that is commonly used in example code, and we will try to give some intuition for why this oracle works.</p>
+<section id="classical-intuition-behind-the-function-f">
+<h4>Classical Intuition Behind the Function $f$<a class="headerlink" href="#classical-intuition-behind-the-function-f" title="Permalink to this heading">#</a></h4>
+<p>Generating a function that is one-to-one is conceptually straightforward, as any such function of the bit strings ${0,1}^n$ will just be a permutation of the inputs. Generating a two-to-one function is a little trickier, though there are many ways to do it. The goal is to define a function that splits the inputs into two groups, such that one element from each group maps to the same output (i.e., $x$ must be in one group, while $x\oplus s$ must be in the other group.)</p>
+<p>We will implement one simple choice for $f$, in which we define the split based on the value of one of the bits in the string. In this way, exactly half of the inputs will have that bit with value $0$, while the other half will have that bit with value $1$.</p>
+<p>Our approach will be to choose a flag bit in the input bit strings that we will use to split the inputs. We then $\mathrm{XOR}$ the input string with $s$ whenever the flag bit is $1$. With this definition, half of the input strings will be untouched, while half of the strings will be $\mathrm{XOR}$’ed with $s$. Clearly, this function does nothing to the all-zeros string $0\dots 0$, since any choice of the flag bit will always be $0$. Thus, we need to ensure that our definition also maps the string $s$ to the all-zeros string $0\dots 0$. In other words, we need to ensure that our flag bit is $1$ when the input string is $s$. One way to ensure the function acts correctly on the input $s$ is to just define the flag bit to be the first bit in the string $s$ that is equal to $1$. For example, if $s=011$, we can choose the flag bit to be the second bit. Concretely:
+$$f(x) = \left{\begin{array}{lr}
+x, &amp; \text{if } x_j=0\
+x\oplus s, &amp; \text{if } x_j=1\
+\end{array}\right},$$
+where $x_j$ is the $j^\text{th}$ bit of $x$, and $j$ is the flag bit in $s$.</p>
+<div class="alert alert-block alert-info">
+    <h4>Example for n=3:</h4>
+<p>We now revisit the example in the introduction. Suppose the secret string $s=011$. Since the first appearance of $1$ in $s$ occurs at the second bit, we will use the second bit in the input strings as our flag bit. We take the $\mathrm{XOR}$ of the input with $s$ whenever the flag bit in the input is 1. This definition results in the following truth table:</p>
+<table>
+    <thead>
+        <tr>
+            <th><center>$$x$$</center></th>
+            <th><center>$$f(x)$$</center></th>
+        </tr>
+    </thead>
+    <tr>
+        <td><center>$$000$$</center></td>
+        <td><center>$$000$$</center></td>
+    </tr>
+    <tr>
+        <td><center>$$001$$</center></td>
+        <td><center>$$001$$</center></td>
+    </tr>
+    <tr>
+        <td><center>$$010$$</center></td>
+        <td><center>$$001$$</center></td>
+    </tr>
+    <tr>
+        <td><center>$$011$$</center></td>
+        <td><center>$$000$$</center></td>
+    </tr>
+    <tr>
+        <td><center>$$100$$</center></td>
+        <td><center>$$100$$</center></td>
+    </tr>
+    <tr>
+        <td><center>$$101$$</center></td>
+        <td><center>$$101$$</center></td>
+    </tr>
+    <tr>
+        <td><center>$$110$$</center></td>
+        <td><center>$$101$$</center></td>
+    </tr>
+    <tr>
+        <td><center>$$111$$</center></td>
+        <td><center>$$100$$</center></td>
+    </tr>
+</table>
+</div><p>We leave it as an exercise to the reader to verify that this definition works for any input string size (i.e., $n$ for inputs ${0,1}^n$, and that it is in fact two-to-one, rather than many-to-one. Note that the function defined in this way is not a general two-to-one function, but it is simple a choice that is easy to implement both classically and as a quantum circuit.</p>
+</section>
+<section id="quantum-implementation-of-u-f">
+<h4>Quantum Implementation of $U_f$<a class="headerlink" href="#quantum-implementation-of-u-f" title="Permalink to this heading">#</a></h4>
+<p>We now define the unitary using the <code class="docutils literal notranslate"><span class="pre">&#64;circuit.subroutine</span></code> functionality of the Amazon Braket SDK. The following code was imported from the <code class="docutils literal notranslate"><span class="pre">simons_utils.py</span></code> module, and is shown below for reference.</p>
+<p>In the quantum setting, we first copy the input register into some ancillary qubits:
+$$ |x\rangle|0\rangle\mapsto |x\rangle|x\rangle.$$
+We then perform the quantum analog of $\mathrm{XOR}$, which means we apply an $X$ gate to the $k^\text{th}$ qubit whenever the $k^\text{th}$ bit of $s$ is $1$. However, we only apply this $X$ gate when the flag qubit is also $|1\rangle$. Thus, our $X$ gate becomes a $\mathrm{CNOT}$ gate between the flag qubit on the input register, and the $k^\text{th}$ qubit on the output.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">braket.circuits</span> <span class="kn">import</span> <span class="n">Circuit</span><span class="p">,</span> <span class="n">circuit</span>
+
+<span class="nd">@circuit</span><span class="o">.</span><span class="n">subroutine</span><span class="p">(</span><span class="n">register</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">simons_oracle</span><span class="p">(</span><span class="n">secret_s</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Quantum circuit implementing a particular oracle for Simon&#39;s problem. Details of this implementation are</span>
+<span class="sd">    explained in the Simons Algorithm demo notebook.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        secret_s (str): secret string we wish to find</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Find the index of the first 1 in s, to be used as the flag bit</span>
+    <span class="n">flag_bit</span><span class="o">=</span><span class="n">secret_s</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;1&#39;</span><span class="p">)</span>
+    
+    <span class="n">n</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">secret_s</span><span class="p">)</span>
+    
+    <span class="n">circ</span> <span class="o">=</span> <span class="n">Circuit</span><span class="p">()</span>
+    <span class="c1"># First copy the first n qubits, so that |x&gt;|0&gt; -&gt; |x&gt;|x&gt;</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">circ</span><span class="o">.</span><span class="n">cnot</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="o">+</span><span class="n">n</span><span class="p">)</span>
+    
+    <span class="c1"># If flag_bit=-1, s is the all-zeros string, and we do nothing else.</span>
+    <span class="k">if</span> <span class="n">flag_bit</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="c1"># Now apply the XOR with s whenever the flag bit is 1.</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span><span class="n">bit_value</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">secret_s</span><span class="p">):</span>
+            
+            <span class="k">if</span> <span class="n">bit_value</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;0&#39;</span><span class="p">,</span><span class="s1">&#39;1&#39;</span><span class="p">]:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span> <span class="p">(</span><span class="s1">&#39;Incorrect char </span><span class="se">\&#39;</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">bit_value</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\&#39;</span><span class="s1"> in secret string s:&#39;</span> <span class="o">+</span> <span class="n">secret_s</span><span class="p">)</span>
+                
+            <span class="c1"># XOR with s whenever the flag bit is 1.</span>
+            <span class="c1"># In terms of gates, XOR means we apply an X gate only whenever the corresponding bit in s is 1.</span>
+            <span class="c1"># Applying this X only when the flag qubit is 1 means this is a CNOT gate.</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">bit_value</span> <span class="o">==</span> <span class="s1">&#39;1&#39;</span><span class="p">):</span>
+                <span class="n">circ</span><span class="o">.</span><span class="n">cnot</span><span class="p">(</span><span class="n">flag_bit</span><span class="p">,</span><span class="n">index</span><span class="o">+</span><span class="n">n</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">circ</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="implementing-the-classical-post-processing-a-name-appendixpostprocessing-a">
+<h3>Implementing the Classical Post-Processing<a name="appendixpostprocessing"></a><a class="headerlink" href="#implementing-the-classical-post-processing-a-name-appendixpostprocessing-a" title="Permalink to this heading">#</a></h3>
+<p>We will now solve the system of linear equations above using Gaussian elimination. We first convert the results into matrix form, then we use <code class="docutils literal notranslate"><span class="pre">sympy</span></code>’s <code class="docutils literal notranslate"><span class="pre">Matrix.rref()</span></code> method to transform the matrix into reduced row echelon form.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip3 install sympy --quiet
+<span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">Matrix</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Generate a matrix from the bit string outputs. We first check that we have sufficiently many output strings to be able to solve the system of equations. If not: output and error and re-run the algorithm.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_results</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="k">raise</span> <span class="ne">Exception</span> <span class="p">(</span><span class="s1">&#39;System will be underdetermined. Minimum &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; bistrings needed, but only &#39;</span>
+                     <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">new_results</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span> <span class="o">+</span><span class="s1">&#39; returned. Please rerun Simon</span><span class="se">\&#39;</span><span class="s1">s algorithm.&#39;</span><span class="p">)</span>
+<span class="n">string_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">new_results</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+<span class="c1">#     if key!= &quot;0&quot;*n:</span>
+    <span class="n">string_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="p">[</span> <span class="nb">int</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">key</span> <span class="p">]</span> <span class="p">)</span>
+    
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The result in matrix form is :&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">string_list</span><span class="p">:</span>
+    <span class="nb">print</span> <span class="p">(</span><span class="n">a</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The result in matrix form is :
+[1, 0, 0, 0, 0, 1]
+[0, 1, 0, 0, 0, 0]
+[0, 0, 1, 0, 0, 1]
+[1, 1, 1, 1, 1, 1]
+[0, 1, 1, 0, 1, 0]
+[0, 1, 1, 1, 1, 0]
+[1, 0, 1, 0, 1, 1]
+[0, 1, 0, 0, 1, 1]
+[1, 1, 0, 1, 0, 1]
+[1, 1, 0, 0, 0, 1]
+[0, 0, 1, 1, 0, 1]
+[0, 1, 0, 1, 0, 0]
+[0, 1, 1, 0, 0, 1]
+[0, 0, 1, 0, 1, 0]
+[1, 0, 1, 1, 1, 1]
+[1, 0, 1, 0, 0, 0]
+[0, 1, 1, 1, 0, 1]
+[1, 0, 0, 1, 0, 1]
+[1, 0, 0, 1, 1, 0]
+[0, 0, 0, 0, 0, 0]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now solve the system $Ms=0$ by finding the kernel of $M$. We do this using Gaussian elimination on the augmented matrix $\left[A|I\right]$ to bring it to row echelon form. Converting the solution to numbers $\mathrm{mod },2$, we can then read off the solution from the last row of the reduced matrix. See <span class="xref myst">[3]</span> and <span class="xref myst">[4]</span> for more details.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">M</span><span class="o">=</span><span class="n">Matrix</span><span class="p">(</span><span class="n">string_list</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+
+<span class="c1"># Construct the agumented matrix</span>
+<span class="n">M_I</span> <span class="o">=</span> <span class="n">Matrix</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">M</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)]))</span>
+
+<span class="c1"># Perform row reduction, working modulo 2. We use the iszerofunc property of rref</span>
+<span class="c1"># to perform the Gaussian elimination over the finite field.</span>
+<span class="n">M_I_rref</span> <span class="o">=</span> <span class="n">M_I</span><span class="o">.</span><span class="n">rref</span><span class="p">(</span><span class="n">iszerofunc</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">%</span> <span class="mi">2</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># In row reduced echelon form, we can end up with a solution outside of the finite field {0,1}.</span>
+<span class="c1"># Thus, we need to revert the matrix back to this field by treating fractions as a modular inverse.</span>
+<span class="c1"># Since the denominator will always be odd (i.e. 1 mod 2), it can be ignored.</span>
+
+<span class="c1"># Helper function to treat fractions as modular inverse:</span>
+<span class="k">def</span> <span class="nf">mod2</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">as_numer_denom</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="o">%</span> <span class="mi">2</span>
+
+<span class="c1"># Apply our helper function to the matrix</span>
+<span class="n">M_I_final</span> <span class="o">=</span> <span class="n">M_I_rref</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">applyfunc</span><span class="p">(</span><span class="n">mod2</span><span class="p">)</span>
+
+<span class="c1"># Extract the kernel of M from the remaining columns of the last row, when s is nonzero.</span>
+<span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">value</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">M_I_final</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,:</span><span class="n">M</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]]):</span>
+    <span class="n">result_s</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">M_I_final</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">M</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:])</span>
+
+<span class="c1"># Otherwise, the sub-matrix will be full rank, so just set s=0...0</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">result_s</span><span class="o">=</span><span class="s1">&#39;0&#39;</span><span class="o">*</span><span class="n">M</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># Check whether result_s is equal to initial s:</span>
+<span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;Secret string: &#39;</span> <span class="o">+</span> <span class="n">s</span><span class="p">)</span>
+<span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;Result string: &#39;</span> <span class="o">+</span> <span class="n">result_s</span><span class="p">)</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">result_s</span> <span class="o">==</span> <span class="n">s</span><span class="p">):</span>
+    <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;We found the correct answer.&#39;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;Error. The answer is wrong!&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Secret string: 101011
+Result string: 101011
+We found the correct answer.
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Simon’s Algorithm</a><ul>
+<li><a class="reference internal" href="#table-of-contents">Table of Contents</a></li>
+<li><a class="reference internal" href="#simon-s-problem-statement-a-name-statement-a">Simon’s Problem Statement: <a name="statement"></a></a></li>
+<li><a class="reference internal" href="#classical-complexity-a-name-classicalcomplexity-a">Classical Complexity<a name="classicalcomplexity"></a></a></li>
+<li><a class="reference internal" href="#quantum-algorithm-for-simon-s-problem-a-name-quantumalgorithm-a">Quantum Algorithm for Simon’s Problem<a name="quantumalgorithm"></a></a><ul>
+<li><a class="reference internal" href="#quantum-circuit-a-name-circuit-a">Quantum Circuit<a name="circuit"></a></a></li>
+<li><a class="reference internal" href="#running-simon-s-algorithm-a-name-runningintro-a">Running Simon’s Algorithm<a name="runningintro"></a></a></li>
+<li><a class="reference internal" href="#classical-post-processing-a-name-postprocessintro-a">Classical Post-Processing<a name="postprocessintro"></a></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#quantum-complexity-a-name-quantumcomplexity-a">Quantum Complexity<a name="quantumcomplexity"></a></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#implementing-simon-s-algorithm-in-amazon-braket-a-name-implementation-a">Implementing Simon’s Algorithm in Amazon Braket<a name="implementation"></a></a><ul>
+<li><a class="reference internal" href="#circuit-definition">Circuit Definition</a></li>
+<li><a class="reference internal" href="#now-run-the-circuit">Now run the circuit</a></li>
+<li><a class="reference internal" href="#analyze-the-results">Analyze the results</a><ul>
+<li><a class="reference internal" href="#aggregate-the-results">Aggregate the results</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#references-a-name-references-a">References<a name="references"></a></a></li>
+<li><a class="reference internal" href="#appendix-a-name-appendix-a">Appendix<a name="appendix"></a></a><ul>
+<li><a class="reference internal" href="#implementing-an-oracle-function-a-name-oracleimplementation-a">Implementing an Oracle Function<a name="oracleimplementation"></a></a><ul>
+<li><a class="reference internal" href="#classical-intuition-behind-the-function-f">Classical Intuition Behind the Function $f$</a></li>
+<li><a class="reference internal" href="#quantum-implementation-of-u-f">Quantum Implementation of $U_f$</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#implementing-the-classical-post-processing-a-name-appendixpostprocessing-a">Implementing the Classical Post-Processing<a name="appendixpostprocessing"></a></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/scripts/furo.js"></script>
+    </body>
+</html>

@@ -1,0 +1,748 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
+
+    <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
+        <title>Introduction to Aquila - Amazon Braket Examples documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">Amazon Braket Examples  documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  
+  
+  <span class="sidebar-brand-text">Amazon Braket Examples  documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="introduction-to-aquila">
+<h1>Introduction to Aquila<a class="headerlink" href="#introduction-to-aquila" title="Permalink to this heading">#</a></h1>
+<p>In the previous notebook, we have introduced the concept of Analog Hamiltonian Simulation (AHS) and how to run an AHS program on the neutral atom local simulator. In this notebook, we illustrate how to run an AHS program on QuEra’s Aquila, a Rydberg based QPU, via Amazon Braket.</p>
+<section id="quera-s-aquila">
+<h2>QuEra’s Aquila<a class="headerlink" href="#quera-s-aquila" title="Permalink to this heading">#</a></h2>
+<p>In order to use the Aquila device, let us first connect to it, and query its parameters with its unique Amazon Resource Number (ARN).</p>
+<div class="alert alert-block alert-info">
+<b>Note: </b> You need to pip install the <a href="https://github.com/aws/amazon-braket-sdk-python#installing-the-amazon-braket-python-sdk" class="alert-link">Braket SDK</a>. If you are new to Amazon Braket, make sure you have completed the necessary <a href="https://docs.aws.amazon.com/braket/latest/developerguide/braket-get-started.html" class="alert-link">Get Started steps</a>. If you are using a Braket hosted notebook instance, this SDK comes pre-installed with the notebooks.
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use Braket SDK Cost Tracking to estimate the cost to run this example</span>
+<span class="kn">from</span> <span class="nn">braket.tracking</span> <span class="kn">import</span> <span class="n">Tracker</span>
+<span class="n">tracker</span> <span class="o">=</span> <span class="n">Tracker</span><span class="p">()</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>In this notebook, we will use <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> package and <code class="docutils literal notranslate"><span class="pre">ahs_utils.py</span></code> module in the current working directory for visualization purposes and other functionalities.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">braket.aws</span> <span class="kn">import</span> <span class="n">AwsDevice</span> 
+<span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span> <span class="k">as</span> <span class="n">pp</span>
+
+<span class="n">device</span> <span class="o">=</span> <span class="n">AwsDevice</span><span class="p">(</span><span class="s2">&quot;arn:aws:braket:us-east-1::device/qpu/quera/Aquila&quot;</span><span class="p">)</span>
+<span class="n">capabilities</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">paradigm</span>
+<span class="n">pp</span><span class="p">(</span><span class="n">capabilities</span><span class="o">.</span><span class="n">dict</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;braketSchemaHeader&#39;: {&#39;name&#39;: &#39;braket.device_schema.quera.quera_ahs_paradigm_properties&#39;,
+                        &#39;version&#39;: &#39;1&#39;},
+ &#39;lattice&#39;: {&#39;area&#39;: {&#39;height&#39;: Decimal(&#39;0.000076&#39;),
+                      &#39;width&#39;: Decimal(&#39;0.000075&#39;)},
+             &#39;geometry&#39;: {&#39;numberSitesMax&#39;: 256,
+                          &#39;positionResolution&#39;: Decimal(&#39;1E-7&#39;),
+                          &#39;spacingRadialMin&#39;: Decimal(&#39;0.000004&#39;),
+                          &#39;spacingVerticalMin&#39;: Decimal(&#39;0.000004&#39;)}},
+ &#39;performance&#39;: {&#39;lattice&#39;: {&#39;positionErrorAbs&#39;: Decimal(&#39;1E-7&#39;)},
+                 &#39;rydberg&#39;: {&#39;rydbergGlobal&#39;: {&#39;rabiFrequencyErrorRel&#39;: Decimal(&#39;0.02&#39;)}}},
+ &#39;qubitCount&#39;: 256,
+ &#39;rydberg&#39;: {&#39;c6Coefficient&#39;: Decimal(&#39;5.42E-24&#39;),
+             &#39;rydbergGlobal&#39;: {&#39;detuningRange&#39;: (Decimal(&#39;-125000000.0&#39;),
+                                                 Decimal(&#39;125000000.0&#39;)),
+                               &#39;detuningResolution&#39;: Decimal(&#39;0.2&#39;),
+                               &#39;detuningSlewRateMax&#39;: Decimal(&#39;2500000000000000.0&#39;),
+                               &#39;phaseRange&#39;: (Decimal(&#39;-99.0&#39;),
+                                              Decimal(&#39;99.0&#39;)),
+                               &#39;phaseResolution&#39;: Decimal(&#39;5E-7&#39;),
+                               &#39;rabiFrequencyRange&#39;: (Decimal(&#39;0.0&#39;),
+                                                      Decimal(&#39;15800000.0&#39;)),
+                               &#39;rabiFrequencyResolution&#39;: Decimal(&#39;400.0&#39;),
+                               &#39;rabiFrequencySlewRateMax&#39;: Decimal(&#39;250000000000000.0&#39;),
+                               &#39;timeDeltaMin&#39;: Decimal(&#39;5E-8&#39;),
+                               &#39;timeMax&#39;: Decimal(&#39;0.000004&#39;),
+                               &#39;timeMin&#39;: Decimal(&#39;0.0&#39;),
+                               &#39;timeResolution&#39;: Decimal(&#39;1E-9&#39;)}}}
+</pre></div>
+</div>
+</div>
+</div>
+<p>The preceding numbers represent numerical capabilities and constraints for which AHS programs can be run on Aquila. In the following sections, we will go through these device capabilities and build an AHS program that complies with these constraints.</p>
+</section>
+<section id="building-an-ahs-program-for-aquila">
+<h2>Building an AHS program for Aquila<a class="headerlink" href="#building-an-ahs-program-for-aquila" title="Permalink to this heading">#</a></h2>
+<p>We have seen the basic components of an AHS program in the previous example, including the register, the driving and shifting fields. In order to run an AHS program on Aquila, however, these components have to meet certain requirements. Particularly, the first version of Aquila does not support shifting field. In this section, we introduce other constraints via building up a valid program for Aquila step by step.</p>
+<section id="register">
+<h3>Register<a class="headerlink" href="#register" title="Permalink to this heading">#</a></h3>
+<p>In contrast to the local simulator which can only simulate a handful of atoms (qubits), Aquila can simulate systems with a few hundred. The coordinates of the atoms (qubits), however, have to meet certain constraints. We can check the requirements as follows</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lattice_constraints</span> <span class="o">=</span> <span class="n">capabilities</span><span class="o">.</span><span class="n">lattice</span>
+<span class="n">pp</span><span class="p">(</span><span class="n">lattice_constraints</span><span class="o">.</span><span class="n">dict</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;area&#39;: {&#39;height&#39;: Decimal(&#39;0.000076&#39;), &#39;width&#39;: Decimal(&#39;0.000075&#39;)},
+ &#39;geometry&#39;: {&#39;numberSitesMax&#39;: 256,
+              &#39;positionResolution&#39;: Decimal(&#39;1E-7&#39;),
+              &#39;spacingRadialMin&#39;: Decimal(&#39;0.000004&#39;),
+              &#39;spacingVerticalMin&#39;: Decimal(&#39;0.000004&#39;)}}
+</pre></div>
+</div>
+</div>
+</div>
+<p>The detailed description of these sections can be inspected as follows</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">lattice_constraints</span><span class="o">.</span><span class="n">area</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">lattice_constraints</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    The area of the FOV
+    Attributes:
+        width (Decimal): Largest allowed difference between x
+            coordinates of any two sites (measured in meters)
+        height (Decimal): Largest allowed difference between y
+            coordinates of any two sites (measured in meters)
+    
+
+    Spacing or number of sites or rows
+    Attributes:
+        spacingRadialMin (Decimal): Minimum radial spacing between any
+            two sites in the lattice (measured in meters)
+        spacingVerticalMin (Decimal): Minimum spacing between any two
+            rows in the lattice (measured in meters)
+        positionResolution (Decimal): Resolution with which site positions
+            can be specified (measured in meters)
+        numberSitesMax (int): Maximum number of sites that can be placed
+            in the lattice
+    
+</pre></div>
+</div>
+</div>
+</div>
+<p>As we can see, the requirements for the setup in an AHS program can be summarized as follows</p>
+<ol class="arabic simple">
+<li><p>The number of sites in the setup cannot be greater than <code class="docutils literal notranslate"><span class="pre">capabilities.lattice.geometry.numberSitesMax</span></code></p></li>
+<li><p>The atoms have to be separated by at least <code class="docutils literal notranslate"><span class="pre">capabilities.lattice.geometry.spacingRadialMin</span></code> meters</p></li>
+<li><p>The rows in the setup have to be separated by at least <code class="docutils literal notranslate"><span class="pre">capabilities.lattice.geometry.spacingVerticalMin</span></code> meters</p></li>
+<li><p>The resolution for the coordinates of the atoms cannot be greater than <code class="docutils literal notranslate"><span class="pre">capabilities.lattice.geometry.positionResolution</span></code> meters</p></li>
+<li><p>The setup cannot be wider than <code class="docutils literal notranslate"><span class="pre">capabilities.lattice.area.width</span></code> meters</p></li>
+<li><p>The setup cannot be taller than <code class="docutils literal notranslate"><span class="pre">capabilities.lattice.area.height</span></code> meters</p></li>
+</ol>
+<p>Below, we demonstrate a valid setup that meets these requirements, which has 105 atoms grouped as 35 equilateral triangles that are well separated from each other.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">braket.ahs.atom_arrangement</span> <span class="kn">import</span> <span class="n">AtomArrangement</span>
+<span class="kn">from</span> <span class="nn">ahs_utils</span> <span class="kn">import</span> <span class="n">show_register</span>
+
+<span class="n">separation</span> <span class="o">=</span> <span class="mf">5e-6</span>
+<span class="n">block_separation</span> <span class="o">=</span> <span class="mf">15e-6</span>
+<span class="n">k_max</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">m_max</span> <span class="o">=</span> <span class="mi">5</span>
+
+<span class="n">register</span> <span class="o">=</span> <span class="n">AtomArrangement</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k_max</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m_max</span><span class="p">):</span>
+        <span class="n">register</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">block_separation</span><span class="o">*</span><span class="n">m</span><span class="p">,</span> <span class="n">block_separation</span><span class="o">*</span><span class="n">k</span> <span class="o">+</span> <span class="n">separation</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="p">)))</span>
+        <span class="n">register</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">block_separation</span><span class="o">*</span><span class="n">m</span><span class="o">-</span><span class="n">separation</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">block_separation</span><span class="o">*</span><span class="n">k</span> <span class="o">-</span> <span class="n">separation</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="p">))))</span>
+        <span class="n">register</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">block_separation</span><span class="o">*</span><span class="n">m</span><span class="o">+</span><span class="n">separation</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">block_separation</span><span class="o">*</span><span class="n">k</span> <span class="o">-</span> <span class="n">separation</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="p">))))</span>        
+
+<span class="n">show_register</span><span class="p">(</span><span class="n">register</span><span class="p">,</span> <span class="n">show_atom_index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">blockade_radius</span><span class="o">=</span> <span class="mf">1.5</span> <span class="o">*</span> <span class="n">separation</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/67d13127da4bed22ed38e4b9f46ac889519892984acc66ab69dc0b6f069e2f45.png" src="../../_images/67d13127da4bed22ed38e4b9f46ac889519892984acc66ab69dc0b6f069e2f45.png" />
+</div>
+</div>
+<p>In the above figure, each blue link connects a pair of atoms that blockade each other. Since the triangles are well separated from each other, and the driving field (see below) is acting on all atoms uniformly, effectively we are repeating the same experiment on the same setup (an equilateral triangle) 35 times in one shot. If the setup of interest is small and contains only a few atoms, we could try to fit in a few identical copies of the setup in the bounding box while avoiding the interference between them. In this way, we are effectively taking more shots for the AHS program of interest.</p>
+</section>
+<section id="driving-field">
+<h3>Driving field<a class="headerlink" href="#driving-field" title="Permalink to this heading">#</a></h3>
+<p>Recall that Aquila can simulate the following Hamiltonian</p>
+<p>\begin{align}
+H(t) = \sum_{k=1}^N H_{\text{drive}, k}(t) + \sum_{j=1}^{N-1}\sum_{k = j+1}^N H_{\text{vdW}, j, k}.
+\end{align}
+Here the second term is the van der Waals interaction term which is fixed once the setup is defined. The first term is the driving field,
+\begin{align}
+H_{\text{drive}, k}(t) = \frac{\Omega(t)}{2}\left(e^{i\phi(t)}|g_k\rangle\langle r_k| + e^{-i\phi(t)}|r_k\rangle\langle g_k|\right) - \Delta_\text{global}(t)n_k,
+\end{align}
+which act on all the atoms in the setup. Here $n_k = |r_k\rangle\langle r_k|$ is the number operator of atom $k$.  The specification of the driving field has to satisfy several conditions, which can be queried as follows</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rydberg</span> <span class="o">=</span> <span class="n">capabilities</span><span class="o">.</span><span class="n">rydberg</span>
+<span class="n">pp</span><span class="p">(</span><span class="n">rydberg</span><span class="o">.</span><span class="n">dict</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;c6Coefficient&#39;: Decimal(&#39;5.42E-24&#39;),
+ &#39;rydbergGlobal&#39;: {&#39;detuningRange&#39;: (Decimal(&#39;-125000000.0&#39;),
+                                     Decimal(&#39;125000000.0&#39;)),
+                   &#39;detuningResolution&#39;: Decimal(&#39;0.2&#39;),
+                   &#39;detuningSlewRateMax&#39;: Decimal(&#39;2500000000000000.0&#39;),
+                   &#39;phaseRange&#39;: (Decimal(&#39;-99.0&#39;), Decimal(&#39;99.0&#39;)),
+                   &#39;phaseResolution&#39;: Decimal(&#39;5E-7&#39;),
+                   &#39;rabiFrequencyRange&#39;: (Decimal(&#39;0.0&#39;),
+                                          Decimal(&#39;15800000.0&#39;)),
+                   &#39;rabiFrequencyResolution&#39;: Decimal(&#39;400.0&#39;),
+                   &#39;rabiFrequencySlewRateMax&#39;: Decimal(&#39;250000000000000.0&#39;),
+                   &#39;timeDeltaMin&#39;: Decimal(&#39;5E-8&#39;),
+                   &#39;timeMax&#39;: Decimal(&#39;0.000004&#39;),
+                   &#39;timeMin&#39;: Decimal(&#39;0.0&#39;),
+                   &#39;timeResolution&#39;: Decimal(&#39;1E-9&#39;)}}
+</pre></div>
+</div>
+</div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">c6Coefficient</span></code> is the constant for the interaction strength between two Rydberg atoms. The detailed description for the <code class="docutils literal notranslate"><span class="pre">rydbergGlobal</span></code> section can be inspected as follows</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">rydberg</span><span class="o">.</span><span class="n">rydbergGlobal</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    Parameters determining the limitations on the driving field that drives the
+        ground-to-Rydberg transition uniformly on all atoms
+    Attributes:
+        rabiFrequencyRange (Tuple[Decimal,Decimal]): Achievable Rabi frequency
+            range for the global Rydberg drive waveform (measured in rad/s)
+        rabiFrequencyResolution (Decimal): Resolution with which global Rabi
+            frequency amplitude can be specified (measured in rad/s)
+        rabiFrequencySlewRateMax (Decimal): Maximum slew rate for changing the
+            global Rabi frequency (measured in (rad/s)/s)
+        detuningRange(Tuple[Decimal,Decimal]): Achievable detuning range for
+            the global Rydberg pulse (measured in rad/s)
+        detuningResolution(Decimal): Resolution with which global detuning can
+            be specified (measured in rad/s)
+        detuningSlewRateMax (Decimal): Maximum slew rate for detuning (measured in (rad/s)/s)
+        phaseRange(Tuple[Decimal,Decimal]): Achievable phase range for the global
+            Rydberg pulse (measured in rad)
+        phaseResolution(Decimal): Resolution with which global Rabi frequency phase
+            can be specified (measured in rad)
+        timeResolution(Decimal): Resolution with which times for global Rydberg drive
+            parameters can be specified (measured in s)
+        timeDeltaMin(Decimal): Minimum time step with which times for global Rydberg
+            drive parameters can be specified (measured in s)
+        timeMin (Decimal): Minimum duration of Rydberg drive (measured in s)
+        timeMax (Decimal): Maximum duration of Rydberg drive (measured in s)
+    
+</pre></div>
+</div>
+</div>
+</div>
+<p>As we can see, the requirements for the driving field in the AHS program can be summarized as follows</p>
+<ol class="arabic simple">
+<li><p>The Rabi frequency $\Omega(t)$ has to be within the range <code class="docutils literal notranslate"><span class="pre">rydberg.rydbergGlobal.rabiFrequencyRange</span></code>, in the unit of rad/s</p></li>
+<li><p>The resolution for the Rabi frequency cannot be greater than <code class="docutils literal notranslate"><span class="pre">rydberg.rydbergGlobal.rabiFrequencyResolution</span></code> rad/s</p></li>
+<li><p>The slew rate for the Rabi frequency cannot be greater than <code class="docutils literal notranslate"><span class="pre">rydberg.rydbergGlobal.rabiFrequencySlewRateMax</span></code> (rad/s)/s</p></li>
+<li><p>The phase $\phi(t)$ has to be within the range <code class="docutils literal notranslate"><span class="pre">rydberg.rydbergGlobal.phaseRange</span></code>, in the unit of rad</p></li>
+<li><p>The resolution for the phase cannot be greater than <code class="docutils literal notranslate"><span class="pre">rydberg.rydbergGlobal.phaseResolution</span></code> rad</p></li>
+<li><p>The detuning $\Delta(t)$ has to be within the range <code class="docutils literal notranslate"><span class="pre">rydberg.rydbergGlobal.detuningRange</span></code>, in the unit of rad</p></li>
+<li><p>The resolution for the detuning cannot be greater than <code class="docutils literal notranslate"><span class="pre">rydberg.rydbergGlobal.detuningResolution</span></code> rad</p></li>
+<li><p>The slew rate for the detuning cannot be greater than <code class="docutils literal notranslate"><span class="pre">rydberg.rydbergGlobal.detuningSlewRateMax</span></code> rad/s</p></li>
+<li><p>The duration of the driving field cannot be less than <code class="docutils literal notranslate"><span class="pre">rydberg.rydbergGlobal.timeMin</span></code> seconds</p></li>
+<li><p>The duration of the driving field cannot be more than <code class="docutils literal notranslate"><span class="pre">rydberg.rydbergGlobal.timeMax</span></code> seconds</p></li>
+<li><p>The time points have to be separated by at least <code class="docutils literal notranslate"><span class="pre">rydberg.rydbergGlobal.timeDeltaMin</span></code> seconds</p></li>
+<li><p>The resolution for the time points cannot be greater than <code class="docutils literal notranslate"><span class="pre">rydberg.rydbergGlobal.timeResolution</span></code> seconds</p></li>
+</ol>
+<p>Besides, there are a few additional requirements</p>
+<ol class="arabic simple">
+<li><p>The Rabi frequency $\Omega(t)$ has to start with 0 rad/s</p></li>
+<li><p>The Rabi frequency $\Omega(t)$ has to end with 0 rad/s</p></li>
+<li><p>The phase $\phi(t)$ has to start with 0 rad</p></li>
+<li><p>All the fields in the driving field have to have the same duration</p></li>
+</ol>
+<p>In this example, we are interested in driving the atoms with constant Rabi frequency $\Omega_\text{const}=1.5\times10^7$ rad/s for a duration of $T_\text{const}=\frac{\pi}{\sqrt{3}\Omega}\approx2.09\times10^{-7}$ seconds such that each atom has average Rydberg density equal to 1/3. Since the Rabi frequency corresponds to blockade radius $R_b\approx8.44\times10^{-6}$ meters, which is greater than the sides of the equilateral triangles ($5\times10^{-6}$ meters), the atoms of the same triangle blockade one another. On the other hand, $R_b$ is smaller than the distance between nearest atoms of neighboring triangles, which is around $10\times10^{-6}$ meters, hence the neighboring triangles are not interacting with each other, as desired.</p>
+<p>However, for the AHS program submitted to Aquila, the Rabi frequency cannot be a constant because of the constraint that it has to start and end with 0 rad/s. Hence we will need to create a time series $\Omega(t)$ such that $\int_0^T\Omega(t)dt=\Omega_\text{const}T_\text{const}=\frac{\pi}{\sqrt{3}}$, while satisfying $\Omega(0)=\Omega(T)=0$. This could be achieved via the utility function <code class="docutils literal notranslate"><span class="pre">rabi_pulse</span></code> below where we demonstrate how to create the desired driving field for Aquila.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">braket.timings.time_series</span> <span class="kn">import</span> <span class="n">TimeSeries</span>
+<span class="kn">from</span> <span class="nn">braket.ahs.driving_field</span> <span class="kn">import</span> <span class="n">DrivingField</span>
+<span class="kn">from</span> <span class="nn">ahs_utils</span> <span class="kn">import</span> <span class="n">rabi_pulse</span><span class="p">,</span> <span class="n">constant_time_series</span>
+
+<span class="n">omega_const</span> <span class="o">=</span> <span class="mf">1.5e7</span>   <span class="c1"># rad / s</span>
+<span class="n">rabi_pulse_area</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="c1"># rad</span>
+<span class="n">omega_slew_rate_max</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">rydberg</span><span class="o">.</span><span class="n">rydbergGlobal</span><span class="o">.</span><span class="n">rabiFrequencySlewRateMax</span><span class="p">)</span> <span class="c1"># rad/s^2</span>
+
+<span class="n">time_points</span><span class="p">,</span> <span class="n">amplitude_values</span> <span class="o">=</span> <span class="n">rabi_pulse</span><span class="p">(</span><span class="n">rabi_pulse_area</span><span class="p">,</span> <span class="n">omega_const</span><span class="p">,</span> <span class="mf">0.99</span> <span class="o">*</span> <span class="n">omega_slew_rate_max</span><span class="p">)</span>
+
+<span class="n">amplitude</span> <span class="o">=</span> <span class="n">TimeSeries</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">time_points</span><span class="p">,</span> <span class="n">amplitude_values</span><span class="p">):</span>
+    <span class="n">amplitude</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+
+<span class="n">detuning</span> <span class="o">=</span> <span class="n">constant_time_series</span><span class="p">(</span><span class="n">amplitude</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span> 
+<span class="n">phase</span> <span class="o">=</span> <span class="n">constant_time_series</span><span class="p">(</span><span class="n">amplitude</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span> 
+
+    
+<span class="n">drive</span> <span class="o">=</span> <span class="n">DrivingField</span><span class="p">(</span>
+    <span class="n">amplitude</span><span class="o">=</span><span class="n">amplitude</span><span class="p">,</span> 
+    <span class="n">detuning</span><span class="o">=</span><span class="n">detuning</span><span class="p">,</span> 
+    <span class="n">phase</span><span class="o">=</span><span class="n">phase</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can inspect the driving field in the following way</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ahs_utils</span> <span class="kn">import</span> <span class="n">show_global_drive</span>
+<span class="n">show_global_drive</span><span class="p">(</span><span class="n">drive</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/eeb406e4bef47e30c23278d4f75c68115078f22c9c15f794ac4ae67a8aec5287.png" src="../../_images/eeb406e4bef47e30c23278d4f75c68115078f22c9c15f794ac4ae67a8aec5287.png" />
+</div>
+</div>
+<p>Here we used constant-zero phase and detuning, but, for more involved programs, its time series can be customized similarly to how we set the amplitude of the Rabi frequency here.</p>
+</section>
+<section id="ahs-program">
+<h3>AHS program<a class="headerlink" href="#ahs-program" title="Permalink to this heading">#</a></h3>
+<p>We can assemble the register and Hamiltonian to an AHS program</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">braket.ahs.hamiltonian</span> <span class="kn">import</span> <span class="n">Hamiltonian</span>
+<span class="kn">from</span> <span class="nn">braket.ahs.analog_hamiltonian_simulation</span> <span class="kn">import</span> <span class="n">AnalogHamiltonianSimulation</span>
+
+<span class="n">ahs_program</span> <span class="o">=</span> <span class="n">AnalogHamiltonianSimulation</span><span class="p">(</span>
+    <span class="n">register</span><span class="o">=</span><span class="n">register</span><span class="p">,</span> 
+    <span class="n">hamiltonian</span><span class="o">=</span><span class="n">drive</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="task">
+<h3>Task<a class="headerlink" href="#task" title="Permalink to this heading">#</a></h3>
+<p>Before submitting the AHS program to Aquila, we need to discretize the program to ensure that it complies with resolution-specific validation rules.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">discretized_ahs_program</span> <span class="o">=</span> <span class="n">ahs_program</span><span class="o">.</span><span class="n">discretize</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We note that the number of shots has to be within the range specified by <code class="docutils literal notranslate"><span class="pre">device.properties.service.shotsRange</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">device</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">shotsRange</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(1, 1000)
+</pre></div>
+</div>
+</div>
+</div>
+<p>The AHS program can be submitted to the device to create a quantum task on the Braket service.</p>
+<div class="alert alert-block alert-info">
+<b>Note: </b> Some atoms may be missing even if the shot was successful. We recommend comparing <code>pre_sequence</code> of each shot with the requested atom filling in the AHS program specification.  
+</div><div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n_shots</span> <span class="o">=</span> <span class="mi">100</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">task</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">discretized_ahs_program</span><span class="p">,</span> <span class="n">shots</span><span class="o">=</span><span class="n">n_shots</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The task metadata can be inspected in the following way</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">metadata</span> <span class="o">=</span> <span class="n">task</span><span class="o">.</span><span class="n">metadata</span><span class="p">()</span>
+<span class="n">task_arn</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;quantumTaskArn&#39;</span><span class="p">]</span>
+<span class="n">task_status</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;status&#39;</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ARN: </span><span class="si">{</span><span class="n">task_arn</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;status: </span><span class="si">{</span><span class="n">task_status</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ARN: arn:aws:braket:us-east-1:545821822555:quantum-task/0f934b5d-fc5c-4b77-85c0-7ef0d2a8cf41
+status: CREATED
+</pre></div>
+</div>
+</div>
+</div>
+<p>It is suggested to save the task ARN for retrieving the task result in a later time. For example if the saved task ARN reads <code class="docutils literal notranslate"><span class="pre">arn:aws:braket:us-east-1:545821822555:quantum-task/12345</span></code>, the task can be retrieved as follows.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">braket.aws</span> <span class="kn">import</span> <span class="n">AwsQuantumTask</span>
+<span class="n">task</span> <span class="o">=</span> <span class="n">AwsQuantumTask</span><span class="p">(</span><span class="n">arn</span><span class="o">=</span><span class="s2">&quot;arn:aws:braket:us-east-1:545821822555:quantum-task/12345&quot;</span><span class="p">)</span>    
+</pre></div>
+</div>
+<p>Alternatively, we can access the tasks through <a class="reference external" href="https://us-east-1.console.aws.amazon.com/braket/home?region=us-east-1#/tasks">the tasks page of Amazon Braket console</a>.</p>
+</section>
+</section>
+<section id="analyzing-the-result-from-aquila">
+<h2>Analyzing the result from Aquila<a class="headerlink" href="#analyzing-the-result-from-aquila" title="Permalink to this heading">#</a></h2>
+<p>The results (once the task is completed) can be downloaded directly into an object in the python session.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">task</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The call <code class="docutils literal notranslate"><span class="pre">task.result()</span></code> is blocking execution until the task is completed and results are loaded from Amazon Braket. After the task is completed, the measurement result is saved in <code class="docutils literal notranslate"><span class="pre">result.measurements</span></code> which is a list of <code class="docutils literal notranslate"><span class="pre">ShotResult</span></code>, as shown below.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result</span><span class="o">.</span><span class="n">measurements</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ShotResult(status=&lt;AnalogHamiltonianSimulationShotStatus.SUCCESS: &#39;Success&#39;&gt;, pre_sequence=array([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+       1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+       1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+       1, 1, 1, 1, 1, 1, 1, 1, 1]), post_sequence=array([0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1,
+       0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1,
+       1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0,
+       1, 0, 1, 1, 1, 1, 1, 1, 0]))
+</pre></div>
+</div>
+</div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">ShotResult</span></code> contains three pieces of information</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">status</span></code> indicates if the shot is successful</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pre_sequence</span></code> contains the measurement result <em>before</em> running the AHS program. Here <code class="docutils literal notranslate"><span class="pre">0</span></code> indicates an empty site, while <code class="docutils literal notranslate"><span class="pre">1</span></code> indicates a filled site with an atom in the ground state</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">post_sequence</span></code> contains the measurement result <em>after</em> running the AHS program. Here <code class="docutils literal notranslate"><span class="pre">0</span></code> indicates an empty site, or an atom in the Rydberg state, while <code class="docutils literal notranslate"><span class="pre">1</span></code> indicates an atom in the ground state</p></li>
+</ol>
+<div class="alert alert-block alert-info">
+<b>Note: </b> Some atoms may be missing even if the shot was successful. We recommend comparing <code>pre_sequence</code> of each shot with the requested atom filling in the AHS program specification.  
+</div><p>To confirm that at the end of the AHS program, the average Rydberg density for the atoms in the triangles are around 1/3 for each atom, we can first collect the  measurement result and aggregate over all triangles</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ahs_utils</span> <span class="kn">import</span> <span class="n">get_counts</span>
+
+<span class="n">counts</span> <span class="o">=</span> <span class="n">get_counts</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+<span class="n">average_density</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">average_num_triangles</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">counts</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="o">*</span><span class="n">k_max</span><span class="o">*</span><span class="n">m_max</span><span class="p">,</span> <span class="mi">3</span><span class="p">):</span>
+        <span class="n">short_seq</span> <span class="o">=</span> <span class="n">key</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">3</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">short_seq</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">==</span><span class="s2">&quot;r&quot;</span><span class="p">:</span>
+                <span class="n">average_density</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+=</span> <span class="n">val</span>     
+        
+        
+        <span class="n">average_num_triangles</span><span class="p">[</span><span class="n">short_seq</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;r&#39;</span><span class="p">)]</span> <span class="o">+=</span> <span class="n">val</span>
+        
+        
+<span class="n">average_density</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">average_density</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">k_max</span> <span class="o">*</span> <span class="n">m_max</span> <span class="o">*</span> <span class="n">n_shots</span><span class="p">)</span>
+<span class="n">average_num_triangles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">average_num_triangles</span><span class="p">)</span> <span class="o">/</span> <span class="n">n_shots</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Note that although we only perform 100 shots for the given AHS program, since we have made the full usage of the area in the Aquila device, effectively, we have made 3,500 shots for the experiment of interest! We can plot the result as follows</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">average_density</span><span class="p">)),</span> <span class="n">average_density</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Indices of atoms&quot;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Average Rydberg density&quot;</span><span class="p">)</span>
+
+<span class="n">ax2</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">average_num_triangles</span><span class="p">)),</span> <span class="n">average_num_triangles</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Number of Rydberg atoms&quot;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Average number of triangles&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/dc56c56f3db773374c4f045cc99bad23ea19733cbe7cf7153f3b8dfa9eb8cf64.png" src="../../_images/dc56c56f3db773374c4f045cc99bad23ea19733cbe7cf7153f3b8dfa9eb8cf64.png" />
+</div>
+</div>
+<p>In the left panel, we show the average Rydberg density for each atom in the triangles. We see that indeed the average Rydberg density for the atoms in the triangles are around 1/3 as expected. In the right panel, we show the number of triangles with certain number of Rydberg atoms (0, 1, 2 or 3) averaged over the shots. It can be seen that almost no triangle has more than 1 Rydberg atoms since the atoms in the same triangle blockade each other.</p>
+<p>In summary, in this notebook we have demonstrated how to connect to QuEra’s Aquila device, and define a valid AHS program for the device.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Task Summary&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tracker</span><span class="o">.</span><span class="n">quantum_tasks_statistics</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Note: Charges shown are estimates based on your Amazon Braket simulator and quantum processing unit (QPU) task usage. Estimated charges shown may differ from your actual charges. Estimated charges do not factor in any discounts or credits, and you may experience additional charges based on your use of other services such as Amazon Elastic Compute Cloud (Amazon EC2).&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Estimated cost to run this example: </span><span class="si">{</span><span class="n">tracker</span><span class="o">.</span><span class="n">qpu_tasks_cost</span><span class="p">()</span> <span class="o">+</span> <span class="n">tracker</span><span class="o">.</span><span class="n">simulator_tasks_cost</span><span class="p">()</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> USD&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Task Summary
+{&#39;arn:aws:braket:us-east-1::device/qpu/quera/Aquila&#39;: {&#39;shots&#39;: 100, &#39;tasks&#39;: {&#39;COMPLETED&#39;: 1}}}
+Note: Charges shown are estimates based on your Amazon Braket simulator and quantum processing unit (QPU) task usage. Estimated charges shown may differ from your actual charges. Estimated charges do not factor in any discounts or credits, and you may experience additional charges based on your use of other services such as Amazon Elastic Compute Cloud (Amazon EC2).
+Estimated cost to run this example: 1.30 USD
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Introduction to Aquila</a><ul>
+<li><a class="reference internal" href="#quera-s-aquila">QuEra’s Aquila</a></li>
+<li><a class="reference internal" href="#building-an-ahs-program-for-aquila">Building an AHS program for Aquila</a><ul>
+<li><a class="reference internal" href="#register">Register</a></li>
+<li><a class="reference internal" href="#driving-field">Driving field</a></li>
+<li><a class="reference internal" href="#ahs-program">AHS program</a></li>
+<li><a class="reference internal" href="#task">Task</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#analyzing-the-result-from-aquila">Analyzing the result from Aquila</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/scripts/furo.js"></script>
+    </body>
+</html>

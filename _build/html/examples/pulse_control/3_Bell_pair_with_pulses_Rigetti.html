@@ -1,0 +1,548 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
+
+    <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
+        <title>Creating a Bell state with pulses on Rigetti’s Aspen M-2 - Amazon Braket Examples documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">Amazon Braket Examples  documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  
+  
+  <span class="sidebar-brand-text">Amazon Braket Examples  documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="creating-a-bell-state-with-pulses-on-rigetti-s-aspen-m-2">
+<h1>Creating a Bell state with pulses on Rigetti’s Aspen M-2<a class="headerlink" href="#creating-a-bell-state-with-pulses-on-rigetti-s-aspen-m-2" title="Permalink to this heading">#</a></h1>
+<p>Let’s create a Bell state program, the <code class="docutils literal notranslate"><span class="pre">Hello</span> <span class="pre">world!</span></code> example in quantum computing, with pulses on a Rigetti’s device.</p>
+<p>The canonical circuit to generate a Bell pair is constitued of an Hadamard gate on a first qubit followed by a CNOT gate between this qubit and a second qubit. In this notebook, we will realize that creating entangled states requires specific mechanisms that are tightly connected to the hardware type and device architecture. Specifically here, we will focus on the native gate set of the Rigetti’s device and choose to use specific waveforms and frames that enable native CZ gates.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use Braket SDK Cost Tracking to estimate the cost to run this example</span>
+<span class="kn">from</span> <span class="nn">braket.tracking</span> <span class="kn">import</span> <span class="n">Tracker</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">Tracker</span><span class="p">()</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s first import few packages.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">matplotlib</span> inline
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="kn">from</span> <span class="nn">braket.aws</span> <span class="kn">import</span> <span class="n">AwsDevice</span>
+<span class="kn">from</span> <span class="nn">braket.pulse</span> <span class="kn">import</span> <span class="n">PulseSequence</span><span class="p">,</span> <span class="n">ArbitraryWaveform</span>
+
+<span class="kn">from</span> <span class="nn">braket.circuits</span> <span class="kn">import</span> <span class="n">Circuit</span>
+<span class="kn">import</span> <span class="nn">braket.circuits.circuit</span> <span class="k">as</span> <span class="nn">circuit</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We will use two qubits, #10 amd #113, that are physically connected to each other. We also instantiate a Rigetti device to extract frames and submit circuits.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span><span class="o">=</span><span class="mi">10</span>
+<span class="n">b</span><span class="o">=</span><span class="mi">113</span>
+
+<span class="n">device</span> <span class="o">=</span> <span class="n">AwsDevice</span><span class="p">(</span><span class="s2">&quot;arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-2&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="bell-pair-with-the-h-and-ctrl-z-gates">
+<h2>Bell pair with the H and Ctrl-Z gates<a class="headerlink" href="#bell-pair-with-the-h-and-ctrl-z-gates" title="Permalink to this heading">#</a></h2>
+<p>First we show how to transform our common Bell state circuit into one that contains a CZ gate instead of a CNOT gate.</p>
+<p>As, CNOT and CZ only differ by a basis transform, we will add Hadamard gates before and after the CZ gate.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bell_pair_with_gates</span> <span class="o">=</span> <span class="n">Circuit</span><span class="p">()</span><span class="o">.</span><span class="n">h</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">.</span><span class="n">h</span><span class="p">(</span><span class="n">b</span><span class="p">)</span><span class="o">.</span><span class="n">cz</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span><span class="o">.</span><span class="n">h</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">bell_pair_with_gates</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>T    : |0|1|2|
+              
+q10  : -H-C---
+          |   
+q113 : -H-Z-H-
+
+T    : |0|1|2|
+</pre></div>
+</div>
+</div>
+</div>
+<p>The circuit is then executed on the Aspen-M-2 device and we plot the measurement histogram which hints that we created $$\frac{|00\rangle+|11\rangle}{\sqrt{2}}$$</p>
+<p>We use <code class="docutils literal notranslate"><span class="pre">disable_qubit_rewiring</span> <span class="pre">=</span> <span class="pre">True</span></code> to be sure that the Bell pair will be created on the specified qubit and not on remapped qubits so we have a fair comparison with the rest of the notebook.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nb_shots</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">task</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">bell_pair_with_gates</span><span class="p">,</span> <span class="n">shots</span> <span class="o">=</span> <span class="n">nb_shots</span><span class="p">,</span> <span class="n">disable_qubit_rewiring</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">counts</span> <span class="o">=</span> <span class="n">task</span><span class="o">.</span><span class="n">result</span><span class="p">()</span><span class="o">.</span><span class="n">measurement_counts</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">counts</span><span class="p">),</span> <span class="p">[</span><span class="n">counts</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">/</span><span class="n">nb_shots</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">counts</span><span class="p">)])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;State&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Population&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;Population&#39;)
+</pre></div>
+</div>
+<img alt="../../_images/90795daab6a5dcf0c4186437a44536e5e638ab09ba04760989de0a6c872798d5.png" src="../../_images/90795daab6a5dcf0c4186437a44536e5e638ab09ba04760989de0a6c872798d5.png" />
+</div>
+</div>
+</section>
+<section id="bell-pair-with-the-pulse-implementation-of-cz">
+<h2>Bell pair with the pulse implementation of CZ<a class="headerlink" href="#bell-pair-with-the-pulse-implementation-of-cz" title="Permalink to this heading">#</a></h2>
+<p>Since Hadamard gates are not native gates on Aspen, we cannot add them to circuits containing pulse sequences. We need to first decompose them into a sequence of native gates. We will use the RX and RZ gates here.</p>
+<p>We will annotate this decomposition with <code class="docutils literal notranslate"><span class="pre">circuit.subroutine</span></code> to register this as a custom gate in the circuit allowing easy reuse.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@circuit</span><span class="o">.</span><span class="n">subroutine</span><span class="p">(</span><span class="n">register</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">rigetti_native_h</span><span class="p">(</span><span class="n">q0</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">Circuit</span><span class="p">()</span>
+        <span class="o">.</span><span class="n">rz</span><span class="p">(</span><span class="n">q0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">rx</span><span class="p">(</span><span class="n">q0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">rz</span><span class="p">(</span><span class="n">q0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">rx</span><span class="p">(</span><span class="n">q0</span><span class="p">,</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+    <span class="p">)</span>
+    
+<span class="nb">print</span><span class="p">(</span><span class="n">Circuit</span><span class="p">()</span><span class="o">.</span><span class="n">rigetti_native_h</span><span class="p">(</span><span class="n">a</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>T   : |   0    |   1    |   2    |    3    |
+                                            
+q10 : -Rz(3.14)-Rx(1.57)-Rz(1.57)-Rx(-1.57)-
+
+T   : |   0    |   1    |   2    |    3    |
+</pre></div>
+</div>
+</div>
+</div>
+<p>For the CZ gate, we will use an arbitrary waveform with parameters (amplitude, rise/fall time, duration) that have been predetermined beforehand. This waveform will be applied on the <code class="docutils literal notranslate"><span class="pre">q10_q113_cz_frame</span> <span class="pre">frame</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a_b_cz_wfm</span> <span class="o">=</span> <span class="n">ArbitraryWaveform</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.00017888439538396808</span><span class="p">,</span> <span class="mf">0.00046751103636033026</span><span class="p">,</span> <span class="mf">0.0011372942989106456</span><span class="p">,</span> <span class="mf">0.002577059611929697</span><span class="p">,</span> <span class="mf">0.005443941944632366</span><span class="p">,</span> <span class="mf">0.010731922770068104</span><span class="p">,</span> <span class="mf">0.01976701723583167</span><span class="p">,</span> <span class="mf">0.03406712171899736</span><span class="p">,</span> <span class="mf">0.05503285980691202</span><span class="p">,</span> <span class="mf">0.08350670755829034</span><span class="p">,</span> <span class="mf">0.11932853352131022</span><span class="p">,</span> <span class="mf">0.16107456696238298</span><span class="p">,</span> <span class="mf">0.20614055551722368</span><span class="p">,</span> <span class="mf">0.2512065440720643</span><span class="p">,</span> <span class="mf">0.292952577513137</span><span class="p">,</span> <span class="mf">0.328774403476157</span><span class="p">,</span> <span class="mf">0.3572482512275353</span><span class="p">,</span> <span class="mf">0.3782139893154499</span><span class="p">,</span> <span class="mf">0.3925140937986156</span><span class="p">,</span> <span class="mf">0.40154918826437913</span><span class="p">,</span> <span class="mf">0.4068371690898149</span><span class="p">,</span> <span class="mf">0.4097040514225177</span><span class="p">,</span> <span class="mf">0.41114381673553674</span><span class="p">,</span> <span class="mf">0.411813599998087</span><span class="p">,</span> <span class="mf">0.4121022266390633</span><span class="p">,</span> <span class="mf">0.4122174383870584</span><span class="p">,</span> <span class="mf">0.41226003881132406</span><span class="p">,</span> <span class="mf">0.4122746298554775</span><span class="p">,</span> <span class="mf">0.4122792591252675</span><span class="p">,</span> <span class="mf">0.4122806196003006</span><span class="p">,</span> <span class="mf">0.41228098995582513</span><span class="p">,</span> <span class="mf">0.41228108334474756</span><span class="p">,</span> <span class="mf">0.4122811051578895</span><span class="p">,</span> <span class="mf">0.4122811098772742</span><span class="p">,</span> <span class="mf">0.4122811108230642</span><span class="p">,</span> <span class="mf">0.4122811109986316</span><span class="p">,</span> <span class="mf">0.41228111102881937</span><span class="p">,</span> <span class="mf">0.41228111103362725</span><span class="p">,</span> <span class="mf">0.4122811110343365</span><span class="p">,</span> <span class="mf">0.41228111103443343</span><span class="p">,</span> <span class="mf">0.4122811110344457</span><span class="p">,</span> <span class="mf">0.4122811110344471</span><span class="p">,</span> <span class="mf">0.41228111103444737</span><span class="p">,</span> <span class="mf">0.41228111103444737</span><span class="p">,</span> <span class="mf">0.41228111103444737</span><span class="p">,</span> <span class="mf">0.41228111103444737</span><span class="p">,</span> <span class="mf">0.41228111103444737</span><span class="p">,</span> <span class="mf">0.41228111103444737</span><span class="p">,</span> <span class="mf">0.41228111103444737</span><span class="p">,</span> <span class="mf">0.41228111103444737</span><span class="p">,</span> <span class="mf">0.41228111103444737</span><span class="p">,</span> <span class="mf">0.41228111103444737</span><span class="p">,</span> <span class="mf">0.41228111103444737</span><span class="p">,</span> <span class="mf">0.41228111103444737</span><span class="p">,</span> <span class="mf">0.41228111103444737</span><span class="p">,</span> <span class="mf">0.41228111103444737</span><span class="p">,</span> <span class="mf">0.41228111103444737</span><span class="p">,</span> <span class="mf">0.41228111103444737</span><span class="p">,</span> <span class="mf">0.41228111103444737</span><span class="p">,</span> <span class="mf">0.41228111103444737</span><span class="p">,</span> <span class="mf">0.41228111103444737</span><span class="p">,</span> <span class="mf">0.41228111103444737</span><span class="p">,</span> <span class="mf">0.41228111103444737</span><span class="p">,</span> <span class="mf">0.41228111103444737</span><span class="p">,</span> <span class="mf">0.41228111103444737</span><span class="p">,</span> <span class="mf">0.41228111103444737</span><span class="p">,</span> <span class="mf">0.41228111103444737</span><span class="p">,</span> <span class="mf">0.4122811110344471</span><span class="p">,</span> <span class="mf">0.4122811110344457</span><span class="p">,</span> <span class="mf">0.41228111103443343</span><span class="p">,</span> <span class="mf">0.4122811110343365</span><span class="p">,</span> <span class="mf">0.41228111103362725</span><span class="p">,</span> <span class="mf">0.41228111102881937</span><span class="p">,</span> <span class="mf">0.4122811109986316</span><span class="p">,</span> <span class="mf">0.4122811108230642</span><span class="p">,</span> <span class="mf">0.4122811098772742</span><span class="p">,</span> <span class="mf">0.4122811051578895</span><span class="p">,</span> <span class="mf">0.41228108334474756</span><span class="p">,</span> <span class="mf">0.41228098995582513</span><span class="p">,</span> <span class="mf">0.4122806196003006</span><span class="p">,</span> <span class="mf">0.4122792591252675</span><span class="p">,</span> <span class="mf">0.4122746298554775</span><span class="p">,</span> <span class="mf">0.41226003881132406</span><span class="p">,</span> <span class="mf">0.4122174383870584</span><span class="p">,</span> <span class="mf">0.4121022266390633</span><span class="p">,</span> <span class="mf">0.411813599998087</span><span class="p">,</span> <span class="mf">0.41114381673553674</span><span class="p">,</span> <span class="mf">0.4097040514225176</span><span class="p">,</span> <span class="mf">0.4068371690898149</span><span class="p">,</span> <span class="mf">0.40154918826437913</span><span class="p">,</span> <span class="mf">0.3925140937986155</span><span class="p">,</span> <span class="mf">0.37821398931544986</span><span class="p">,</span> <span class="mf">0.3572482512275351</span><span class="p">,</span> <span class="mf">0.32877440347615655</span><span class="p">,</span> <span class="mf">0.2929525775131368</span><span class="p">,</span> <span class="mf">0.2512065440720641</span><span class="p">,</span> <span class="mf">0.20614055551722307</span><span class="p">,</span> <span class="mf">0.16107456696238268</span><span class="p">,</span> <span class="mf">0.11932853352131002</span><span class="p">,</span> <span class="mf">0.08350670755829034</span><span class="p">,</span> <span class="mf">0.05503285980691184</span><span class="p">,</span> <span class="mf">0.03406712171899729</span><span class="p">,</span> <span class="mf">0.01976701723583167</span><span class="p">,</span> <span class="mf">0.010731922770068058</span><span class="p">,</span> <span class="mf">0.005443941944632366</span><span class="p">,</span> <span class="mf">0.002577059611929697</span><span class="p">,</span> <span class="mf">0.0011372942989106229</span><span class="p">,</span> <span class="mf">0.00046751103636033026</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>To draw this waveform as it will be played on the device, we need to know the frame and the corresponding time separation between each sample. This information is stored in the device capabilities.</p>
+<p>First we retrieve the frame that we will use to create a CZ gate between qubit 10 and 113. The minimum time increment can then be extracted through the corresponding port.</p>
+<p>The pulse length will be the product of the number of samples and the minimum time increment.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a_b_cz_frame</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">frames</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;q</span><span class="si">{</span><span class="n">a</span><span class="si">}</span><span class="s1">_q</span><span class="si">{</span><span class="n">b</span><span class="si">}</span><span class="s1">_cz_frame&#39;</span><span class="p">]</span>
+<span class="n">dt</span><span class="o">=</span><span class="n">a_b_cz_frame</span><span class="o">.</span><span class="n">port</span><span class="o">.</span><span class="n">dt</span>
+
+<span class="n">a_b_cz_wfm_duration</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">a_b_cz_wfm</span><span class="o">.</span><span class="n">amplitudes</span><span class="p">)</span><span class="o">*</span><span class="n">dt</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;CZ pulse duration:&#39;</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">a_b_cz_wfm_duration</span> <span class="o">*</span> <span class="mf">1e9</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="s1">&#39;ns&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>CZ pulse duration: 124.0 ns
+</pre></div>
+</div>
+</div>
+</div>
+<p>With all these data, we call also plot the waveform and see that it is rounded square pulse.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">a_b_cz_wfm</span><span class="o">.</span><span class="n">amplitudes</span><span class="p">))</span><span class="o">*</span><span class="n">dt</span><span class="o">*</span><span class="mf">1e9</span><span class="p">,</span> <span class="n">a_b_cz_wfm</span><span class="o">.</span><span class="n">amplitudes</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (ns)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Amplitude (a. u.)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Pulse on CZ frame between qubit </span><span class="si">{</span><span class="n">a</span><span class="si">}</span><span class="s1"> and </span><span class="si">{</span><span class="n">b</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/d262f5bb4ed7ed249bdf639a8438176711be93ec0587482c9412b4996e1cf27a.png" src="../../_images/d262f5bb4ed7ed249bdf639a8438176711be93ec0587482c9412b4996e1cf27a.png" />
+</div>
+</div>
+<p>Playing the CZ waveform on a frame that is related to a fast-flux port enable a CZ interaction that causes the systems to oscillate between $|11\rangle$ and $|20\rangle$.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a_rf_frame</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">frames</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;q</span><span class="si">{</span><span class="n">a</span><span class="si">}</span><span class="s1">_rf_frame&#39;</span><span class="p">]</span>
+<span class="n">b_rf_frame</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">frames</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;q</span><span class="si">{</span><span class="n">b</span><span class="si">}</span><span class="s1">_rf_frame&#39;</span><span class="p">]</span>
+<span class="n">frames</span> <span class="o">=</span> <span class="p">[</span><span class="n">a_rf_frame</span><span class="p">,</span> <span class="n">b_rf_frame</span><span class="p">,</span> <span class="n">a_b_cz_frame</span><span class="p">]</span>
+
+<span class="n">cz_pulse_sequence</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">PulseSequence</span><span class="p">()</span>
+    <span class="o">.</span><span class="n">barrier</span><span class="p">(</span><span class="n">frames</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">play</span><span class="p">(</span><span class="n">a_b_cz_frame</span><span class="p">,</span> <span class="n">a_b_cz_wfm</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>One side-effect of this pulse that that the mean qubit frequencies will be shifted during the process.
+The qubit frames rotate at the different rates and a relative phase is acquired with respect to the all frames connected to these qubits.</p>
+<p>These phase shifts was measured via Ramsey sequences beforehand (and given here as hardcoded information via <code class="docutils literal notranslate"><span class="pre">phase_shift_a</span></code> and <code class="docutils literal notranslate"><span class="pre">phase_shift_b</span></code>). We apply corrections by using shift_phase instructions on RF and XY frames after the CZ pulse. (see Caldwell et all, https://arxiv.org/abs/1706.06562 for more information).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">phase_shift_a</span><span class="o">=</span><span class="mf">1.1733407221086924</span>
+<span class="n">phase_shift_b</span><span class="o">=</span><span class="mf">6.269846678712192</span>
+
+<span class="n">cz_pulse_sequence</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">cz_pulse_sequence</span>
+    <span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="n">a_rf_frame</span><span class="p">,</span> <span class="n">a_b_cz_wfm_duration</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">shift_phase</span><span class="p">(</span><span class="n">a_rf_frame</span><span class="p">,</span> <span class="n">phase_shift_a</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="n">b_rf_frame</span><span class="p">,</span> <span class="n">a_b_cz_wfm_duration</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">shift_phase</span><span class="p">(</span><span class="n">b_rf_frame</span><span class="p">,</span> <span class="n">phase_shift_b</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">barrier</span><span class="p">(</span><span class="n">frames</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="k">for</span> <span class="n">phase</span><span class="p">,</span> <span class="n">q</span> <span class="ow">in</span> <span class="p">[(</span><span class="n">phase_shift_a</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">a</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="n">phase_shift_b</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">b</span><span class="p">)]:</span>
+    <span class="k">for</span> <span class="n">neighbor</span> <span class="ow">in</span> <span class="n">device</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">paradigm</span><span class="o">.</span><span class="n">connectivity</span><span class="o">.</span><span class="n">connectivityGraph</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">q</span><span class="p">)]:</span>
+        <span class="n">xy_frame_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;q</span><span class="si">{</span><span class="nb">min</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">neighbor</span><span class="p">))</span><span class="si">}</span><span class="s2">_q</span><span class="si">{</span><span class="nb">max</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">neighbor</span><span class="p">))</span><span class="si">}</span><span class="s2">_xy_frame&quot;</span>
+        <span class="k">if</span> <span class="n">xy_frame_name</span> <span class="ow">in</span> <span class="n">device</span><span class="o">.</span><span class="n">frames</span><span class="p">:</span>
+            <span class="n">xy_frame</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">frames</span><span class="p">[</span><span class="n">xy_frame_name</span><span class="p">]</span>
+            <span class="n">cz_pulse_sequence</span><span class="o">.</span><span class="n">shift_phase</span><span class="p">(</span><span class="n">xy_frame</span><span class="p">,</span> <span class="n">phase</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Pulse sequences can be exported as time series via the function <code class="docutils literal notranslate"><span class="pre">to_time_trace</span></code> for visualization. This method returns an object that contains all the numerical values of our pulse sequences, and can be used to plot the traces for each frames.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">cz_pulse_sequence</span><span class="o">.</span><span class="n">to_time_trace</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">frame_id</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">amplitudes</span><span class="p">:</span>
+    <span class="n">f</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">amplitudes</span><span class="p">[</span><span class="n">frame_id</span><span class="p">]</span><span class="o">.</span><span class="n">times</span><span class="p">(),</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">amplitudes</span><span class="p">[</span><span class="n">frame_id</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Real&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">amplitudes</span><span class="p">[</span><span class="n">frame_id</span><span class="p">]</span><span class="o">.</span><span class="n">times</span><span class="p">(),</span> <span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">amplitudes</span><span class="p">[</span><span class="n">frame_id</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Imag&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Time (s)&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Amplitude (norm.)&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">frame_id</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">frequencies</span><span class="p">[</span><span class="n">frame_id</span><span class="p">]</span><span class="o">.</span><span class="n">times</span><span class="p">(),</span> <span class="n">data</span><span class="o">.</span><span class="n">frequencies</span><span class="p">[</span><span class="n">frame_id</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Time (s)&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Frequency (Hz)&quot;</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">phases</span><span class="p">[</span><span class="n">frame_id</span><span class="p">]</span><span class="o">.</span><span class="n">times</span><span class="p">(),</span> <span class="n">data</span><span class="o">.</span><span class="n">phases</span><span class="p">[</span><span class="n">frame_id</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Time (s)&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Phase (rad)&quot;</span><span class="p">)</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/cfbf78cb516d4196ec6d1c71d0dbe4ab1ee599477684ca834d90868347eff8ea.png" src="../../_images/cfbf78cb516d4196ec6d1c71d0dbe4ab1ee599477684ca834d90868347eff8ea.png" />
+<img alt="../../_images/8308b7827014a92cc937e69d928e95927ed634c61a022882e21bb6cc082688a3.png" src="../../_images/8308b7827014a92cc937e69d928e95927ed634c61a022882e21bb6cc082688a3.png" />
+<img alt="../../_images/191b2533ca5a2bd2061c19739d2443db818a539550f368723ad5ceea81c51f15.png" src="../../_images/191b2533ca5a2bd2061c19739d2443db818a539550f368723ad5ceea81c51f15.png" />
+</div>
+</div>
+<p>Finally, we can build our own implementation of the Bell circuit using a <code class="docutils literal notranslate"><span class="pre">pulse_gate</span></code> instruction that encapsulates the pulse sequence into a gate instructions.</p>
+<p>Pulse gates are strictly defined by the pulse sequence and the associated frames. The qubit or a list of qubits provided to <code class="docutils literal notranslate"><span class="pre">pulse_gate</span></code> are for representational purposes.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bell_pair_with_pulse</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">Circuit</span><span class="p">()</span>
+    <span class="o">.</span><span class="n">rigetti_native_h</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">rigetti_native_h</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">pulse_gate</span><span class="p">([</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">],</span> <span class="n">cz_pulse_sequence</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">rigetti_native_h</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">bell_pair_with_pulse</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>T    : |   0    |   1    |   2    |    3    |4 |   5    |   6    |   7    |    8    |
+                                                                                     
+q10  : -Rz(3.14)-Rx(1.57)-Rz(1.57)-Rx(-1.57)-PG--------------------------------------
+                                             |                                       
+q113 : -Rz(3.14)-Rx(1.57)-Rz(1.57)-Rx(-1.57)-PG-Rz(3.14)-Rx(1.57)-Rz(1.57)-Rx(-1.57)-
+
+T    : |   0    |   1    |   2    |    3    |4 |   5    |   6    |   7    |    8    |
+</pre></div>
+</div>
+</div>
+</div>
+<p>Circuits with embedded pulse sequences can be executed normally.</p>
+<p>As pulse sequences are inherently hardware dependent since the timings and strength of the waveforms are tuned to be optimal for the frame they are played on, you can only use pulse gates with the flag <code class="docutils literal notranslate"><span class="pre">disable_qubit_rewiring=True</span></code> that prevents any compiler to remap qubits. Amazon Braket SDK toggles automatically the flag when it detects that pulse sequences are embedded in a circuit.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nb_shots</span> <span class="o">=</span> <span class="mi">500</span>
+<span class="n">task</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">bell_pair_with_pulse</span><span class="p">,</span> <span class="n">shots</span><span class="o">=</span><span class="n">nb_shots</span><span class="p">,</span> <span class="n">disable_qubit_rewiring</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">counts</span> <span class="o">=</span> <span class="n">task</span><span class="o">.</span><span class="n">result</span><span class="p">()</span><span class="o">.</span><span class="n">measurement_counts</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">counts</span><span class="p">),</span> <span class="p">[</span><span class="n">counts</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">/</span><span class="n">nb_shots</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">counts</span><span class="p">)])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;State&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Population&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;Population&#39;)
+</pre></div>
+</div>
+<img alt="../../_images/284ea0aebd8006a8a1cf16e7eff7b8aa2d6487bd50ec01dc71ed25f6b37eb3ed.png" src="../../_images/284ea0aebd8006a8a1cf16e7eff7b8aa2d6487bd50ec01dc71ed25f6b37eb3ed.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Task Summary&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">quantum_tasks_statistics</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Note: Charges shown are estimates based on your Amazon Braket simulator and quantum processing unit (QPU) task usage. Estimated charges shown may differ from your actual charges. Estimated charges do not factor in any discounts or credits, and you may experience additional charges based on your use of other services such as Amazon Elastic Compute Cloud (Amazon EC2).&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Estimated cost to run this example: </span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="n">qpu_tasks_cost</span><span class="p">()</span> <span class="o">+</span> <span class="n">t</span><span class="o">.</span><span class="n">simulator_tasks_cost</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> USD&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Task Summary
+{&#39;arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-2&#39;: {&#39;shots&#39;: 600, &#39;tasks&#39;: {&#39;COMPLETED&#39;: 2}}}
+Note: Charges shown are estimates based on your Amazon Braket simulator and quantum processing unit (QPU) task usage. Estimated charges shown may differ from your actual charges. Estimated charges do not factor in any discounts or credits, and you may experience additional charges based on your use of other services such as Amazon Elastic Compute Cloud (Amazon EC2).
+Estimated cost to run this example: 0.810 USD
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Creating a Bell state with pulses on Rigetti’s Aspen M-2</a><ul>
+<li><a class="reference internal" href="#bell-pair-with-the-h-and-ctrl-z-gates">Bell pair with the H and Ctrl-Z gates</a></li>
+<li><a class="reference internal" href="#bell-pair-with-the-pulse-implementation-of-cz">Bell pair with the pulse implementation of CZ</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/scripts/furo.js"></script>
+    </body>
+</html>
