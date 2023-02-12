@@ -1,0 +1,8 @@
+jupyter nbconvert --execute examples/analog_hamiltonian_simulation/Testing_boundaries_local_sim_task_5_10_atoms_Omega_ramp.ipynb --to notebook
+echo "Testing_boundaries_local_sim_task_5_10_atoms_Omega_ramp done"
+jupyter nbconvert --execute examples/analog_hamiltonian_simulation/Testing_boundaries_local_sim_task_3_1_atom_Omega_ramp.ipynb --to notebook
+echo "Testing_boundaries_local_sim_task_3_1_atom_Omega_ramp done"
+jupyter nbconvert --execute examples/analog_hamiltonian_simulation/Testing_boundaries_local_sim_task_2_10_atoms.ipynb --to notebook
+echo "Testing_boundaries_local_sim_task_2_10_atoms done"
+jupyter nbconvert --execute examples/analog_hamiltonian_simulation/Testing_boundaries_local_sim_task_1_2_atoms.ipynb --to notebook
+echo "Testing_boundaries_local_sim_task_1_2_atoms done"
