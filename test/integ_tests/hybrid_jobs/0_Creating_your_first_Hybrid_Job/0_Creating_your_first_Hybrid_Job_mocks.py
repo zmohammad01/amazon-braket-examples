@@ -3,6 +3,8 @@ import tarfile
 import subprocess
 import unittest.mock as mock
 
+import pytest
+
 default_job_results = ""
 
 
@@ -50,8 +52,8 @@ def post_run(tb):
     tb.inject(
         """
         import os
-        os.remove("model.tar.gz")
-        os.remove("results.json")
+        # os.remove("model.tar.gz")
+        # os.remove("results.json")
         """
     )
 

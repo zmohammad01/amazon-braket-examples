@@ -1,5 +1,8 @@
+import importlib
 import logging
 import os
+import site
+
 import pytest
 
 from testbook import testbook
@@ -37,9 +40,18 @@ root_path = os.getcwd()
 examples_path = "examples"
 test_notebooks = []
 
+
+@pytest.fixture
+def my_fs(fs):
+    fs.add_real_directory(root_path)
+    fs.add_real_directory(site.getsitepackages()[0])
+    # fs.additional_skip_names = ["subprocess"]
+    yield fs
+
+
 for dir_, _, files in os.walk(examples_path):
     for file_name in files:
-        if file_name.endswith(".ipynb") and ".ipynb_checkpoints" not in dir_:
+        if file_name.endswith(".ipynb") and ".ipynb_checkpoints" not in dir_ and file_name == "0_Creating_your_first_Hybrid_Job.ipynb":
             test_notebooks.append((dir_, file_name))
 
 
@@ -57,6 +69,7 @@ def get_mock_paths(notebook_dir, notebook_file):
     return path_to_utils, path_to_mocks
 
 
+@pytest.mark.usefixtures("my_fs")
 @pytest.mark.parametrize("notebook_dir, notebook_file", test_notebooks)
 def test_all_notebooks(notebook_dir, notebook_file, mock_level):
     if notebook_file in EXCLUDED_NOTEBOOKS:

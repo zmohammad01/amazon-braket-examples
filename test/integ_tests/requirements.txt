@@ -5,6 +5,7 @@ matplotlib
 nbconvert
 pandas
 pennylane
+pyfakefs
 pytest
 pytest-rerunfailures
 pytest-xdist
