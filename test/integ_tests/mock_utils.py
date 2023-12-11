@@ -252,6 +252,7 @@ class AwsSessionMinWrapper(SessionWrapper):
         braket.aws.aws_session.AwsSession.cancel_quantum_task = AwsSessionFacade.cancel_quantum_task
         AwsSessionFacade.real_retrieve_s3_object_body = braket.aws.aws_session.AwsSession.retrieve_s3_object_body
         braket.aws.aws_session.AwsSession.retrieve_s3_object_body = AwsSessionFacade.retrieve_s3_object_body
+        AwsSessionFacade.real_create_job = braket.aws.aws_session.AwsSession.create_job
         braket.aws.aws_session.AwsSession.create_job = AwsSessionFacade.create_job
         braket.aws.aws_session.AwsSession.get_job = AwsSessionFacade.get_job
         braket.aws.aws_session.AwsSession.cancel_job = AwsSessionFacade.cancel_job
@@ -319,6 +320,20 @@ class AwsSessionFacade(braket.aws.AwsSession):
         return AwsSessionFacade._wrapper.boto_client.cancel_quantum_task(arn)
 
     def create_job(self, **boto3_kwargs):
+        if boto3_kwargs and boto3_kwargs["deviceArn"]:
+            device_arn = boto3_kwargs["deviceArn"]
+            device_name = device_arn.split("/")[-1]
+            if device_name in AwsSessionFacade.unsupported_device_config:
+                return AwsSessionFacade._wrapper.boto_client.create_job(boto3_kwargs)["jobArn"]
+            if device_name in AwsSessionFacade.mock_device_config:
+                device_sub = AwsSessionFacade.mock_device_config[device_name]
+                if device_sub == "MOCK":
+                    return AwsSessionFacade._wrapper.boto_client.create_job(boto3_kwargs)["jobArn"]
+                else:
+                    boto3_kwargs["deviceArn"] = device_sub
+            job_arn = AwsSessionFacade.real_create_job(self, **boto3_kwargs)
+            AwsSessionFacade.created_job_arns.add(job_arn)
+            return job_arn
         return AwsSessionFacade._wrapper.boto_client.create_job(boto3_kwargs)["jobArn"]
 
     def get_job(self, arn):
