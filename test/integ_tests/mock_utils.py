@@ -282,7 +282,7 @@ class AwsSessionFacade(braket.aws.AwsSession):
     created_task_arns = set()
     created_job_arns = set()
     created_task_locations = set()
-    created_job_locatinos = set()
+    created_job_locations = set()
 
     def get_device(self, arn):
         device_name = arn.split("/")[-1]
