@@ -320,7 +320,7 @@ class AwsSessionFacade(braket.aws.AwsSession):
         return AwsSessionFacade._wrapper.boto_client.cancel_quantum_task(arn)
 
     def create_job(self, **boto3_kwargs):
-        if boto3_kwargs and boto3_kwargs["deviceArn"]:
+        if boto3_kwargs and "deviceArn" in boto3_kwargs.keys():
             device_arn = boto3_kwargs["deviceArn"]
             device_name = device_arn.split("/")[-1]
             if device_name in AwsSessionFacade.unsupported_device_config:
