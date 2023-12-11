@@ -254,6 +254,7 @@ class AwsSessionMinWrapper(SessionWrapper):
         braket.aws.aws_session.AwsSession.retrieve_s3_object_body = AwsSessionFacade.retrieve_s3_object_body
         AwsSessionFacade.real_create_job = braket.aws.aws_session.AwsSession.create_job
         braket.aws.aws_session.AwsSession.create_job = AwsSessionFacade.create_job
+        AwsSessionFacade.real_get_job = braket.aws.aws_session.AwsSession.get_job
         braket.aws.aws_session.AwsSession.get_job = AwsSessionFacade.get_job
         braket.aws.aws_session.AwsSession.cancel_job = AwsSessionFacade.cancel_job
         braket.aws.aws_session.AwsSession.copy_s3_directory = AwsSessionFacade.copy_s3_directory
@@ -279,7 +280,9 @@ class AwsSessionMinWrapper(SessionWrapper):
 
 class AwsSessionFacade(braket.aws.AwsSession):
     created_task_arns = set()
+    created_job_arns = set()
     created_task_locations = set()
+    created_job_locatinos = set()
 
     def get_device(self, arn):
         device_name = arn.split("/")[-1]
@@ -337,6 +340,10 @@ class AwsSessionFacade(braket.aws.AwsSession):
         return AwsSessionFacade._wrapper.boto_client.create_job(boto3_kwargs)["jobArn"]
 
     def get_job(self, arn):
+        if arn in AwsSessionFacade.created_job_arns:
+            job_data = AwsSessionFacade.real_get_job(self, arn)
+            AwsSessionFacade.created_job_locations.add(job_data["outputS3Directory"])
+            return job_data
         return AwsSessionFacade._wrapper.boto_client.get_job(arn)
 
     def cancel_job(self, arn):
@@ -348,6 +355,8 @@ class AwsSessionFacade(braket.aws.AwsSession):
     def retrieve_s3_object_body(self, s3_bucket, s3_object_key):
         location = s3_object_key[:s3_object_key.rindex("/")]
         if location in AwsSessionFacade.created_task_locations:
+            return AwsSessionFacade.real_retrieve_s3_object_body(self, s3_bucket, s3_object_key)
+        if location in AwsSessionFacade.created_job_locations:
             return AwsSessionFacade.real_retrieve_s3_object_body(self, s3_bucket, s3_object_key)
         if AwsSessionFacade._wrapper.task_result_mock.side_effect is not None:
             return next(AwsSessionFacade._wrapper.task_result_mock.side_effect)
