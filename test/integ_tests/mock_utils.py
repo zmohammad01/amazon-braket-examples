@@ -342,7 +342,7 @@ class AwsSessionFacade(braket.aws.AwsSession):
     def get_job(self, arn):
         if arn in AwsSessionFacade.created_job_arns:
             job_data = AwsSessionFacade.real_get_job(self, arn)
-            AwsSessionFacade.created_job_locations.add(job_data["outputS3Directory"])
+            AwsSessionFacade.created_job_locations.add(job_data["outputDataConfig"]["s3Path"])
             return job_data
         return AwsSessionFacade._wrapper.boto_client.get_job(arn)
 
