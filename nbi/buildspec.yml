@@ -21,7 +21,6 @@ phases:
       - export PATH=$LCC_MINICONDA_INSTALL_DIR/bin:$PATH
       - conda config --set default_threads 2
       - conda config --set channel_priority strict
-      - conda config --set solver libmamba
       - conda install -c conda-forge conda-pack squashfs-tools
   build:
     commands:
