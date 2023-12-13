@@ -22,13 +22,13 @@ phases:
       - conda config --set default_threads 2
       - conda config --set channel_priority strict
       - conda config --set solver libmamba
-      - conda install -c conda-forge conda-pack=0.7.0 squashfs-tools
+      - conda install -c conda-forge conda-pack squashfs-tools
   build:
     commands:
       - BRAKET_ENV=Braket
       - mkdir -p envs
       - conda config --set path_conflict warn
-      - conda env create --name $BRAKET_ENV -f environment.yml --no-default-package --solver libmamba
+      - conda env create --name $BRAKET_ENV -f environment.yml --no-default-package
       - pip cache purge
       - conda pack --quiet --name $BRAKET_ENV --output envs/Braket.squash --compress-level 1 --n-threads -1 --format squashfs
       - du -hs envs/
