@@ -29,7 +29,7 @@ phases:
       - conda config --set path_conflict warn
       - conda env create --name $BRAKET_ENV -f environment.yml --no-default-package --solver libmamba
       - _CONDA_ENVS_DIR=$(conda info --json | jq --raw-output '.envs_dirs[0]')
-      - _ENV_PATH=$_CONDA_ENVS_DIR/$BRAKET_ENV
+      - _ENV_PATH=$BRAKET_ENV
       - source $_ENV_PATH/bin/activate
       - conda clean --tarballs
       - source $_ENV_PATH/bin/deactivate
