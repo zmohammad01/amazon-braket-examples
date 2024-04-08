@@ -28,6 +28,11 @@ phases:
       - mkdir -p envs
       - conda config --set path_conflict warn
       - conda env create --name $BRAKET_ENV -f environment.yml --no-default-package --solver libmamba
+      - _CONDA_ENVS_DIR=$(conda info --json | jq --raw-output '.envs_dirs[0]')
+      - _ENV_PATH=$_CONDA_ENVS_DIR/$BRAKET_ENV
+      - source $_ENV_PATH/bin/activate
+      - conda clean --tarballs
+      - source $_ENV_PATH/bin/deactivate
       - pip cache purge
       - conda pack --quiet --name $BRAKET_ENV --output envs/Braket.tar --compress-level 1 --n-threads -1
       - zstd -16 envs/Braket.tar -T0 --auto-threads=logical --rsyncable --sparse
