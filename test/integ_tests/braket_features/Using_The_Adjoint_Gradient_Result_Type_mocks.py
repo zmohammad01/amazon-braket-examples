@@ -15,7 +15,7 @@ def pre_run_inject(mock_utils):
         effects.append(res1)
     for i in range(66):
         effects.append(res2)
-    for i in range(20):
+    for i in range(27):
         effects.append(res3)
     mocker.set_task_result_side_effect(effects)
     random.seed(42)
