@@ -31,7 +31,30 @@ def pre_run_inject(mock_utils):
         "deviceStatus": "ONLINE",
         "deviceType": "SIMULATOR",
         "providerName": "Amazon Braket"
-    }
+    })
+    mocker.set_get_device_result({
+        "deviceArn": "arn:aws:braket:::device/quantum-simulator/amazon/dm1",
+        "deviceCapabilities": mock_utils.read_file("rig_pulse_device_capabilities.json", __file__),
+        "deviceName": "dm1",
+        "deviceQueueInfo": [
+            {
+            "queue": "QUANTUM_TASKS_QUEUE",
+            "queuePriority": "Normal",
+            "queueSize": "0"
+            },
+            {
+            "queue": "QUANTUM_TASKS_QUEUE",
+            "queuePriority": "Priority",
+            "queueSize": "0"
+            },
+            {
+            "queue": "JOBS_QUEUE",
+            "queueSize": "0"
+            }
+        ],
+        "deviceStatus": "ONLINE",
+        "deviceType": "SIMULATOR",
+        "providerName": "Amazon Braket"
     })
     mocker.set_get_device_result({
         "deviceType" : "QPU",
