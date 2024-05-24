@@ -16,25 +16,26 @@ def pre_run_inject(mock_utils):
         "deviceType" : "QPU",
         "deviceCapabilities" : mock_utils.read_file("rig_pulse_device_capabilities.json", __file__)
     })
+    # get_devices device is based on arns
     mocker.set_search_result([
         {
             "devices": [
                 {
-                    "deviceArn": "arn:aws:braket:us-west-2::device/qpu/arn/TestARN",
+                    "deviceArn": "arn:aws:braket:us-west-2::device/qpu/arn/sv1",
                     "deviceName": "SV1",
                     "deviceType": "SIMULATOR",
                     "deviceStatus": "ONLINE",
                     "providerName": "Test Provider"
                 },
                 {
-                    "deviceArn": "arn:aws:braket:us-west-2::device/qpu/arn/TestARN",
+                    "deviceArn": "arn:aws:braket:us-west-2::device/qpu/arn/dm1",
                     "deviceName": "dm1",
                     "deviceType": "SIMULATOR",
                     "deviceStatus": "ONLINE",
                     "providerName": "Test Provider"
                 },
                 {
-                    "deviceArn": "arn:aws:braket:us-west-2::device/qpu/arn/TestARN",
+                    "deviceArn": "arn:aws:braket:us-west-2::device/qpu/arn/tn1",
                     "deviceName": "TN1",
                     "deviceType": "SIMULATOR",
                     "deviceStatus": "ONLINE",
