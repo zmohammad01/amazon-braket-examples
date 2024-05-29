@@ -69,21 +69,21 @@ def pre_run_inject(mock_utils):
                     "deviceName": "SV1",
                     "deviceType": "SIMULATOR",
                     "deviceStatus": "ONLINE",
-                    "providerName": "Test Provider"
+                    "providerName": "Amazon Braket"
                 },
                 {
                     "deviceArn": "arn:aws:braket:::device/quantum-simulator/amazon/dm1",
                     "deviceName": "dm1",
                     "deviceType": "SIMULATOR",
                     "deviceStatus": "ONLINE",
-                    "providerName": "Test Provider"
+                    "providerName": "Amazon Braket"
                 },
                 {
                     "deviceArn": "arn:aws:braket:::device/quantum-simluator/amazon/tn1",
                     "deviceName": "TN1",
                     "deviceType": "SIMULATOR",
                     "deviceStatus": "ONLINE",
-                    "providerName": "Test Provider"
+                    "providerName": "Amazon Braket"
                 },
                 {
                     "deviceArn": "arn:aws:braket:us-west-2::device/qpu/arn/TestARN",
