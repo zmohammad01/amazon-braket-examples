@@ -4,5 +4,6 @@ channels:
 dependencies:
   - libstdcxx-ng
   - python=3.10
+  - julia
   - pip:
       - -r requirements.txt
