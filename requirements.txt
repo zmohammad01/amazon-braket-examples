@@ -6,6 +6,7 @@ amazon-braket-pennylane-plugin==1.27.3
 amazon-braket-schemas==1.22.0
 amazon-braket-sdk==1.80.0
 amazon-braket-algorithm-library==1.4.11
+amazon-braket-simulator-v2-python==0.1.2
 cvxpy==1.5.1
 ipykernel==6.29.4
 jax==0.4.28
