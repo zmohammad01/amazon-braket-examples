@@ -30,8 +30,8 @@ phases:
       - conda env create --name $BRAKET_ENV -f environment.yml --no-default-package --solver libmamba
       - pip cache purge
       - source activate Braket
-      - CMD="from braket.devices import LocalSimulator
-device = LocalSimulator('braket_sv_v2')"
+      - CMD="from braket.devices import LocalSimulator \ndevice = LocalSimulator('braket_sv_v2')"
+      - CMD=$(echo $CMD)
       - python -c ${USAGE}
       - source deactivate
       - conda pack --quiet --name $BRAKET_ENV --output envs/Braket.tar --compress-level 1 --n-threads -1
