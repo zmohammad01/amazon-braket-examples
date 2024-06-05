@@ -29,7 +29,7 @@ phases:
       - conda config --set path_conflict warn
       - conda env create --name $BRAKET_ENV -f environment.yml --no-default-package --solver libmamba
       - pip cache purge
-      - source activate Braket
+      - conda activate Braket
       - CMD="from braket.devices import LocalSimulator \ndevice = LocalSimulator('braket_sv_v2')"
       - CMD=$(echo ${CMD})
       - echo $CMD
