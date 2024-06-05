@@ -32,7 +32,7 @@ phases:
       - source activate Braket
       - CMD="from braket.devices import LocalSimulator \ndevice = LocalSimulator('braket_sv_v2')"
       - CMD=$(echo $CMD)
-      - python -c ${CMD}
+      - python -c $CMD
       - source deactivate
       - conda pack --quiet --name $BRAKET_ENV --output envs/Braket.tar --compress-level 1 --n-threads -1
       - zstd -16 envs/Braket.tar -T0 --auto-threads=logical --rsyncable --sparse
