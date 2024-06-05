@@ -30,7 +30,7 @@ phases:
       - conda env create --name $BRAKET_ENV -f environment.yml --no-default-package --solver libmamba
       - pip cache purge
       - source activate Braket
-      - >-
+      - >
         CMD="from braket.devices import LocalSimulator \ndevice = LocalSimulator('braket_sv_v2')"
         NEW_CMD=$(echo -e ${CMD})
         echo -e $NEW_CMD
