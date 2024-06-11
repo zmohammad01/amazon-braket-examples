@@ -261,7 +261,7 @@ class AwsSessionMinWrapper(SessionWrapper):
         braket.aws.aws_session.AwsSession.copy_s3_directory = AwsSessionFacade.copy_s3_directory
         md.CwlInsightsMetricsFetcher._get_metrics_results_sync = AwsSessionFacade.get_job_metrics
         if boto3.session.Session().region_name == "eu-north-1":
-            braket.aws.aws_quantum_job.AwsQuantumJob.metrics() = {'timestamp': [1718132516.9092681, 1718132516.9093235, 1718132456.9210198, 1718132456.921077, 1718132397.1327991, 1718132397.132854, 1718132337.7559743, 1718132337.756036, 1718132278.052257, 1718132278.052337], 'cost': [-30.009201374779202, None, -30.00270233086587, None, -29.991376034394918, None, -27.057919181655198, None, -29.990278808563687, None], 'iteration_number': [4.0, 4.0, 3.0, 3.0, 2.0, 2.0, 1.0, 1.0, 0.0, 0.0], 'braket_cost': [None, 0.0, None, 0.0, None, 0.0, None, 0.0, None, 0.0]}
+            braket.aws.aws_quantum_job.AwsQuantumJob.metrics = {'timestamp': [1718132516.9092681, 1718132516.9093235, 1718132456.9210198, 1718132456.921077, 1718132397.1327991, 1718132397.132854, 1718132337.7559743, 1718132337.756036, 1718132278.052257, 1718132278.052337], 'cost': [-30.009201374779202, None, -30.00270233086587, None, -29.991376034394918, None, -27.057919181655198, None, -29.990278808563687, None], 'iteration_number': [4.0, 4.0, 3.0, 3.0, 2.0, 2.0, 1.0, 1.0, 0.0, 0.0], 'braket_cost': [None, 0.0, None, 0.0, None, 0.0, None, 0.0, None, 0.0]}
  
         braket.aws.aws_quantum_job.AwsQuantumJob._attempt_results_download = mock.Mock()
         AwsSessionMinWrapper.parse_device_config()
