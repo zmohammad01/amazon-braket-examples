@@ -261,7 +261,7 @@ class AwsSessionMinWrapper(SessionWrapper):
         braket.aws.aws_session.AwsSession.copy_s3_directory = AwsSessionFacade.copy_s3_directory
         md.CwlInsightsMetricsFetcher._get_metrics_results_sync = AwsSessionFacade.get_job_metrics
         if boto3.session.Session().region_name == "eu-north-1":
-            braket.aws.aws_quantum_job.AwsQuantumJob.metrics = AwsSessionFacade.job_metrics
+            braket.aws.aws_quantum_job.AwsQuantumJob.metrics = AwsSessionFacade.get_job_metrics
  
         braket.aws.aws_quantum_job.AwsQuantumJob._attempt_results_download = mock.Mock()
         AwsSessionMinWrapper.parse_device_config()
